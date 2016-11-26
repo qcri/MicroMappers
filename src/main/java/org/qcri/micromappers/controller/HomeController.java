@@ -14,18 +14,15 @@ import org.qcri.micromappers.model.CurrentUser;
 @org.springframework.stereotype.Controller
 public class HomeController {
 
-	CurrentUser current_user = new CurrentUser();
+	//CurrentUser current_user = new CurrentUser();
 
 	@RequestMapping(value="/")
 	public String loadHomePage(Model model){
-		model.addAttribute("current_user", current_user);
-
 		return "index";
 	}
 
 	@RequestMapping(value="/signin")
 	public String signInPage(Model model){
-		model.addAttribute("current_user", current_user);
 
 		return "signin";
 	}
