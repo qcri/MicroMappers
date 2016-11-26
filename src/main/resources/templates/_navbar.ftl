@@ -15,7 +15,8 @@
         </ul>
 
 
-        <#if current_user.user_name == "Anonymous" >
+        <#if current_user?? >
+        <#else>
             <ul class="nav secondary-nav pull-right">
               <li><a href="signin"><i class="icon icon-white icon-signin"></i>Sign in</a></li>
             </ul>
