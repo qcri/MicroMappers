@@ -6,7 +6,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-       <a class="brand" href="http://clickers.micromappers.org"><img src="./img/mm_logo.png"></a>
+       <a class="brand" href="http://clickers.micromappers.org"><img src="/img/mm_logo.png"></a>
        <div class="nav-collapse collapse">
         <ul class="nav">
             <li><a href="http://clickers.micromappers.org">Home</a></li>
@@ -16,6 +16,11 @@
 
 
         <#if current_user?? >
+        <form id="signOut" action="/signout" method="post" class="secondary-nav pull-right">
+		    <input type="hidden" name="_csrf" value="${_csrf.token}" />
+		    <a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-white icon-signin"></i>Sign out</a>
+		</form>
+        	
         <#else>
             <ul class="nav secondary-nav pull-right">
               <li><a href="signin"><i class="icon icon-white icon-signin"></i>Sign in</a></li>

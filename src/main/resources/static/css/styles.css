@@ -732,3 +732,14 @@ body > footer li > a {
 body > footer li > a:hover {
     color: rgb(205, 205, 205);
 }
+
+/* Custom styles
+-------------------------*/
+
+.social-logo {
+	height: 30px;
+}
+.social-btn {
+	font-weight: bold;
+	color: #3272aa;
+}

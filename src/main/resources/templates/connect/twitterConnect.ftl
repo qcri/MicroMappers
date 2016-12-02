@@ -29,44 +29,39 @@
 </head>
 
 <body>
-<#include "_navbar.ftl">
+<#include "/_navbar.ftl">
 
   <div class="container" style="min-height:400px;">
 
-
-
-    <p style="padding-top:5px;">
-    <p style="padding-top:5px;">
-    <span class="label label-warning"><i class="icon-bullhorn"></i>Note</span>
-        By click the <strong>Sign in button</strong> below you are agreeing to
-        the <a href="">terms of use</a> and
-        <a href="">data</a>.
-    </p>
-
-		<!-- <form name="user" action="auth/google" method="get">
-			<input type="hidden" name="scope" value="email" />
-		  	<button type="submit" class="btn btn-default btn-md social-btn" >
-	               <class="btn btn-warning"><i class="icon-google-plus"></i> Sign in with Google
-			</button>
-  		</form> -->
-  		<form action="auth/google" method="GET">
-			<input type="hidden" name="scope" value="email" />
-        	<button type="submit" class="btn btn-default btn-md social-btn" >
-        		<img src="/img/google.png" class="social-logo" /> Login with Google
-        	</button>
-    	</form>
-    <hr>
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>MicroMappers</h1>
+            <p class="lead">Social Message Purification</p>
+            <ul class="list-unstyled">
+                <li>
+                	Welcome
+                	<form action="/connect/twitter" method="POST">
+                		<input type="hidden" name="_csrf" value="${_csrf.token}" />
+                    	<button type="submit" class="btn btn-default btn-md social-btn" >
+                    		<img src="/img/twitter.png" class="social-logo" /> Connect with Twitter
+                    	</button>
+                	</form> 
+                </li>
+                
+            </ul>
+        </div>
+    </div>
 
   </div> <!-- /container -->
 
   <footer>
-    <#include "_footer.html">
+    <#include "/_footer.html">
   </footer>
   <!-- Le javascript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script>
-    <#include "cookies.js">
+    <#include "/cookies.js">
   </script>
 </body>
 </html>

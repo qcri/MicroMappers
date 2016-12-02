@@ -1,15 +1,9 @@
 package org.qcri.micromappers.controller;
 
 
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.qcri.micromappers.model.CurrentUser;
 
 @org.springframework.stereotype.Controller
 public class HomeController {
@@ -26,6 +20,19 @@ public class HomeController {
 
 		return "signin";
 	}
+	
+	@RequestMapping(value="/home")
+	public String homePage(Model model){
+		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		model.addAttribute("current_user",name);
+		return "home";
+	}
+	
+	/*@RequestMapping(value="/signout")
+	public String signOutPage(Model model){
+
+		return "login";
+	}*/
 
 
 }

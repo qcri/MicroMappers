@@ -8,10 +8,10 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="./vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    <link href="./css/fonts/stylesheet.css" rel="stylesheet">
-    <link href="./css/styles.css" rel="stylesheet">
+    <link href="/css/fonts/stylesheet.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -19,12 +19,12 @@
     <![endif]-->
 
     <!-- Le fav and touch icons -->
-    <link rel="shortcut icon" href="./img/favicon.ico">
+    <link rel="shortcut icon" href="/img/favicon.ico">
 
     <!-- Le javascript -->
-    <script type="text/javascript" src="./vendor/jquery.js"></script>
-    <script type="text/javascript" src="./vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
-    <script type="text/javascript" src="./vendor/modernizr.min.js"></script>
+    <script type="text/javascript" src="/vendor/jquery.js"></script>
+    <script type="text/javascript" src="/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/vendor/modernizr.min.js"></script>
 </head>
 
 <body>
