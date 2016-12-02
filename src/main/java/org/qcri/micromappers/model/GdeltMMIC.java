@@ -36,6 +36,15 @@ public class GdeltMMIC {
     @Column(name = "glide_code", nullable = false)
     private String glideCode;
 
+    @Column(name = "local_img_url", nullable = false)
+    private String localImgUrl;
+
+    @Column(name = "local_article_url", nullable = false)
+    private String localArticleUrl;
+
+    @Column(name = "state", nullable = false)
+    private String state;
+
     public GdeltMMIC() {
     }
 
@@ -48,6 +57,49 @@ public class GdeltMMIC {
         this.lon = lon;
         this.imgURL = imgURL;
         this.glideCode = glideCode;
+        this.state = "insert";
+    }
+
+    public GdeltMMIC(String languageCode, String articleURL, String timestamp, String location, String lat, String lon, String imgURL, String glideCode, String localImgUrl, String localArticleUrl, String state) {
+        this.languageCode = languageCode;
+        this.articleURL = articleURL;
+        this.timestamp = timestamp;
+        this.location = location;
+        this.lat = lat;
+        this.lon = lon;
+        this.imgURL = imgURL;
+        this.glideCode = glideCode;
+        this.localImgUrl = localImgUrl;
+        this.localArticleUrl = localArticleUrl;
+        this.state = state;
+    }
+
+    public long getGdeltmmic_id() {
+        return gdeltmmic_id;
+    }
+
+    public String getLocalImgUrl() {
+        return localImgUrl;
+    }
+
+    public void setLocalImgUrl(String localImgUrl) {
+        this.localImgUrl = localImgUrl;
+    }
+
+    public String getLocalArticleUrl() {
+        return localArticleUrl;
+    }
+
+    public void setLocalArticleUrl(String localArticleUrl) {
+        this.localArticleUrl = localArticleUrl;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getLanguageCode() {

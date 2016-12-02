@@ -2,6 +2,8 @@ package org.qcri.micromappers.batch.processor;
 
 
 import org.qcri.micromappers.model.GdeltMMIC;
+import org.qcri.micromappers.utility.FilePathSpec;
+import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.springframework.batch.item.ItemProcessor;
 
 /**
@@ -13,11 +15,12 @@ public class GdeltMMICProcessor implements ItemProcessor<GdeltMMIC, GdeltMMIC> {
     public GdeltMMIC process(GdeltMMIC gdeltMMIC) throws Exception {
 
         GdeltMMIC transformedGdeltMMIC = null;
+        //HttpDownloadUtility httpDownloadUtility;
         try{
             System.out.println("******************************************************************");
        //public GdeltMMIC(String languageCode, String articleURL, String timestamp, String location, String lat, String lon, String imgURL, String glidecode)
             transformedGdeltMMIC = new GdeltMMIC(gdeltMMIC.getLanguageCode(), gdeltMMIC.getArticleURL(), gdeltMMIC.getTimestamp(), gdeltMMIC.getLocation(), gdeltMMIC.getLat(), gdeltMMIC.getLon(), gdeltMMIC.getImgURL(), gdeltMMIC.getGlideCode());
-
+           // HttpDownloadUtility.downloadFile(gdeltMMIC.getImgURL(), FilePathSpec.GDELT_IMAGE_PATH, null);
             System.out.println("Converting (" + gdeltMMIC + ") into (" + transformedGdeltMMIC + ")");
 
 

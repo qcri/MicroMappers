@@ -29,8 +29,8 @@ public class FetchGdeltMaster implements Tasklet {
 
         while ((inputLine = in.readLine()) != null){
             GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
-            HttpDownloadUtility httpDownloadUtility = new HttpDownloadUtility();
-            httpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH, null);
+           // HttpDownloadUtility httpDownloadUtility = new HttpDownloadUtility();
+            HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH, null);
             System.out.println(inputLine);
         }
 

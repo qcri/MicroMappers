@@ -42,12 +42,17 @@
 		<step id="step1" allow-start-if-complete="true" next="step2">
 			<tasklet ref="firstTasklet"></tasklet>
 		</step>
-		<step id="step2" allow-start-if-complete="true">
+		<step id="step2" allow-start-if-complete="true" next="step3">
 			<tasklet transaction-manager="transactionManager">
 				<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="10" />
 				<listeners>
 					<listener ref="StepListener" />
 				</listeners>
+			</tasklet>
+		</step>
+		<step id="step3" allow-start-if-complete="true">
+			<tasklet transaction-manager="transactionManager">
+				<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="10" />
 			</tasklet>
 		</step>
 	</job>
@@ -71,12 +76,18 @@
 				</property>
 				<property name="lineTokenizer">
 					<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+						<property name="strict" value="false" />
 						<property name="delimiter" value="," />
 						<property name="names" value="languageCode,articleURL,timestamp,location,lat,lon,imgURL,glidecode" />
 					</bean>
 				</property>
 			</bean>
 		</property>
+	</bean>
+
+	<bean id="databaseItemReader" class="org.springframework.batch.item.database.HibernateCursorItemReader">
+		<property name="queryString" value="From GdeltMMIC where state = 'insert'"/>
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 
@@ -89,15 +100,14 @@
 	<!-- Optional ItemProcessor to perform business logic/filtering on the input records -->
 	<bean id="mmicItemProcessor" class="org.qcri.micromappers.batch.processor.GdeltMMICProcessor" />
 
+	<bean id="mmicMediaItemProcessor" class="org.qcri.micromappers.batch.processor.GdeltMMICMediaProcessor"/>
+
 	<bean id="StepListener" class="org.qcri.micromappers.batch.steplistener.GdeltMMICStepListener">
 		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/*.mmic.txt" />
 	</bean>
 
 	<!-- Optional JobExecutionListener to perform business logic before and after the job
 	<bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
-
-
-
 
 
 	<bean id="myScheduler" class="org.qcri.micromappers.batch.scheduler.MyScheduler"/>
