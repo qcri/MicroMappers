@@ -12,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Created by jlucas on 11/25/16.
  */
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class})
-@ImportResource(value = {"spring-batch-context.xml","context-datasource.xml","context-model.xml"})
+@ImportResource("spring-batch-context.xml")
 public class MicroMappersApplication {
     public static void main(String[] args) {
         //String[] str = {"spring-batch-context.xml","context-datasource.xml","context-model.xml"};

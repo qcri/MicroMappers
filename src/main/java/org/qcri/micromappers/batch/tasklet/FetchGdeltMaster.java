@@ -2,6 +2,7 @@ package org.qcri.micromappers.batch.tasklet;
 
 
 import org.qcri.micromappers.model.GdeltMaster;
+import org.qcri.micromappers.utility.FilePathSpec;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -16,12 +17,11 @@ import java.net.URL;
  * Created by jlucas on 11/28/16.
  */
 public class FetchGdeltMaster implements Tasklet {
-    private String MASTER_URL = "http://data.gdeltproject.org/micromappers/lastupdate.txt";
-    private String MASTER_LOC = "/Users/jlucas/Documents/JavaDev/data/resources";
+
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
         System.out.println("Execution ***************************");
-        URL url = new URL(MASTER_URL);
+        URL url = new URL(FilePathSpec.GDELT_LAST_UPDATE_URL);
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(url.openStream()));
 
@@ -30,7 +30,7 @@ public class FetchGdeltMaster implements Tasklet {
         while ((inputLine = in.readLine()) != null){
             GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
             HttpDownloadUtility httpDownloadUtility = new HttpDownloadUtility();
-            httpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), MASTER_LOC);
+            httpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH, null);
             System.out.println(inputLine);
         }
 

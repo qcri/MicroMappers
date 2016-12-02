@@ -8,6 +8,7 @@ import org.springframework.batch.item.ItemProcessor;
  * Created by jlucas on 11/29/16.
  */
 public class GdeltMMICProcessor implements ItemProcessor<GdeltMMIC, GdeltMMIC> {
+
     @Override
     public GdeltMMIC process(GdeltMMIC gdeltMMIC) throws Exception {
 
@@ -18,6 +19,7 @@ public class GdeltMMICProcessor implements ItemProcessor<GdeltMMIC, GdeltMMIC> {
             transformedGdeltMMIC = new GdeltMMIC(gdeltMMIC.getLanguageCode(), gdeltMMIC.getArticleURL(), gdeltMMIC.getTimestamp(), gdeltMMIC.getLocation(), gdeltMMIC.getLat(), gdeltMMIC.getLon(), gdeltMMIC.getImgURL(), gdeltMMIC.getGlideCode());
 
             System.out.println("Converting (" + gdeltMMIC + ") into (" + transformedGdeltMMIC + ")");
+
 
         }
         catch(Exception e){

@@ -45,6 +45,9 @@
 		<step id="step2" allow-start-if-complete="true">
 			<tasklet transaction-manager="transactionManager">
 				<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="10" />
+				<listeners>
+					<listener ref="StepListener" />
+				</listeners>
 			</tasklet>
 		</step>
 	</job>
@@ -85,6 +88,10 @@
 
 	<!-- Optional ItemProcessor to perform business logic/filtering on the input records -->
 	<bean id="mmicItemProcessor" class="org.qcri.micromappers.batch.processor.GdeltMMICProcessor" />
+
+	<bean id="StepListener" class="org.qcri.micromappers.batch.steplistener.GdeltMMICStepListener">
+		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/*.mmic.txt" />
+	</bean>
 
 	<!-- Optional JobExecutionListener to perform business logic before and after the job
 	<bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
