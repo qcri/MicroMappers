@@ -1,13 +1,20 @@
 package org.qcri.micromappers.controller;
 
 
+import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.service.AccountService;
+import org.qcri.micromappers.utility.RoleType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@org.springframework.stereotype.Controller
+@Controller
 public class HomeController {
 
+	@Autowired
+	AccountService accountService;
 	//CurrentUser current_user = new CurrentUser();
 
 	@RequestMapping(value="/")

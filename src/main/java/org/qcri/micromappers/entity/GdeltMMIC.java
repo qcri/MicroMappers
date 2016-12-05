@@ -1,4 +1,4 @@
-package org.qcri.micromappers.model;
+package org.qcri.micromappers.entity;
 
 import javax.persistence.*;
 
@@ -36,10 +36,10 @@ public class GdeltMMIC {
     @Column(name = "glide_code", nullable = false)
     private String glideCode;
 
-    @Column(name = "local_img_url", nullable = false)
+    @Column(name = "local_img_url", nullable = true)
     private String localImgUrl;
 
-    @Column(name = "local_article_url", nullable = false)
+    @Column(name = "local_article_url", nullable = true)
     private String localArticleUrl;
 
     @Column(name = "state", nullable = false)

@@ -1,7 +1,7 @@
 package org.qcri.micromappers.batch.tasklet;
 
 
-import org.qcri.micromappers.model.GdeltMaster;
+import org.qcri.micromappers.entity.GdeltMaster;
 import org.qcri.micromappers.utility.FilePathSpec;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.springframework.batch.core.StepContribution;

@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 
 import org.qcri.micromappers.controller.FacebookConnectInterceptor;
 import org.qcri.micromappers.controller.TwitterConnectInterceptor;
+import org.qcri.micromappers.social.CustomConnectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -54,6 +55,9 @@ public class SocialConfig extends SocialConfigurerAdapter
 	@Value("${google.appSecret}")
 	private String googleAppSecret;
 	
+	@Value("${application.url}")
+	private String applicationURL;
+	
 	@Inject
 	private DataSource dataSource;
 	@Autowired
@@ -84,8 +88,8 @@ public class SocialConfig extends SocialConfigurerAdapter
 	@Override
 	public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator)
 	{
-		JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(this.dataSource, connectionFactoryLocator, Encryptors.noOpText());
-		jdbcUsersConnectionRepository.setConnectionSignUp(this.userConnectionSignUp);
+		JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+		jdbcUsersConnectionRepository.setConnectionSignUp(userConnectionSignUp);
 		return jdbcUsersConnectionRepository;
 	}
   
@@ -97,13 +101,13 @@ public class SocialConfig extends SocialConfigurerAdapter
   
 	private ConnectionFactory<Facebook> facebookConnectionFactory()
 	{
-		FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(this.facebookAppKey, this.facebookAppSecret);
+		FacebookConnectionFactory facebookConnectionFactory = new FacebookConnectionFactory(facebookAppKey, facebookAppSecret);
 		return facebookConnectionFactory;
 	}
   
 	private ConnectionFactory<Twitter> twitterConnectionFactory()
 	{
-		TwitterConnectionFactory twitterConnectionFactory = new TwitterConnectionFactory(this.twitterAppKey, this.twitterAppSecret);
+		TwitterConnectionFactory twitterConnectionFactory = new TwitterConnectionFactory(twitterAppKey, twitterAppSecret);
 		return twitterConnectionFactory;
 	}
 	
@@ -138,7 +142,8 @@ public class SocialConfig extends SocialConfigurerAdapter
 	
 	@Bean
 	public ConnectController connectController(ConnectionFactoryLocator connectionFactoryLocator, ConnectionRepository connectionRepository) {
-		ConnectController connectController = new ConnectController(connectionFactoryLocator, connectionRepository);
+		ConnectController connectController = new CustomConnectController(connectionFactoryLocator, connectionRepository);
+		connectController.setApplicationUrl(applicationURL);
 		connectController.addInterceptor(facebookConnectInterceptor());
 		connectController.addInterceptor(twitterConnectInterceptor());
 		return connectController;

@@ -4,6 +4,7 @@
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:tx="http://www.springframework.org/schema/tx"
         xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         					http://www.springframework.org/schema/context
@@ -11,30 +12,40 @@
         					http://www.springframework.org/schema/aop
         					http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
         					http://www.springframework.org/schema/tx
-        					 http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+        					http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        					http://www.springframework.org/schema/data/jpa 
+    						http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd"
         					 default-autowire="byName"  default-init-method="init">
 
 	<import resource="context-datasource.xml"/>
 
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
-		<property name="dataSource" ref="dataSource"/>
-		<property name="packagesToScan">
-			<list>
-				<value>org.qcri.micromappers.model</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<props>
- 				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<!-- 	<prop key="hibernate.format_sql">true</prop> -->
-			</props>
-		
-		</property>		
-	</bean>
-	
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" />
+	<!-- 	Spring-data JPA configurations -->
 
-	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 	
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+	    <property name="jpaProperties">
+	      <props>
+	        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+	        <prop key="hibernate.hbm2ddl.auto">${dataSource.hbm2ddl}</prop>
+	      </props>
+	    </property>
+	    <!-- Set base package of your entities -->
+	    <property name="packagesToScan" value="org.qcri.micromappers.entity"/>
+  	</bean>
+  
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    	<property name="entityManagerFactory" ref="entityManagerFactory"/>
+  	</bean>
+
+  <!-- Enable annotation driven transaction management -->
+  <tx:annotation-driven />
+
+  <!-- 
+    Configure Spring Data JPA and set the base package of the 
+    repository interfaces 
+  -->
+  <jpa:repositories base-package="org.qcri.micromappers.repository"/>
 </beans>

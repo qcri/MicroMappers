@@ -85,15 +85,15 @@
 		</property>
 	</bean>
 
-	<bean id="databaseItemReader" class="org.springframework.batch.item.database.HibernateCursorItemReader">
+	<bean id="databaseItemReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
 		<property name="queryString" value="From GdeltMMIC where state = 'insert'"/>
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 
 	<!-- ItemWriter which writes data to database -->
-  	<bean id="databaseItemWriter" class="org.springframework.batch.item.database.HibernateItemWriter">
-		<property name="sessionFactory" ref="sessionFactory" />
+  	<bean id="databaseItemWriter" class="org.springframework.batch.item.database.JpaItemWriter">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 

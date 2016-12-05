@@ -1,7 +1,7 @@
 package org.qcri.micromappers.batch.mapper;
 
 
-import org.qcri.micromappers.model.GdeltMMIC;
+import org.qcri.micromappers.entity.GdeltMMIC;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.validation.BindException;
