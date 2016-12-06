@@ -18,8 +18,8 @@ package org.qcri.micromappers.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.qcri.micromappers.social.CustomSocialUsersDetailService;
-import org.qcri.micromappers.social.CustomUserDetailService;
+import org.qcri.micromappers.config.social.CustomSocialUsersDetailService;
+import org.qcri.micromappers.config.social.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

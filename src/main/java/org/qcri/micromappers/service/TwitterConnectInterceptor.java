@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.qcri.micromappers.controller;
+package org.qcri.micromappers.service;
 
 import org.apache.log4j.Logger;
 import org.springframework.social.connect.Connection;
@@ -29,33 +29,9 @@ public class TwitterConnectInterceptor implements ConnectInterceptor<Twitter> {
 
 	private static Logger logger = Logger.getLogger(TwitterConnectInterceptor.class);
 	
-	/*@Autowired
-	private UtilService utilService;
-	@Autowired
-	private UserConnectionService userConnectionService;
-	@Autowired
-	private AccountUserService accountUserService;*/
-	
 	public void preConnect(ConnectionFactory<Twitter> provider, MultiValueMap<String, String> parameters, WebRequest request) {
 	}
 
 	public void postConnect(Connection<Twitter> connection, WebRequest request) {
-		/*try {
-			Account authenticatedAccount = utilService.getAuthenticatedAccount();
-			UserConnection newUserConnection = userConnectionService.getByProviderIdAndProviderUserId(connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
-			Long countByUserConnection = accountUserService.getCountByUserConnection(newUserConnection);
-		
-			if(countByUserConnection == null || countByUserConnection == 0){
-				AccountUser accountUser = new AccountUser();
-				accountUser.setAccount(authenticatedAccount);
-				accountUser.setUserConnection(newUserConnection);
-				accountUserService.create(accountUser);
-			}else{
-				logger.info("Connection already exists");
-			}
-		
-		} catch (Exception e) {
-			logger.info("Exception while connecting a twitter account");
-		}*/
 	}
 }

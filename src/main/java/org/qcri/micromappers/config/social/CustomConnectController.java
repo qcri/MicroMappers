@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.qcri.micromappers.social;
+package org.qcri.micromappers.config.social;
 /*
  * 
 Override the default Connect Controller to handle Duplicate Connection . 

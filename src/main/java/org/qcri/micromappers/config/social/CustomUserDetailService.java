@@ -1,4 +1,4 @@
-package org.qcri.micromappers.social;
+package org.qcri.micromappers.config.social;
 
 import java.util.ArrayList;
 import java.util.List;

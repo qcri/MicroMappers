@@ -1,4 +1,4 @@
-package org.qcri.micromappers.social;
+package org.qcri.micromappers.config.social;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -40,7 +40,7 @@
             <ul class="list-unstyled">
                 <li>
                 	Welcome
-                	This twitter user is already connected to other user. Please logout this user and  connect with different account.
+                	<h4 style="color:red">This twitter user is already connected to other user. Please logout this user and connect with different account.</h4>
                 	<form action="/connect/twitter" method="POST">
                 		<input type="hidden" name="_csrf" value="${_csrf.token}" />
                     	<button type="submit" class="btn btn-default btn-md social-btn" >

@@ -3,9 +3,9 @@ package org.qcri.micromappers.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.qcri.micromappers.controller.FacebookConnectInterceptor;
-import org.qcri.micromappers.controller.TwitterConnectInterceptor;
-import org.qcri.micromappers.social.CustomConnectController;
+import org.qcri.micromappers.config.social.CustomConnectController;
+import org.qcri.micromappers.service.FacebookConnectInterceptor;
+import org.qcri.micromappers.service.TwitterConnectInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
