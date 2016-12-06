@@ -1,6 +1,7 @@
 package org.qcri.micromappers.batch.tasklet;
 
 
+import org.apache.commons.io.FileUtils;
 import org.qcri.micromappers.entity.GdeltMaster;
 import org.qcri.micromappers.utility.FilePathSpec;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
@@ -8,10 +9,18 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by jlucas on 11/28/16.
@@ -36,11 +45,68 @@ public class FetchGdeltMaster implements Tasklet {
 
         in.close();
 
+        this.reformat3WJason();
+
         System.out.println("Execution Finish***************************");
 
 
 
 
         return RepeatStatus.FINISHED;
+    }
+
+    private void reformat3WJason() throws IOException {
+
+        List<String> result = Files.find(Paths.get(FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH), 1,
+                (p, a) -> p.toString().toLowerCase().endsWith("mm3w.json"))
+                .map(path -> path.toString())
+                .collect(Collectors.toList());
+
+        JSONParser parser = new JSONParser();
+
+        result.forEach(item -> {
+            File file = new File(item);
+            JSONObject jsonContext = null;
+            try {
+                jsonContext = (JSONObject)parser.parse(FileUtils.readFileToString(file));
+
+                if(!jsonContext.isEmpty() && jsonContext.containsKey("data")){
+                    this.generateJsonFile((JSONArray)jsonContext.get("data"), file);
+                }
+
+                File newMaserFile = new File(file.getAbsolutePath() + ".processed");
+                FileUtils.copyFile(file, newMaserFile);
+                file.delete();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e2){
+                e2.printStackTrace();
+            }
+
+
+        });
+    }
+
+    private void generateJsonFile(JSONArray gdelt3WArrary, File file){
+
+        int index = 0;
+        try{
+            for(Object o : gdelt3WArrary){
+                JSONObject jsonObject = (JSONObject)o;
+
+                File newfile = new File(FilePathSpec.GDELT_JSON_UPDATE_PATH+ File.separator+ file.getName()+"_"+index+".json");
+
+                FileUtils.writeStringToFile(newfile,jsonObject.toJSONString());
+                index++;
+            }
+
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e2) {
+            e2.printStackTrace();
+        }
+
     }
 }

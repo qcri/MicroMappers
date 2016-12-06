@@ -35,9 +35,7 @@
 	</bean>
 
 
-	<!-- Actual Job -->
-
-
+	<!-- Actual Job Steps -->
 	<job id="myJob" xmlns="http://www.springframework.org/schema/batch" restartable="true" job-repository="jobRepository">
 		<step id="step1" allow-start-if-complete="true" next="step2">
 			<tasklet ref="firstTasklet"></tasklet>
@@ -50,20 +48,38 @@
 				</listeners>
 			</tasklet>
 		</step>
-		<step id="step3" allow-start-if-complete="true">
+		<step id="step3" allow-start-if-complete="true" next="step4">
+			<tasklet transaction-manager="transactionManager">
+				<chunk reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
+					   commit-interval="10"/>
+				<listeners>
+					<listener ref="StepListener3W"/>
+				</listeners>
+			</tasklet>
+		</step>
+		<step id="step4" allow-start-if-complete="true" next="step5">
 			<tasklet transaction-manager="transactionManager">
 				<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="10" />
 			</tasklet>
 		</step>
+		<step id="step5" allow-start-if-complete="true">
+			<tasklet transaction-manager="transactionManager">
+				<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
+					   commit-interval="10"/>
+			</tasklet>
+		</step>
 	</job>
 
-
+	<!-- tasklet -->
 	<bean id="firstTasklet" class="org.qcri.micromappers.batch.tasklet.FetchGdeltMaster"></bean>
 
+	<!-- Multi-ItemReader -->
 	<bean id="multiResourceItemReader" class="org.springframework.batch.item.file.MultiResourceItemReader">
-		<property name="resources" value="file:/Users/jlucas/Documents/JavaDev/data/resources/*.mmic.txt" />
 		<property name="delegate" ref="flatFileItemReader" />
   	</bean>
+	<bean id="multiResourceItemReader3W" class="org.springframework.batch.item.file.MultiResourceItemReader">
+		<property name="delegate" ref="flatFile3WItemReader"/>
+	</bean>
 
 	<!-- ItemReader reads a complete line one by one from input file -->
 	<bean id="flatFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader"  scope="step">
@@ -85,11 +101,28 @@
 		</property>
 	</bean>
 
+	<bean id="flatFile3WItemReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+		<!--<property name="resource" value="file:/Users/jlucas/Documents/JavaDev/data/resources/20161204110000.mm3w.json" />-->
+		<property name="recordSeparatorPolicy" ref="recordPolicy"/>
+		<property name="lineMapper" ref="lineMapper"/>
+	</bean>
+
+	<bean id="lineMapper" class="org.qcri.micromappers.batch.mapper.Gdelt3WFieldSetMapper">
+		<property name="delegate" ref="lineMapperType"/>
+	</bean>
+	<bean id="lineMapperType" class="org.springframework.batch.item.file.mapping.JsonLineMapper"/>
+
+	<bean id="recordPolicy" class="org.springframework.batch.item.file.separator.JsonRecordSeparatorPolicy"/>
+
+
 	<bean id="databaseItemReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
 		<property name="queryString" value="From GdeltMMIC where state = 'insert'"/>
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
-
+	<bean id="database3wItemReader" class="org.springframework.batch.item.database.JpaPagingItemReader">
+		<property name="queryString" value="From Gdelt3W where state = 'insert'"/>
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
 
 	<!-- ItemWriter which writes data to database -->
   	<bean id="databaseItemWriter" class="org.springframework.batch.item.database.JpaItemWriter">
@@ -99,15 +132,20 @@
 
 	<!-- Optional ItemProcessor to perform business logic/filtering on the input records -->
 	<bean id="mmicItemProcessor" class="org.qcri.micromappers.batch.processor.GdeltMMICProcessor" />
-
 	<bean id="mmicMediaItemProcessor" class="org.qcri.micromappers.batch.processor.GdeltMMICMediaProcessor"/>
+	<bean id="gdelt3WItemProcessor" class="org.qcri.micromappers.batch.processor.Gdelt3WProcessor"/>
+	<bean id="gdelt3wMediaItemProcessor" class="org.qcri.micromappers.batch.processor.Gdelt3WMediaProcessor"/>
 
+
+	<!-- Optional JobExecutionListener to perform business logic before and after the job-->
 	<bean id="StepListener" class="org.qcri.micromappers.batch.steplistener.GdeltMMICStepListener">
 		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/*.mmic.txt" />
 	</bean>
+	<bean id="StepListener3W" class="org.qcri.micromappers.batch.steplistener.Gdelt3WStepListener">
+		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/3w/*.mm3w.*.json"/>
+	</bean>
 
-	<!-- Optional JobExecutionListener to perform business logic before and after the job
-	<bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
+	<!-- <bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
 
 
 	<bean id="myScheduler" class="org.qcri.micromappers.batch.scheduler.MyScheduler"/>
