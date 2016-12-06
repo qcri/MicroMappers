@@ -235,6 +235,14 @@ public class CustomConnectController extends ConnectController {
 			return connectedView(providerId);			
 		}
 	}
+	
+	@RequestMapping(value="/{providerId}/duplicate", method=RequestMethod.GET)
+	public String duplicateConnectionStatus(@PathVariable String providerId, NativeWebRequest request, Model model) {
+		setNoCache(request);
+		processFlash(request, model);
+		setNoCache(request);
+		return duplicateView(providerId);			
+	}
 
 	/**
 	 * Process a connect form submission by commencing the process of establishing a connection to the provider on behalf of the member.
@@ -268,16 +276,17 @@ public class CustomConnectController extends ConnectController {
 	 */
 	@RequestMapping(value="/{providerId}", method=RequestMethod.GET, params="oauth_token")
 	public RedirectView oauth1Callback(@PathVariable String providerId, NativeWebRequest request) {
+		Boolean isDuplicate = false;
 		try {
 			OAuth1ConnectionFactory<?> connectionFactory = (OAuth1ConnectionFactory<?>) connectionFactoryLocator.getConnectionFactory(providerId);
 			Connection<?> connection = connectSupport.completeConnection(connectionFactory, request);
-			handleDuplicateConnectionException(connection, connectionFactory, request);
+			isDuplicate = handleDuplicateConnection(connection, connectionFactory, request);
 //			addConnection(connection, connectionFactory, request);
 		} catch (Exception e) {
 			sessionStrategy.setAttribute(request, PROVIDER_ERROR_ATTRIBUTE, e);
 			logger.warn("Exception while handling OAuth1 callback (" + e.getMessage() + "). Redirecting to " + providerId +" connection status page.");
 		}
-		return connectionStatusRedirect(providerId, request);
+		return connectionStatusRedirect(providerId, request, isDuplicate);
 	}
 
 	/**
@@ -290,16 +299,17 @@ public class CustomConnectController extends ConnectController {
 	 */
 	@RequestMapping(value="/{providerId}", method=RequestMethod.GET, params="code")
 	public RedirectView oauth2Callback(@PathVariable String providerId, NativeWebRequest request) {
+		Boolean isDuplicate = false;
 		try {
 			OAuth2ConnectionFactory<?> connectionFactory = (OAuth2ConnectionFactory<?>) connectionFactoryLocator.getConnectionFactory(providerId);
 			Connection<?> connection = connectSupport.completeConnection(connectionFactory, request);
-			handleDuplicateConnectionException(connection, connectionFactory, request);
+			isDuplicate = handleDuplicateConnection(connection, connectionFactory, request);
 //			addConnection(connection, connectionFactory, request);
 		} catch (Exception e) {
 			sessionStrategy.setAttribute(request, PROVIDER_ERROR_ATTRIBUTE, e);
 			logger.warn("Exception while handling OAuth2 callback (" + e.getMessage() + "). Redirecting to " + providerId +" connection status page.");
 		}
-		return connectionStatusRedirect(providerId, request);
+		return connectionStatusRedirect(providerId, request, isDuplicate);
 	}
 	
 	/**
@@ -392,6 +402,10 @@ public class CustomConnectController extends ConnectController {
 	protected String connectedView(String providerId) {
 		return getViewPath() + providerId + "Connected";		
 	}
+	
+	protected String duplicateView(String providerId) {
+		return getViewPath() + providerId + "Duplicate";		
+	}
 
 	/**
 	 * Returns a RedirectView with the URL to redirect to after a connection is created or deleted.
@@ -401,28 +415,34 @@ public class CustomConnectController extends ConnectController {
 	 * @param request the NativeWebRequest used to access the servlet path when constructing the redirect path.
 	 * @return a RedirectView to the page to be displayed after a connection is created or deleted
 	 */
-	protected RedirectView connectionStatusRedirect(String providerId, NativeWebRequest request) {
+	protected RedirectView connectionStatusRedirect(String providerId, NativeWebRequest request, boolean isDuplicate) {
 		HttpServletRequest servletRequest = request.getNativeRequest(HttpServletRequest.class);
-		String path = "/connect/" + providerId + getPathExtension(servletRequest);
+		String path = "/connect/" + providerId + getPathForDuplicate(isDuplicate) +getPathExtension(servletRequest);
 		if (prependServletPath(servletRequest)) {
 			path = servletRequest.getServletPath() + path;
 		}
 		return new RedirectView(path, true);
 	}
 	
+	protected RedirectView connectionStatusRedirect(String providerId, NativeWebRequest request) {
+		return connectionStatusRedirect(providerId, request, false);
+	}
+	
 	/**
 	 * May be overridden to allow custom processing of DuplicateConnectionException. 
 	 */
-	protected void handleDuplicateConnectionException(Connection<?> connection, ConnectionFactory<?> connectionFactory, WebRequest request) {
+	protected Boolean handleDuplicateConnection(Connection<?> connection, ConnectionFactory<?> connectionFactory, WebRequest request) {
 		UserConnection userConnection = userConnectionService.getByProviderIdAndProviderUserId(connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
 		if(userConnection != null){
 			if(userConnection.getUserId().equalsIgnoreCase(request.getUserPrincipal().getName())){
 				updateConnection(connection, connectionFactory, request);
+				return false;
 			}else{
-			//handle duplicate connection over here 	
+				return true;
 			}
 		}else{
 			addConnection(connection, connectionFactory, request);
+			return false;
 		}
 	}
 	
@@ -449,6 +469,14 @@ public class CustomConnectController extends ConnectController {
 		String fileName = WebUtils.extractFullFilenameFromUrlPath(request.getRequestURI());		
 		String extension = StringUtils.getFilenameExtension(fileName);
 		return extension != null ? "." + extension : "";
+	}
+	
+	private String getPathForDuplicate(Boolean isDuplicate){
+		if(isDuplicate != null && isDuplicate == Boolean.TRUE){
+			return "/duplicate";
+		}else{
+			return "";
+		}
 	}
 
 	private String getViewPath() {
