@@ -1,8 +1,10 @@
 package org.qcri.micromappers.batch.steplistener;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
-import org.qcri.micromappers.utility.FilePathSpec;
-import org.springframework.batch.core.BatchStatus;
+import org.qcri.micromappers.utility.Constants;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -11,9 +13,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.Resource;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by jlucas on 12/1/16.
@@ -54,7 +53,7 @@ public class GdeltMMICStepListener implements StepExecutionListener, Application
             for (Resource resource : resources) {
                 try {
                     File oldFile = new File(resource.getFile().getAbsolutePath());
-                    File newFile = new File(resource.getFile().getAbsolutePath() + FilePathSpec.GDELT_PROCESSED_EXTENTION);
+                    File newFile = new File(resource.getFile().getAbsolutePath() + Constants.GDELT_PROCESSED_EXTENTION);
                     FileUtils.copyFile(oldFile, newFile);
                     oldFile.delete();
                 } catch (IOException ex) {

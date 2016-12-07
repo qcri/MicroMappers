@@ -1,8 +1,9 @@
 package org.qcri.micromappers.batch.processor;
 
 import org.qcri.micromappers.entity.GdeltMMIC;
-import org.qcri.micromappers.utility.FilePathSpec;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.springframework.batch.item.ItemProcessor;
 
 
@@ -11,6 +12,8 @@ import org.springframework.batch.item.ItemProcessor;
  */
 public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMMIC> {
 
+	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+	
     @Override
     public GdeltMMIC process(GdeltMMIC gdeltMMIC) throws Exception {
         String imgFileURL = gdeltMMIC.getImgURL();
@@ -32,7 +35,7 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
             imgFileName = gdeltMMIC.getGdeltmmic_id()+ "_" + imgFileName;
 
             System.out.println("imgFileName : " + imgFileName);
-            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getImgURL(), FilePathSpec.GDELT_IMAGE_PATH, imgFileName);
+            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getImgURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_IMAGE_PATH), imgFileName);
 
             gdeltMMIC.setLocalImgUrl(imgFileName);
         }
@@ -52,7 +55,7 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
             System.out.println("articleFileURL : " + articleFileURL);
             System.out.println("articleFileName : " + articleFileName);
 
-            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , FilePathSpec.GDELT_ARTICLE_PATH, articleFileName);
+            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);
 
             gdeltMMIC.setLocalArticleUrl(articleFileName);
         }

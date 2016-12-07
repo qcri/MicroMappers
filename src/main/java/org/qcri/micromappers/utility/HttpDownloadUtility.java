@@ -38,7 +38,7 @@ public class HttpDownloadUtility {
                 // opens input stream from the HTTP connection
                 InputStream inputStream = httpConn.getInputStream();
                 String saveFilePath = saveDir + File.separator + fileName;
-                String saveFilePathProcessed = saveDir + File.separator + fileName + FilePathSpec.GDELT_PROCESSED_EXTENTION;
+                String saveFilePathProcessed = saveDir + File.separator + fileName + Constants.GDELT_PROCESSED_EXTENTION;
                 // check file exists
                 if(!new File(saveFilePath).exists() && !new File(saveFilePathProcessed).exists()){
                     // opens an output stream to save into file
@@ -115,7 +115,7 @@ public class HttpDownloadUtility {
                 // opens input stream from the HTTP connection
                 InputStream inputStream = httpConn.getInputStream();
                 String saveFilePath = saveDir + File.separator + fileName;
-                String saveFilePathProcessed = saveDir + File.separator + fileName + FilePathSpec.GDELT_PROCESSED_EXTENTION;
+                String saveFilePathProcessed = saveDir + File.separator + fileName + Constants.GDELT_PROCESSED_EXTENTION;
                 // check file exists
                 if(!new File(saveFilePath).exists() && !new File(saveFilePathProcessed).exists()){
                     // opens an output stream to save into file

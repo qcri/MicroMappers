@@ -2,8 +2,6 @@ package org.qcri.micromappers.batch.processor;
 
 
 import org.qcri.micromappers.entity.GdeltMMIC;
-import org.qcri.micromappers.utility.FilePathSpec;
-import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.springframework.batch.item.ItemProcessor;
 
 /**

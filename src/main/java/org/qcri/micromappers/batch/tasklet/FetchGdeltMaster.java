@@ -1,17 +1,6 @@
 package org.qcri.micromappers.batch.tasklet;
 
 
-import org.apache.commons.io.FileUtils;
-import org.qcri.micromappers.entity.GdeltMaster;
-import org.qcri.micromappers.utility.FilePathSpec;
-import org.qcri.micromappers.utility.HttpDownloadUtility;
-import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.scope.context.ChunkContext;
-import org.springframework.batch.core.step.tasklet.Tasklet;
-import org.springframework.batch.repeat.RepeatStatus;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -22,15 +11,30 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.qcri.micromappers.entity.GdeltMaster;
+import org.qcri.micromappers.utility.HttpDownloadUtility;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
+import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.scope.context.ChunkContext;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.repeat.RepeatStatus;
+
 /**
  * Created by jlucas on 11/28/16.
  */
 public class FetchGdeltMaster implements Tasklet {
 
+	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+	
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
         System.out.println("Execution ***************************");
-        URL url = new URL(FilePathSpec.GDELT_LAST_UPDATE_URL);
+        URL url = new URL(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_LAST_UPDATE_URL));
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(url.openStream()));
 
@@ -39,7 +43,7 @@ public class FetchGdeltMaster implements Tasklet {
         while ((inputLine = in.readLine()) != null){
             GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
            // HttpDownloadUtility httpDownloadUtility = new HttpDownloadUtility();
-            HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH, null);
+            HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH), null);
             System.out.println(inputLine);
         }
 
@@ -57,7 +61,7 @@ public class FetchGdeltMaster implements Tasklet {
 
     private void reformat3WJason() throws IOException {
 
-        List<String> result = Files.find(Paths.get(FilePathSpec.GDELT_DOWNLOADED_LAST_UPDATE_PATH), 1,
+        List<String> result = Files.find(Paths.get(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH)), 1,
                 (p, a) -> p.toString().toLowerCase().endsWith("mm3w.json"))
                 .map(path -> path.toString())
                 .collect(Collectors.toList());
@@ -95,7 +99,7 @@ public class FetchGdeltMaster implements Tasklet {
             for(Object o : gdelt3WArrary){
                 JSONObject jsonObject = (JSONObject)o;
 
-                File newfile = new File(FilePathSpec.GDELT_JSON_UPDATE_PATH+ File.separator+ file.getName()+"_"+index+".json");
+                File newfile = new File(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_JSON_UPDATE_PATH)+ File.separator+ file.getName()+"_"+index+".json");
 
                 FileUtils.writeStringToFile(newfile,jsonObject.toJSONString());
                 index++;
