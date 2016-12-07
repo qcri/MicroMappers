@@ -8,10 +8,10 @@
   <meta name="author" content="">
 
   <!-- Le styles -->
-  <link href="/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="${rc.getContextPath()}/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-  <link href="/css/fonts/stylesheet.css" rel="stylesheet">
-  <link href="/css/styles.css" rel="stylesheet">
+  <link href="${rc.getContextPath()}/css/fonts/stylesheet.css" rel="stylesheet">
+  <link href="${rc.getContextPath()}/css/styles.css" rel="stylesheet">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -23,9 +23,9 @@
   <link rel="shortcut icon" href="/img/favicon.ico">
 
   <!-- Le javascript -->
-  <script type="text/javascript" src="/vendor/jquery.js"></script>
-  <script type="text/javascript" src="/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
-  <script type="text/javascript" src="/vendor/modernizr.min.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/jquery.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/modernizr.min.js"></script>
 </head>
 
 <body>
@@ -40,10 +40,10 @@
             <ul class="list-unstyled">
                 <li>
                 	Welcome
-                	<form action="/connect/twitter" method="POST">
+                	<form action="${rc.getContextPath()}/connect/twitter" method="POST">
                 		<input type="hidden" name="_csrf" value="${_csrf.token}" />
                     	<button type="submit" class="btn btn-default btn-md social-btn" >
-                    		<img src="/img/twitter.png" class="social-logo" /> Connect with Twitter
+                    		<img src="${rc.getContextPath()}/img/twitter.png" class="social-logo" /> Connect with Twitter
                     	</button>
                 	</form> 
                 </li>

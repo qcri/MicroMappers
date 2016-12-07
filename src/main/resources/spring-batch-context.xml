@@ -23,7 +23,6 @@
 	<import resource="context-model.xml"/>
 	<context:component-scan base-package="org.qcri.micromappers"></context:component-scan>
 
-
 	<!-- JobRepository and JobLauncher are configuration/setup classes -->
 	<bean id="jobRepository"
 		  class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
@@ -139,10 +138,10 @@
 
 	<!-- Optional JobExecutionListener to perform business logic before and after the job-->
 	<bean id="StepListener" class="org.qcri.micromappers.batch.steplistener.GdeltMMICStepListener">
-		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/*.mmic.txt" />
+		<property name="filePattern" value="file:${GDELT_DOWNLOADED_LAST_UPDATE_PATH}/*.mmic.txt" />
 	</bean>
 	<bean id="StepListener3W" class="org.qcri.micromappers.batch.steplistener.Gdelt3WStepListener">
-		<property name="filePattern" value="file:/Users/jlucas/Documents/JavaDev/data/resources/3w/*.mm3w.*.json"/>
+		<property name="filePattern" value="file:${GDELT_JSON_UPDATE_PATH}/*.mm3w.*.json"/>
 	</bean>
 
 	<!-- <bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
