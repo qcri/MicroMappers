@@ -6,7 +6,7 @@
 							http://www.springframework.org/schema/context
         					http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
- 	<context:property-placeholder location="hibernate.properties" /> 
+ 	<context:property-placeholder location="hibernate.properties, config.properties" /> 
 
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="${dataSource.driverClassName}" />
