@@ -8,10 +8,10 @@
   <meta name="author" content="">
 
   <!-- Le styles -->
-  <link href="/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="${rc.getContextPath()}/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-  <link href="/css/fonts/stylesheet.css" rel="stylesheet">
-  <link href="/css/styles.css" rel="stylesheet">
+  <link href="${rc.getContextPath()}/css/fonts/stylesheet.css" rel="stylesheet">
+  <link href="${rc.getContextPath()}/css/styles.css" rel="stylesheet">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -20,12 +20,12 @@
 
   <!-- Le fav and touch icons -->
   <!-- Le fav and touch icons -->
-  <link rel="shortcut icon" href="/img/favicon.ico">
+  <link rel="shortcut icon" href="${rc.getContextPath()}/img/favicon.ico">
 
   <!-- Le javascript -->
-  <script type="text/javascript" src="/vendor/jquery.js"></script>
-  <script type="text/javascript" src="/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
-  <script type="text/javascript" src="/vendor/modernizr.min.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/jquery.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
+  <script type="text/javascript" src="${rc.getContextPath()}/vendor/modernizr.min.js"></script>
 </head>
 
 <body>
@@ -43,16 +43,10 @@
         <a href="">data</a>.
     </p>
 
-		<!-- <form name="user" action="auth/google" method="get">
-			<input type="hidden" name="scope" value="email" />
-		  	<button type="submit" class="btn btn-default btn-md social-btn" >
-	               <class="btn btn-warning"><i class="icon-google-plus"></i> Sign in with Google
-			</button>
-  		</form> -->
   		<form action="auth/google" method="GET">
 			<input type="hidden" name="scope" value="email" />
         	<button type="submit" class="btn btn-default btn-md social-btn" >
-        		<img src="/img/google.png" class="social-logo" /> Login with Google
+        		<img src="${rc.getContextPath()}/img/google.png" class="social-logo" /> Login with Google
         	</button>
     	</form>
     <hr>
