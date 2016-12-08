@@ -1,5 +1,6 @@
 package org.qcri.micromappers.batch.processor;
 
+import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Gdelt3W;
 import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
@@ -11,19 +12,15 @@ import org.springframework.batch.item.ItemProcessor;
  * Created by jlucas on 12/5/16.
  */
 public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
-	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+    private static Logger logger = Logger.getLogger(GdeltMMICMediaProcessor.class);
+    private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
 	
     @Override
     public Gdelt3W process(Gdelt3W gdelt3W) throws Exception {
         String imgFileURL = gdelt3W.getImgURL();
         if(imgFileURL != null){
-            if(imgFileURL.contains("http//cdn.")){
-                System.out.println("cdn found : " + imgFileURL);
-                System.out.println("cdn indexx : " + imgFileURL.indexOf("cdn."));
-                System.out.println("cdn imgFileURL.length() : " + imgFileURL.length());
-                System.out.println("cdn substring : " + imgFileURL.substring(imgFileURL.indexOf("cdn."), imgFileURL.length()));
-
-                imgFileURL = imgFileURL.substring(imgFileURL.indexOf("cdn."), imgFileURL.length());
+            if(imgFileURL.contains("//cdn.")){
+                imgFileURL = imgFileURL.substring(imgFileURL.indexOf("cdn."));
 
             }
             String imgFileName = imgFileURL.substring(imgFileURL.lastIndexOf("/") + 1, imgFileURL.length());
@@ -43,8 +40,8 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
 
         if(articleFileURL != null){
 
-            if(articleFileURL.lastIndexOf("/") == articleFileURL.length()){
-                articleFileURL = articleFileURL.substring(0, articleFileURL.length() - 1) ;
+            if(articleFileURL.endsWith("/")){
+                articleFileURL = articleFileURL.replaceAll("/+$","") ; ;
             }
 
             String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());

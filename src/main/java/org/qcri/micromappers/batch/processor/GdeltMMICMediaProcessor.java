@@ -2,6 +2,7 @@ package org.qcri.micromappers.batch.processor;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.GdeltMMIC;
+import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -20,13 +21,12 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
         String imgFileURL = gdeltMMIC.getImgURL();
         if(imgFileURL != null){
             if(imgFileURL.contains("//cdn.")){
-                System.out.println("cdn substring : " + imgFileURL.substring(imgFileURL.indexOf("cdn."), imgFileURL.length()));
-                imgFileURL = imgFileURL.substring(imgFileURL.indexOf("cdn."), imgFileURL.length());
+                imgFileURL = imgFileURL.substring(imgFileURL.indexOf("cdn."));
 
             }
             String imgFileName = imgFileURL.substring(imgFileURL.lastIndexOf("/") + 1, imgFileURL.length());
 
-            imgFileName = gdeltMMIC.getGdeltmmic_id()+ "_" + imgFileName;
+            imgFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getGdeltmmic_id()+ "_" + imgFileName;
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getImgURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_IMAGE_PATH), imgFileName);
 
@@ -38,12 +38,12 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
         if(articleFileURL != null){
 
             if(articleFileURL.endsWith("/")){
-                articleFileURL = articleFileURL.substring(0, articleFileURL.length() - 2) ;
+                articleFileURL = articleFileURL.replaceAll("/+$","") ;
             }
 
             String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
 
-            articleFileName = gdeltMMIC.getGdeltmmic_id()+ "_" + articleFileName;
+            articleFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getGdeltmmic_id()+ "_" + articleFileName;
 
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);

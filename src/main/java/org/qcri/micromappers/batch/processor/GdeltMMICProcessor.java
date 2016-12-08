@@ -17,6 +17,7 @@ public class GdeltMMICProcessor implements ItemProcessor<GdeltMMIC, GdeltMMIC> {
 
         try{
             gdeltMMIC.setGlideCode(gdeltMMIC.getGlideCode().replace(";",","));
+            gdeltMMIC.setState("insert");
         }
         catch(Exception e){
             logger.error(e.getMessage());
