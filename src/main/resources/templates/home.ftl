@@ -48,7 +48,6 @@
                 	</form> 
                 </li></br>
                 <li>
-                	Welcome
                 	<form action="${rc.getContextPath()}/connect/facebook" method="POST">
                 		<input type="hidden" name="_csrf" value="${_csrf.token}" />
                     	<button type="submit" class="btn btn-default btn-md social-btn" >
