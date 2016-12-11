@@ -7,5 +7,6 @@ public class Constants
   public static final String GDELT_PROCESSED_EXTENTION = ".processed";
   public static final String GDELT_3W_SIGNATURE = "3W";
   public static final String GDELT_MMIC_SIGNATURE = "MMIC";
+  public static final String SNOPES_STATE_ACTIVE = "active";
   
 }

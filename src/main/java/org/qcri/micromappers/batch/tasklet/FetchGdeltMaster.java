@@ -42,7 +42,6 @@ public class FetchGdeltMaster implements Tasklet {
 
         while ((inputLine = in.readLine()) != null){
             GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
-           // HttpDownloadUtility httpDownloadUtility = new HttpDownloadUtility();
             HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH), null);
             System.out.println(inputLine);
         }

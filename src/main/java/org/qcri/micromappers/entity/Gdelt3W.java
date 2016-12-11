@@ -18,7 +18,7 @@ public class Gdelt3W {
     @Column(name = "article_url", nullable = false)
     private String articleURL;
 
-    @Column(name = "img_url", nullable = false)
+    @Column(name = "img_url")
     private String imgURL;
 
     @Column(name = "glide_code", nullable = false)
