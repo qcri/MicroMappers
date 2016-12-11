@@ -238,10 +238,8 @@ public class CustomConnectController extends ConnectController {
 	
 	@RequestMapping(value="/{providerId}/duplicate", method=RequestMethod.GET)
 	public String duplicateConnectionStatus(@PathVariable String providerId, NativeWebRequest request, Model model) {
-		setNoCache(request);
-		processFlash(request, model);
-		setNoCache(request);
-		return duplicateView(providerId);			
+		model.addAttribute("isDuplicateError", Boolean.TRUE);
+		return connectionStatus(providerId, request, model);
 	}
 
 	/**
@@ -403,10 +401,6 @@ public class CustomConnectController extends ConnectController {
 		return getViewPath() + providerId + "Connected";		
 	}
 	
-	protected String duplicateView(String providerId) {
-		return getViewPath() + providerId + "Duplicate";		
-	}
-
 	/**
 	 * Returns a RedirectView with the URL to redirect to after a connection is created or deleted.
 	 * Defaults to "/connect/{providerId}" relative to DispatcherServlet's path. 
