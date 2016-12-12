@@ -1,4 +1,4 @@
-package org.qcri.micromappers.utility.configurator.exception;
+package org.qcri.micromappers.exception;
 
 /**
  * An Micromappers-specific exception indicating that a required property has not been set.

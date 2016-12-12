@@ -1,4 +1,4 @@
-package org.qcri.micromappers.utility.configurator.exception;
+package org.qcri.micromappers.exception;
 
 public class ConfigurationPropertyNotRecognizedException extends
 		RuntimeException {

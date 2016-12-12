@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyFileException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotRecognizedException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotSetException;
-import org.qcri.micromappers.utility.configurator.exception.DirectoryNotWritableException;
+import org.qcri.micromappers.exception.ConfigurationPropertyFileException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotRecognizedException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotSetException;
+import org.qcri.micromappers.exception.DirectoryNotWritableException;
 
 public abstract class BaseConfigurator implements Configurator {
 
