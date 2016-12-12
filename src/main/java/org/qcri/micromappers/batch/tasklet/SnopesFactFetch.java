@@ -61,7 +61,7 @@ public class SnopesFactFetch implements Tasklet {
                     if(globalEventDefinitionService.findByEventUrl(baseUrl+itemUrl) == null){
                         String title = itemAnchor1.asText();
 
-                        globalEventDefinition.setSearchKeyword(itemUrl.replaceAll("-", ","));
+                        globalEventDefinition.setSearchKeyword(itemUrl.replaceAll("/", "").replaceAll("-", ","));
                         globalEventDefinition.setTitle(title);
                         globalEventDefinition.setEventUrl(baseUrl+itemUrl);
 

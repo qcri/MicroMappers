@@ -28,7 +28,7 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
             System.out.println("imgFileURL : " + imgFileURL);
 
 
-            imgFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getGdelt3w_id()+ "_" + imgFileName;
+            imgFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId()+ "_" + imgFileName;
 
             System.out.println("imgFileName : " + imgFileName);
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdelt3W.getImgURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_IMAGE_PATH), imgFileName);
@@ -46,7 +46,7 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
 
             String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
 
-            articleFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getGdelt3w_id()+ "_" + articleFileName;
+            articleFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId()+ "_" + articleFileName;
 
             System.out.println("articleFileURL : " + articleFileURL);
             System.out.println("articleFileName : " + articleFileName);

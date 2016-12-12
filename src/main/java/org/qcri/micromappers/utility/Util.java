@@ -6,8 +6,8 @@ import java.util.Date;
 
 public class Util
 {
- // final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours
-  final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr
+ // final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production setting
+  final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr setting for testing
   private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
 
   public static long getDurationInMinutes(Date currentTime, Date oldTime)

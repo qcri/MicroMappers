@@ -26,7 +26,7 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
             }
             String imgFileName = imgFileURL.substring(imgFileURL.lastIndexOf("/") + 1, imgFileURL.length());
 
-            imgFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getGdeltmmic_id()+ "_" + imgFileName;
+            imgFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getId()+ "_" + imgFileName;
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getImgURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_IMAGE_PATH), imgFileName);
 
@@ -43,7 +43,7 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
 
             String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
 
-            articleFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getGdeltmmic_id()+ "_" + articleFileName;
+            articleFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getId()+ "_" + articleFileName;
 
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);

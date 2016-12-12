@@ -7,36 +7,34 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "gdelt3w")
-public class Gdelt3W {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long gdelt3w_id;
+public class Gdelt3W  extends ExtendedBaseEntity {
+    private static final long serialVersionUID = -881973526366597368L;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, length = 50)
     private String languageCode;
 
-    @Column(name = "article_url", nullable = false)
+    @Column(name = "article_url", nullable = false, length = 1000)
     private String articleURL;
 
-    @Column(name = "img_url")
+    @Column(name = "img_url", length = 1000)
     private String imgURL;
 
-    @Column(name = "glide_code", nullable = false)
+    @Column(name = "glide_code", nullable = false, length = 500)
     private String glideCode;
 
-    @Column(name = "local_img_url")
+    @Column(name = "local_img_url", length = 1000)
     private String localImgUrl;
 
-    @Column(name = "local_article_url")
+    @Column(name = "local_article_url", length = 1000)
     private String localArticleUrl;
 
-    @Column(name = "state")
+    @Column(name = "state", length = 50)
     private String state;
 
-    @Column(name = "wheres")
+    @Column(name = "wheres", length = 6000)
     private String wheres;
 
-    @Column(name = "who")
+    @Column(name = "who", length = 1000)
     private String who;
 
     public Gdelt3W() {
@@ -83,14 +81,6 @@ public class Gdelt3W {
 
     public void setWho(String who) {
         this.who = who;
-    }
-
-    public long getGdelt3w_id() {
-        return gdelt3w_id;
-    }
-
-    public void setGdelt3w_id(long gdelt3w_id) {
-        this.gdelt3w_id = gdelt3w_id;
     }
 
     public String getLanguageCode() {

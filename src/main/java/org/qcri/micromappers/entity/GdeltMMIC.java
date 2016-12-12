@@ -7,42 +7,40 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "gdeltmmic")
-public class GdeltMMIC {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long gdeltmmic_id;
+public class GdeltMMIC  extends ExtendedBaseEntity {
+    private static final long serialVersionUID = -881973526366597368L;
 
-    @Column(name = "language_code", nullable = false)
+    @Column(name = "language_code", nullable = false, length = 50)
     private String languageCode;
 
-    @Column(name = "article_url", nullable = false)
+    @Column(name = "article_url", nullable = false, length = 1000)
     private String articleURL;
 
-    @Column(name = "timestamp", nullable = false)
+    @Column(name = "timestamp", nullable = false, length = 100)
     private String timestamp;
 
-    @Column(name = "location", nullable = true)
+    @Column(name = "location", nullable = true, length = 255)
     private String location;
 
-    @Column(name = "lat", nullable = true)
+    @Column(name = "lat", nullable = true, length = 50)
     private String lat;
 
-    @Column(name = "lon", nullable = true)
+    @Column(name = "lon", nullable = true, length = 50)
     private String lon;
 
-    @Column(name = "img_url", nullable = false)
+    @Column(name = "img_url", nullable = false, length = 1000)
     private String imgURL;
 
-    @Column(name = "glide_code", nullable = false)
+    @Column(name = "glide_code", nullable = false, length = 500)
     private String glideCode;
 
-    @Column(name = "local_img_url", nullable = true)
+    @Column(name = "local_img_url", nullable = true, length = 1000)
     private String localImgUrl;
 
-    @Column(name = "local_article_url", nullable = true)
+    @Column(name = "local_article_url", nullable = true, length = 1000)
     private String localArticleUrl;
 
-    @Column(name = "state", nullable = false)
+    @Column(name = "state", nullable = false, length = 50)
     private String state;
 
     public GdeltMMIC() {
@@ -72,10 +70,6 @@ public class GdeltMMIC {
         this.localImgUrl = localImgUrl;
         this.localArticleUrl = localArticleUrl;
         this.state = state;
-    }
-
-    public long getGdeltmmic_id() {
-        return gdeltmmic_id;
     }
 
     public String getLocalImgUrl() {

@@ -51,7 +51,7 @@
 				</step>
 				<step id="step2" allow-start-if-complete="true" next="step3">
 					<tasklet transaction-manager="transactionManager">
-						<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="10" />
+						<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="50" />
 						<listeners>
 							<listener ref="StepListener" />
 						</listeners>
@@ -60,7 +60,7 @@
 				<step id="step3" allow-start-if-complete="true" next="step4">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
-							   commit-interval="10"/>
+							   commit-interval="50"/>
 						<listeners>
 							<listener ref="StepListener3W"/>
 						</listeners>
@@ -68,13 +68,13 @@
 				</step>
 				<step id="step4" allow-start-if-complete="true" next="step5">
 					<tasklet transaction-manager="transactionManager">
-						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="10" />
+						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="50" />
 					</tasklet>
 				</step>
 				<step id="step5" allow-start-if-complete="true">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
-							   commit-interval="10"/>
+							   commit-interval="50"/>
 					</tasklet>
 				</step>
 			</flow>
