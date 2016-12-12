@@ -10,7 +10,7 @@ public enum CollectionType
   
   private CollectionType(String value, String singular, String plural)
   {
-    setValue(value);
+    this.value = value;
     this.singular = singular;
     this.plural = plural;
   }

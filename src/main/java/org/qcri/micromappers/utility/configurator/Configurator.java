@@ -1,9 +1,9 @@
 package org.qcri.micromappers.utility.configurator;
 
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyFileException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotRecognizedException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotSetException;
-import org.qcri.micromappers.utility.configurator.exception.DirectoryNotWritableException;
+import org.qcri.micromappers.exception.ConfigurationPropertyFileException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotRecognizedException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotSetException;
+import org.qcri.micromappers.exception.DirectoryNotWritableException;
 
 public interface Configurator {
 

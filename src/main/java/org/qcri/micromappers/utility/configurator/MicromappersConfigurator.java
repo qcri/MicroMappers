@@ -1,8 +1,8 @@
 package org.qcri.micromappers.utility.configurator;
 
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyFileException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotRecognizedException;
-import org.qcri.micromappers.utility.configurator.exception.ConfigurationPropertyNotSetException;
+import org.qcri.micromappers.exception.ConfigurationPropertyFileException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotRecognizedException;
+import org.qcri.micromappers.exception.ConfigurationPropertyNotSetException;
 
 public class MicromappersConfigurator extends BaseConfigurator {
 	
