@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.qcri.micromappers.utility.Constants;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -18,6 +19,8 @@ import org.springframework.core.io.Resource;
  * Created by jlucas on 12/1/16.
  */
 public class GdeltMMICStepListener implements StepExecutionListener, ApplicationContextAware {
+    private static Logger logger = Logger.getLogger(GdeltMMICStepListener.class);
+
     private Resource[] resources;
     private ApplicationContext applicationContext;
     private String filePattern;
@@ -37,7 +40,7 @@ public class GdeltMMICStepListener implements StepExecutionListener, Application
             resources = applicationContext.getResources(filePattern);
             reader.setResources(resources);
         } catch (IOException ex) {
-            System.out.println( "Unable to set file resources to bean multiResourceItemReader: " +  ex);
+            logger.error("Unable to set file resources to bean multiResourceItemReader: " + ex);
         }
     }
 
@@ -57,7 +60,7 @@ public class GdeltMMICStepListener implements StepExecutionListener, Application
                     FileUtils.copyFile(oldFile, newFile);
                     oldFile.delete();
                 } catch (IOException ex) {
-                    System.out.println("Encountered problem when trying to remove the processed file(s): " +  ex);
+                    logger.error("Encountered problem when trying to remove the processed file(s): " + ex);
                 }
             }
         }

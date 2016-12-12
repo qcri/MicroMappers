@@ -12,7 +12,7 @@ import org.springframework.batch.item.ItemProcessor;
  * Created by jlucas on 12/5/16.
  */
 public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
-    private static Logger logger = Logger.getLogger(GdeltMMICMediaProcessor.class);
+    private static Logger logger = Logger.getLogger(Gdelt3WMediaProcessor.class);
     private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
 	
     @Override
@@ -25,12 +25,8 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
             }
             String imgFileName = imgFileURL.substring(imgFileURL.lastIndexOf("/") + 1, imgFileURL.length());
 
-            System.out.println("imgFileURL : " + imgFileURL);
-
-
             imgFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId()+ "_" + imgFileName;
 
-            System.out.println("imgFileName : " + imgFileName);
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdelt3W.getImgURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_IMAGE_PATH), imgFileName);
 
             gdelt3W.setLocalImgUrl(imgFileName);
@@ -43,13 +39,8 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
             if(articleFileURL.endsWith("/")){
                 articleFileURL = articleFileURL.replaceAll("/+$","") ; ;
             }
-
             String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
-
             articleFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId()+ "_" + articleFileName;
-
-            System.out.println("articleFileURL : " + articleFileURL);
-            System.out.println("articleFileName : " + articleFileName);
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdelt3W.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);
 

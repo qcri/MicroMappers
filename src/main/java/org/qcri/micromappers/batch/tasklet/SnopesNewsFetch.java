@@ -24,7 +24,7 @@ import java.util.logging.Level;
  */
 public class SnopesNewsFetch implements Tasklet {
 
-    private static Logger logger = Logger.getLogger(GdeltMMICMediaProcessor.class);
+    private static Logger logger = Logger.getLogger(SnopesNewsFetch.class);
     private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
     @Autowired
     GlobalEventDefinitionService globalEventDefinitionService;
@@ -82,7 +82,7 @@ public class SnopesNewsFetch implements Tasklet {
                 }
             }
         }catch(Exception e){
-            logger.error(e);
+            logger.error("RepeatStatus: " + e);
         }
         return RepeatStatus.FINISHED;
     }

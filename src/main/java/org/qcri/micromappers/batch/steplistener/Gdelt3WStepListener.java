@@ -1,6 +1,7 @@
 package org.qcri.micromappers.batch.steplistener;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -21,6 +22,8 @@ import java.io.IOException;
  */
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class Gdelt3WStepListener implements StepExecutionListener, ApplicationContextAware {
+    private static Logger logger = Logger.getLogger(Gdelt3WStepListener.class);
+
     private Resource[] resources;
     private ApplicationContext applicationContext;
     private String filePattern;
@@ -40,7 +43,7 @@ public class Gdelt3WStepListener implements StepExecutionListener, ApplicationCo
             resources = applicationContext.getResources(filePattern);
             reader.setResources(resources);
         } catch (IOException ex) {
-            System.out.println( "Unable to set file resources to bean multiResourceItemReader: " +  ex);
+            logger.error("Unable to set file resources to bean multiResourceItemReader: " + ex);
         }
     }
 
@@ -57,7 +60,7 @@ public class Gdelt3WStepListener implements StepExecutionListener, ApplicationCo
                     FileUtils.copyFile(oldFile, newFile);
                     oldFile.delete();
                 } catch (IOException ex) {
-                    System.out.println("Encountered problem when trying to remove the processed file(s): " +  ex);
+                    logger.error("Encountered problem when trying to remove the processed file(s): " +  ex);
                 }
             }
         }

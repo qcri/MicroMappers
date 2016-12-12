@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -28,12 +29,12 @@ import org.springframework.batch.repeat.RepeatStatus;
  * Created by jlucas on 11/28/16.
  */
 public class FetchGdeltMaster implements Tasklet {
+    private static Logger logger = Logger.getLogger(FetchGdeltMaster.class);
 
-	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+    private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
 	
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-        System.out.println("Execution ***************************");
         URL url = new URL(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_LAST_UPDATE_URL));
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(url.openStream()));
@@ -43,17 +44,11 @@ public class FetchGdeltMaster implements Tasklet {
         while ((inputLine = in.readLine()) != null){
             GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
             HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH), null);
-            System.out.println(inputLine);
         }
 
         in.close();
 
         this.reformat3WJason();
-
-        System.out.println("Execution Finish***************************");
-
-
-
 
         return RepeatStatus.FINISHED;
     }
@@ -105,10 +100,10 @@ public class FetchGdeltMaster implements Tasklet {
             }
 
         }catch (IOException e) {
-            e.printStackTrace();
+            logger.error("generateJsonFile IOException: " + e);
         }
         catch (Exception e2) {
-            e2.printStackTrace();
+            logger.error("generateJsonFile Exception: " + e2);
         }
 
     }

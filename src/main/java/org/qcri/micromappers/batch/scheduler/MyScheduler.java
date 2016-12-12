@@ -1,5 +1,6 @@
 package org.qcri.micromappers.batch.scheduler;
 
+import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MyScheduler {
+	private static Logger logger = Logger.getLogger(MyScheduler.class);
 
 	@Autowired
 	private JobLauncher launcher;
@@ -25,15 +27,15 @@ public class MyScheduler {
 	public void run(){
 		try {
 			execution = launcher.run(job, new JobParameters());
-			System.out.println("Execution status: "+ execution.getStatus());
-		} catch (JobExecutionAlreadyRunningException e) {
-			e.printStackTrace();
-		} catch (JobRestartException e) {			
-			e.printStackTrace();
-		} catch (JobInstanceAlreadyCompleteException e) {			
-			e.printStackTrace();
-		} catch (JobParametersInvalidException e) {			
-			e.printStackTrace();
+			logger.info("Execution status: " + execution.getStatus());
+		} catch (JobExecutionAlreadyRunningException e1) {
+			logger.error("JobExecutionAlreadyRunningException: " + e1);
+		} catch (JobRestartException e2) {
+			logger.error("JobRestartException: " + e2);
+		} catch (JobInstanceAlreadyCompleteException e3) {
+			logger.error("JobInstanceAlreadyCompleteException: " + e3);
+		} catch (JobParametersInvalidException e4) {
+			logger.error("JobParametersInvalidException: " + e4);
 		}
 
 	}
