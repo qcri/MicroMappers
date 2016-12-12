@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Util
 {
-	// final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours
-	final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr
+	// final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production
+	final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
 	private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
 
 
