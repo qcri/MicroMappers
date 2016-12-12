@@ -6,6 +6,10 @@ import java.util.Date;
 
 public class Util
 {
+ // final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours
+  final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr
+  private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
+
   public static long getDurationInMinutes(Date currentTime, Date oldTime)
   {
     long diff = currentTime.getTime() - oldTime.getTime();
@@ -14,24 +18,12 @@ public class Util
   }
 
   public static boolean isTimeToSnopesFetchRun(){
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-    String currentTime = LocalTime.now().format(formatter);
-
-    if(currentTime.equalsIgnoreCase(LocalTime.of(0, 0).format(formatter))){
+    long currentTimeMillis = System.currentTimeMillis();
+    // every 3hours
+    if ((currentTimeMillis - timeOfLastTranslationProcessingMillis) >= MAX_CHECK_TIME_MILLIS) {
       return true;
     }
-    if(currentTime.equalsIgnoreCase(LocalTime.of(6, 0).format(formatter))){
-      return true;
-
-    }
-    if(currentTime.equalsIgnoreCase(LocalTime.of(12, 0).format(formatter))){
-      return true;
-    }
-    if(currentTime.equalsIgnoreCase(LocalTime.of(18,0).format(formatter))){
-      return true;
-    }
-
     return false;
   }
 }

@@ -79,49 +79,7 @@
 				</step>
 			</flow>
 		</split>
-
 	</job>
-
-
-	<!--<job id="myJob" xmlns="http://www.springframework.org/schema/batch" restartable="true" job-repository="jobRepository">
-		<step id="snopstep1" allow-start-if-complete="true" next="snopstep2">
-			<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
-		</step>
-		<step id="snopstep2" allow-start-if-complete="true">
-			<tasklet ref="SnopesFactFetchTasklet"></tasklet>
-		</step>
-		<step id="step1" allow-start-if-complete="true" next="step2">
-			<tasklet ref="firstTasklet"></tasklet>
-		</step>
-		<step id="step2" allow-start-if-complete="true" next="step3">
-			<tasklet transaction-manager="transactionManager">
-				<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="10" />
-				<listeners>
-					<listener ref="StepListener" />
-				</listeners>
-			</tasklet>
-		</step>
-		<step id="step3" allow-start-if-complete="true" next="step4">
-			<tasklet transaction-manager="transactionManager">
-				<chunk reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
-					   commit-interval="10"/>
-				<listeners>
-					<listener ref="StepListener3W"/>
-				</listeners>
-			</tasklet>
-		</step>
-		<step id="step4" allow-start-if-complete="true" next="step5">
-			<tasklet transaction-manager="transactionManager">
-				<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="10" />
-			</tasklet>
-		</step>
-		<step id="step5" allow-start-if-complete="true">
-			<tasklet transaction-manager="transactionManager">
-				<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
-					   commit-interval="10"/>
-			</tasklet>
-		</step>
-	</job>-->
 
 	<!-- tasklet -->
 	<bean id="firstTasklet" class="org.qcri.micromappers.batch.tasklet.FetchGdeltMaster"></bean>
