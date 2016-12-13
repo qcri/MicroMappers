@@ -16,16 +16,16 @@ public class UserConnectionService
   
   public UserConnection register(UserConnection userConnection)
   {
-    return (UserConnection)this.userConnectionRepository.save(userConnection);
+    return userConnectionRepository.save(userConnection);
   }
   
   public UserConnection getByProviderIdAndProviderUserId(String providerId, String providerUserId)
   {
-    return this.userConnectionRepository.findFirstByProviderIdAndProviderUserId(providerId, providerUserId);
+    return userConnectionRepository.findFirstByProviderIdAndProviderUserId(providerId, providerUserId);
   }
   
   public UserConnection getByProviderIdAndUserId(String providerId, String userId)
   {
-    return this.userConnectionRepository.findFirstByProviderIdAndUserId(providerId, userId);
+    return userConnectionRepository.findFirstByProviderIdAndUserId(providerId, userId);
   }
 }

@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public abstract interface CollectionRepository extends CrudRepository<Collection, Long>
 {
+	public Collection findById(Long id);
 }

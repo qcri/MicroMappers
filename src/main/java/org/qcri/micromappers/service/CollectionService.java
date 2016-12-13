@@ -25,4 +25,14 @@ public class CollectionService
 	}
   }
   
+  public Collection getById(Long id)
+  {
+	  try{
+		  return collectionRepository.findById(id);
+	  }catch (Exception e) {
+		logger.error("Error while fetching collection by id", e);
+		throw new MicromappersServiceException("Error while fetching collection by id", e);
+	}
+  }
+  
 }

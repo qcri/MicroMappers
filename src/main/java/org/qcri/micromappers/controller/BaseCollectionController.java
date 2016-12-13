@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
+import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.BaseCollectionService;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -35,7 +36,7 @@ public abstract class BaseCollectionController {
     		logger.info("New collection created with collectionCode : "+ collectionDetailsInfo.getCode());
     	}catch (MicromappersServiceException e) {
 			logger.error("Error while creating a new collection", e);
-			new ResponseWrapper(null, false, "Failure", "Error while creating a new collection");
+			return new ResponseWrapper(null, false, "Failure", "Error while creating a new collection");
 		}
     	
     	if(collection == null) {
@@ -47,11 +48,17 @@ public abstract class BaseCollectionController {
 			return start(collection.getId());
 		} */
 		
-		
 		return new ResponseWrapper(collection, true, "Successful", "Collection created Successfully");
-		
-		
 	}
+    
+    @RequestMapping(value = "/start", method=RequestMethod.GET)
+    @ResponseBody
+    protected ResponseWrapper start(@RequestParam Long id) {
+    	CollectionTask collectionTask = baseCollectionService.prepareCollectionTask(id);
+    	return startTask(collectionTask);
+	}
+    
+    public abstract ResponseWrapper startTask(CollectionTask collectionTask);
     
 //    @RequestMapping("/stop")
 //    protected abstract Response stopCollection(@RequestParam("id") String collectionCode);
@@ -62,8 +69,7 @@ public abstract class BaseCollectionController {
 //    @RequestMapping("/restart")
 //    protected abstract ResponseWrapper restartCollection(@QueryParam("code") String collectionCode);
 //    
-//    @RequestMapping(value = "/start", method={RequestMethod.POST})
-//    protected abstract ResponseWrapper startTask(@RequestBody TwitterCollectionTask task);
+   
 //    
     /*public Response stopTask(@RequestParam("id") String collectionCode) {
         
