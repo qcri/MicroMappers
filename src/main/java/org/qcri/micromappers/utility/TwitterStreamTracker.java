@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
@@ -32,7 +33,6 @@ public class TwitterStreamTracker implements Closeable {
 //	private JedisPublisher publisherJedis;
 
 	public TwitterStreamTracker(CollectionTask task) throws ParseException{
-
 		logger.info("Waiting to aquire Jedis connection for collection " + task.getCollectionCode());
 		this.query = task2query(task);
 		Configuration config = task2configuration(task);
@@ -44,7 +44,7 @@ public class TwitterStreamTracker implements Closeable {
 				Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.PERSISTER_LOAD_LIMIT)),
 				Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.PERSISTER_LOAD_CHECK_INTERVAL_MINUTES)), 
 				true,channelName);*/
-		TwitterStatusListener listener = new TwitterStatusListener(task, "temp");
+		TwitterStatusListener listener = new TwitterStatusListener(task);
 //		listener.addFilter(new ShedderFilter(channelName, shedder));
 		if ("strict".equals(task.getGeoR())) {
 			listener.addFilter(new StrictLocationFilter(task));

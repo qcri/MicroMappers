@@ -31,6 +31,10 @@ public class Collection extends ExtendedBaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "account_id", nullable=false)
 	private Account account;
+	
+	@ManyToOne
+	@JoinColumn(name = "global_event_definition_id", nullable=false)
+	private GlobalEventDefinition globalEventDefinition;
 
 	@Column(name = "count", columnDefinition = "bigint default 0")
 	private Long count;
@@ -43,9 +47,6 @@ public class Collection extends ExtendedBaseEntity {
 
 	@Column(name="end_date")
 	private Date endDate;
-
-	@Column(length = 1024, name="last_document")
-	private String lastDocument;
 
 	@Enumerated(EnumType.STRING)
 	private CollectionType provider;
@@ -177,20 +178,6 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
-	}
-
-	/**
-	 * @return the lastDocument
-	 */
-	public String getLastDocument() {
-		return lastDocument;
-	}
-
-	/**
-	 * @param lastDocument the lastDocument to set
-	 */
-	public void setLastDocument(String lastDocument) {
-		this.lastDocument = lastDocument;
 	}
 
 	/**
@@ -345,6 +332,26 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setFetchFrom(Integer fetchFrom) {
 		this.fetchFrom = fetchFrom;
+	}
+
+	/**
+	 * @return the globalEventDefinition
+	 */
+	public GlobalEventDefinition getGlobalEventDefinition() {
+		return globalEventDefinition;
+	}
+
+	/**
+	 * @param globalEventDefinition the globalEventDefinition to set
+	 */
+	public void setGlobalEventDefinition(GlobalEventDefinition globalEventDefinition) {
+		this.globalEventDefinition = globalEventDefinition;
+	}
+	
+	public void setGlobalEventDefinition(Long id) {
+		GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
+		globalEventDefinition.setId(id);
+		setGlobalEventDefinition(globalEventDefinition);
 	}
 
 }

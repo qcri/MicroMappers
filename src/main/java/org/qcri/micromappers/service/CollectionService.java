@@ -35,4 +35,14 @@ public class CollectionService
 	}
   }
   
+  public Collection getByCode(String code)
+  {
+	  try{
+		  return collectionRepository.findByCode(code);
+	  }catch (Exception e) {
+		logger.error("Error while fetching collection by code", e);
+		throw new MicromappersServiceException("Error while fetching collection by code", e);
+	}
+  }
+  
 }

@@ -1,8 +1,11 @@
 package org.qcri.micromappers;
 
+import org.qcri.micromappers.entity.DataFeed;
+import org.qcri.micromappers.service.DataFeedService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -11,10 +14,15 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class})
 @ImportResource("spring-batch-context.xml")
 public class MicroMappersApplication {
+	private static  ConfigurableApplicationContext context;
     public static void main(String[] args) {
         //String[] str = {"spring-batch-context.xml","context-datasource.xml","context-model.xml"};
         //ApplicationContext context = new ClassPathXmlApplicationContext(str);
 
-        SpringApplication.run(MicroMappersApplication.class, args);
+    	context = SpringApplication.run(MicroMappersApplication.class, args);
+    }
+    
+    public static ConfigurableApplicationContext getApplicationContext(){
+    	return context;
     }
 }

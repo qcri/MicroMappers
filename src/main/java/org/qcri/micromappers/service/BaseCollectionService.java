@@ -54,7 +54,7 @@ public class BaseCollectionService{
 			collaboratorService.addCollaborator(collection, user);
 		} catch (MicromappersServiceException e) {
 			logger.error("Error while creating a new collection", e);
-			throw new MicromappersServiceException("Error while creating a new collection : " + e.getMessage(), e);
+			throw new MicromappersServiceException(e.getMessage(), e);
 		}
 		return collection;
 	}
@@ -112,6 +112,7 @@ public class BaseCollectionService{
 		Collection collection = new Collection();
 		collection.setCode(collectionInfo.getCode());
 		collection.setName(collectionInfo.getName());
+		collection.setGlobalEventDefinition(collectionInfo.getGlobalEventDefinitionId());
 		collection.setAccount(user);
 		collection.setStatus(CollectionStatus.NOT_RUNNING);
 		collection.setProvider(CollectionType.valueOf(collectionInfo.getProvider()));
@@ -123,7 +124,6 @@ public class BaseCollectionService{
 		collection.setLangFilters(collectionInfo.getLangFilters());
 		collection.setFetchInterval(collectionInfo.getFetchInterval());
 		collection.setFetchFrom(collectionInfo.getFetchFrom());
-
 		return collection;
 	}
 

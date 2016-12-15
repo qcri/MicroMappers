@@ -14,7 +14,6 @@ public class CollectionTask {
 	protected String collectionCode;
 	protected String collectionName;
 	protected String toTrack;
-	protected String lastDocument;
 	protected String statusCode;
 	protected String statusMessage;
 	protected String accessToken;
@@ -120,21 +119,6 @@ public class CollectionTask {
 	 */
 	public void setCollectionCount(Long collectionCount) {
 		this.collectionCount = collectionCount;
-	}
-
-	/**
-	 * @return the lastDocument
-	 */
-	public String getLastDocument() {
-		return lastDocument;
-	}
-
-	/**
-	 * @param lastDocument
-	 *            the lastDocument to set
-	 */
-	public void setLastDocument(String lastDocument) {
-		this.lastDocument = lastDocument;
 	}
 
 	/**
@@ -295,7 +279,6 @@ public class CollectionTask {
 		newTask.setAccessTokenSecret(accessTokenSecret);
 		newTask.setCollectionCode(collectionCode);
 		newTask.setCollectionName(collectionName);
-		newTask.setLastDocument(lastDocument);
 		newTask.setStatusCode(statusCode);
 		newTask.setStatusMessage(statusMessage);
 		newTask.setToTrack(toTrack);

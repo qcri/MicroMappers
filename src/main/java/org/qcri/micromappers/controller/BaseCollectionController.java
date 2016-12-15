@@ -35,8 +35,8 @@ public abstract class BaseCollectionController {
     		collection = baseCollectionService.create(collectionDetailsInfo);
     		logger.info("New collection created with collectionCode : "+ collectionDetailsInfo.getCode());
     	}catch (MicromappersServiceException e) {
-			logger.error("Error while creating a new collection", e);
-			return new ResponseWrapper(null, false, "Failure", "Error while creating a new collection");
+			logger.error("Error while creating a new collection"+ e.getMessage(), e);
+			return new ResponseWrapper(null, false, "Failure", "Error while creating a new collection : "+ e.getMessage());
 		}
     	
     	if(collection == null) {
@@ -44,9 +44,9 @@ public abstract class BaseCollectionController {
 		}
     	
     	//Running collection right after creation
-		/*if (runAfterCreate && collection != null) {
+		if (runAfterCreate && collection != null) {
 			return start(collection.getId());
-		} */
+		} 
 		
 		return new ResponseWrapper(collection, true, "Successful", "Collection created Successfully");
 	}

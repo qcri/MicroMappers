@@ -2,7 +2,9 @@ package org.qcri.micromappers.utility;
 
 public enum CollectionType
 {
-  TWITTER("twitter", "tweet", "tweets"),  FACEBOOK("facebook", "post", "posts");
+  TWITTER("twitter", "tweet", "tweets"),
+  FACEBOOK("facebook", "post", "posts"),
+  ALL("all", "feed", "feeds");
   
   private String value;
   private String singular;

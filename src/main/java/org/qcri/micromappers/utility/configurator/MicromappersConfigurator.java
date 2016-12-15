@@ -16,6 +16,7 @@ public class MicromappersConfigurator extends BaseConfigurator {
 		this.directoryIsWritable(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH.getName());
 		this.directoryIsWritable(MicromappersConfigurationProperty.GDELT_IMAGE_PATH.getName());
 		this.directoryIsWritable(MicromappersConfigurationProperty.GDELT_JSON_UPDATE_PATH.getName());
+		this.directoryIsWritable(MicromappersConfigurationProperty.Feed_PATH.getName());
 	}
 
 	public static MicromappersConfigurator getInstance()

@@ -3,16 +3,18 @@ package org.qcri.micromappers.utility;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.concurrent.RejectedExecutionException;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.MicroMappersApplication;
+import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.DataFeed;
+import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionTask;
+import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.DataFeedService;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
@@ -21,7 +23,6 @@ import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
-import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
 
 /**
@@ -47,24 +48,24 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 	private CollectionTask task;
 
 	private List<Predicate<JsonObject>> filters = new ArrayList<>();
-//	private List<Publisher> publishers = new ArrayList<>();
-	private JsonObject mm;
-	private String channelName;
-	private long timeToSleep = 0;
+	private Collection collection;
 	private static int max  = 3;
 	private static int min = 1;
-	private GenericCache cache;
+	private long counter = 0;
+	private int threshold = 5;
+	private static GenericCache cache;
 	
-	public TwitterStatusListener(CollectionTask task, String channelName) {
-		this.task = task;
-		this.channelName = channelName;
-		this.mm = Json.createObjectBuilder()
-			.add("doctype", "twitter")
-			.add("crisis_code", task.getCollectionCode())
-			.add("crisis_name", task.getCollectionName())
-			.build();
-		
+	private static DataFeedService dataFeedService;
+	private static CollectionService collectionService;
+	static{
 		cache = GenericCache.getInstance();
+		dataFeedService = MicroMappersApplication.getApplicationContext().getBean(DataFeedService.class);
+		collectionService = MicroMappersApplication.getApplicationContext().getBean(CollectionService.class);
+	}
+	
+	public TwitterStatusListener(CollectionTask task) {
+		this.task = task;
+		collection = collectionService.getByCode(task.getCollectionCode());
 	}
 
 	/**
@@ -78,11 +79,6 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		filters.add(filter);
 	}
 
-/*	public void addPublisher(Publisher publisher) {
-		publishers.add(publisher);
-	}*/
-
-	
 	@Override
 	public void onStatus(Status status) {		
 //		task.setSourceOutage(false);
@@ -96,15 +92,24 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 			}
 		}
 
-		JsonObjectBuilder builder = Json.createObjectBuilder();
-		originalDoc.entrySet().
-        forEach(e -> builder.add(e.getKey(), e.getValue()));
-		builder.add("mm", mm);
-		JsonObject doc = builder.build();
+		//System.out.println("TweetId: " +originalDoc.getString("id_str"));
+		DataFeed dataFeed = new DataFeed();
+		dataFeed.setCollection(collection);
+		dataFeed.setFeedId(Long.parseLong(originalDoc.getString("id_str")));
+		dataFeed.setProvider(CollectionType.TWITTER);
 		
-		System.out.println("TweetId: " +doc.getString("id_str"));
-		/*for (Publisher p : publishers)
-			p.publish(channelName, doc);		*/	
+		//Persisting to dataFeed
+		try{
+			dataFeedService.persistToDbAndFile(dataFeed, originalDoc.toString());
+			//incrementing the counterMap
+			++counter;
+			if (counter >= threshold) {
+				cache.incrCounter(collection.getCode(), counter);
+				counter = 0;
+			}
+		}catch(MicromappersServiceException e){
+			logger.error("Exception while persisting tweet to db & fileSystem", e);
+		}
 	}
 
 	@Override
@@ -232,7 +237,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		}
 		else
 			task.setStatusMessage(null);
-		task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_RUNNING));
+			task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_RUNNING));
 	}
 
 	@Override
