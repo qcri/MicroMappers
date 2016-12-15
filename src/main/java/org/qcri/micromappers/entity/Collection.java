@@ -48,6 +48,7 @@ public class Collection extends ExtendedBaseEntity {
 	@Column(name="end_date")
 	private Date endDate;
 
+	@Column(length = 10, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private CollectionType provider;
 

@@ -23,6 +23,7 @@ public class DataFeed extends ExtendedBaseEntity
 	@JoinColumn(name = "collection_id", nullable=false)
 	private Collection collection;
 	
+	@Column(length = 10, nullable = false)
 	@Enumerated(EnumType.STRING)
 	private CollectionType provider;
 	
