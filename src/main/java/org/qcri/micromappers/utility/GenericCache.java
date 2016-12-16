@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.qcri.micromappers.models.CollectionTask;
-import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
 /**
@@ -26,8 +25,6 @@ public class GenericCache {
     private final Map<String, Integer> reconnectAttempts;
 //    private final Map<String, Boolean> fbSyncObjMap;
 //    private final Map<String, Integer> fbSyncStateMap;
-    
-    private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
     
     private GenericCache() {
         twitterTrackerMap = new HashMap<String, TwitterStreamTracker>();
@@ -209,39 +206,26 @@ public class GenericCache {
         return mappersList;
     }
 
-    private CollectionTask ommitKeys(CollectionTask task) {
+    public CollectionTask ommitKeys(CollectionTask task) {
 
         task.setAccessToken(null);
         task.setAccessTokenSecret(null);
         return task;
     }
 
-    public CollectionTask getTwitterConfig(String id) {
+    public CollectionTask getTwitterConfig(String key) {
 
-    	CollectionTask task =  null;
-        if (!(this.twtConfigMap.containsKey(id))) {
-            return null;
-        }
-        
-    	task = this.twtConfigMap.get(id).clone();
-        
-        if (task != null) {
-            Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
-            if(tweetsCounter == null)
-                tweetsCounter = 0L;
-            task.setCollectionCount(tweetsCounter);
-            task.setAccessToken(null);
-            task.setAccessTokenSecret(null);
-        } else {
-            task = (CollectionTask) this.failedCollections.get(id);
-            if (task != null) {
-                task.setAccessToken(null);
-                task.setAccessTokenSecret(null);
-            }
-        }
-
-        return task;
-
+    	 if (this.twtConfigMap.containsKey(key)) {
+             CollectionTask task = this.twtConfigMap.get(key).clone();
+             if (task != null) {
+                 Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
+                 if(tweetsCounter == null)
+                     tweetsCounter = 0L;
+                 task.setCollectionCount(tweetsCounter);
+             }
+             return ommitKeys(task);
+         }
+         return null;
     }
 
    /* public FacebookCollectionTask getFacebookConfig(String id) {
@@ -280,7 +264,7 @@ public class GenericCache {
             if (storedQM != null) {
                 if (storedQM.equals(qm)) {
                     if (qm.getStatusCode() != null) {
-                        if (!(qm.getStatusCode().equals(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR)))) {
+                        if (!(qm.getStatusCode().equals(CollectionStatus.FATAL_ERROR.toString()))) {
                             return true;
                         }
                     }
@@ -290,20 +274,20 @@ public class GenericCache {
         return false;
     }
 
-    public boolean isConfigExists(CollectionTask qm) {
+    public boolean isConfigExists(CollectionTask task) {
 
     	// check for twitter collection
         for (Map.Entry pairs : twtConfigMap.entrySet()) {
-            CollectionTask storedQM = (CollectionTask) pairs.getValue();
-            if (storedQM.equals(qm)) {
+            CollectionTask storedTask = (CollectionTask) pairs.getValue();
+            if (storedTask.equals(task)) {
                 return true;
             }
         }
         
-        /*// check for fb collection
-        for (Map.Entry pairs : fbConfigMap.entrySet()) {
-            CollectionTask storedQM = (CollectionTask) pairs.getValue();
-            if (storedQM.equals(qm)) {
+        // check for fb collection
+        /*for (Map.Entry pairs : fbConfigMap.entrySet()) {
+            CollectionTask storedTask = (CollectionTask) pairs.getValue();
+            if (storedTask.equals(task)) {
                 return true;
             }
         }*/

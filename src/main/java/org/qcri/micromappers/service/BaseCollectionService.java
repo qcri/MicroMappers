@@ -91,7 +91,7 @@ public class BaseCollectionService{
 		
 		task.setAccessToken(userconnection.getAccessToken());
 		task.setAccessTokenSecret(userconnection.getSecret());
-
+		task.setStatusCode(collection.getStatus());
 		task.setCollectionName(collection.getName());
 		task.setCollectionCode(collection.getCode());
 		task.setToFollow(collection.getFollow());

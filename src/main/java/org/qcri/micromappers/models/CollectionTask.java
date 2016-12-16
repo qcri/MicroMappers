@@ -3,6 +3,7 @@ package org.qcri.micromappers.models;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
+import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
 /**
@@ -14,7 +15,7 @@ public class CollectionTask {
 	protected String collectionCode;
 	protected String collectionName;
 	protected String toTrack;
-	protected String statusCode;
+	protected CollectionStatus statusCode;
 	protected String statusMessage;
 	protected String accessToken;
 	protected String accessTokenSecret;
@@ -124,7 +125,7 @@ public class CollectionTask {
 	/**
 	 * @return the status
 	 */
-	public String getStatusCode() {
+	public CollectionStatus getStatusCode() {
 		return statusCode;
 	}
 
@@ -132,7 +133,7 @@ public class CollectionTask {
 	 * @param status
 	 *            the status to set
 	 */
-	public void setStatusCode(String status) {
+	public void setStatusCode(CollectionStatus status) {
 		this.statusCode = status;
 	}
 
@@ -329,10 +330,10 @@ public class CollectionTask {
 
 	public boolean checkSocialConfigInfo() {
 
-		boolean isConfigured = StringUtils.isNotEmpty(getAccessToken());
+		boolean isConfigured = StringUtils.isNotBlank(getAccessToken());
 
 		if (getProvider().equals("Twitter")) {
-			isConfigured = isConfigured && StringUtils.isNotEmpty(getAccessTokenSecret());
+			isConfigured = isConfigured && StringUtils.isNotBlank(getAccessTokenSecret());
 		}
 
 		return isConfigured;

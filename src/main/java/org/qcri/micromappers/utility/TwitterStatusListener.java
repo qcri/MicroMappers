@@ -15,7 +15,6 @@ import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.DataFeedService;
-import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
 import twitter4j.ConnectionLifeCycleListener;
@@ -43,8 +42,6 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 
 	private static Logger logger = Logger.getLogger(TwitterStatusListener.class.getName());
 
-	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
-	
 	private CollectionTask task;
 
 	private List<Predicate<JsonObject>> filters = new ArrayList<>();
@@ -92,7 +89,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 			}
 		}
 
-		//System.out.println("TweetId: " +originalDoc.getString("id_str"));
+		System.out.println("TweetId: " +originalDoc.getString("id_str"));
 		DataFeed dataFeed = new DataFeed();
 		dataFeed.setCollection(collection);
 		dataFeed.setFeedId(Long.parseLong(originalDoc.getString("id_str")));
@@ -120,7 +117,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 	public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
 		logger.debug(task.getCollectionName() + ": Track limitation notice: " + numberOfLimitedStatuses);
 		// TODO: thread safety
-		task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_RUNNING_WARNING));
+		task.setStatusCode(CollectionStatus.RUNNING_WARNING);
 		task.setStatusMessage("Track limitation notice: " + numberOfLimitedStatuses);
 	}
 
@@ -230,14 +227,14 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 
 	@Override
 	public void onConnect() {
-		if(task.getStatusCode() == configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_WARNING))
+		if(task.getStatusCode() == CollectionStatus.WARNING)
 		{
 			task.setStatusMessage("was disconnected due to network failure, reconnected OK");
 			cache.resetAttempt(task.getCollectionCode());
 		}
 		else
 			task.setStatusMessage(null);
-			task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_RUNNING));
+			task.setStatusCode(CollectionStatus.RUNNING);
 	}
 
 	@Override

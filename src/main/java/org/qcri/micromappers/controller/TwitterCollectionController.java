@@ -1,10 +1,15 @@
 package org.qcri.micromappers.controller;
 
+import java.io.IOException;
+
+import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.models.CollectionTask;
+import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.TwitterStreamTracker;
-import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,21 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/twitter")
 public class TwitterCollectionController extends BaseCollectionController {
 
-
+	@Autowired
+	private CollectionService collectionService;
+	
 	public ResponseWrapper startTask(CollectionTask task) {
 		logger.info("Collection start request received for " + task.getCollectionCode());
 
 		//check if all twitter specific information is available in the request
 		if (!task.checkSocialConfigInfo()) {
-			return new ResponseWrapper(null, false, 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR), 
+			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"One or more Twitter authentication token(s) are missing");
 		}
 
 		//check if all query parameters are missing in the query
 		if (!task.isToTrackAvailable() && !task.isToFollowAvailable() && !task.isGeoLocationAvailable()) {
-			return new ResponseWrapper(null, false, 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR), 
+			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"Missing one or more fields (toTrack, toFollow, and geoLocation). At least one field is required");
 		}
 
@@ -45,12 +50,11 @@ public class TwitterCollectionController extends BaseCollectionController {
 			String msg = "Provided OAuth configurations already in use. Please stop this collection and then start again.";
 			logger.info(collectionCode + ": " + msg);
 
-			return new ResponseWrapper(null, false, 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR), msg);
+			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), msg);
 		}
 
 		logger.info("Initializing connection with Twitter streaming API for collection " + collectionCode);
-		task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_INITIALIZING));
+		task.setStatusCode(CollectionStatus.RUNNING);
 
 		try {
 			TwitterStreamTracker tracker = new TwitterStreamTracker(task);
@@ -60,20 +64,48 @@ public class TwitterCollectionController extends BaseCollectionController {
 			cache.incrCounter(code, new Long(0));
 
 			// if twitter streaming connection successful then change the status code
-			task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_RUNNING));
+			task.setStatusCode(CollectionStatus.RUNNING);
 			task.setStatusMessage(null);
 			cache.setTwitterTracker(code, tracker);
 			cache.setTwtConfigMap(code, task);
-
-			return new ResponseWrapper(null, true, 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_INITIALIZING), 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_INITIALIZING));
+			collectionService.updateStatusByCode(code, CollectionStatus.RUNNING);
+			return new ResponseWrapper(null, true, CollectionStatus.RUNNING.toString(), 
+					CollectionStatus.RUNNING.toString());
 		} catch (Exception ex) {
 			logger.error("Exception in creating TwitterStreamTracker for collection " + collectionCode, ex);
-			return new ResponseWrapper(null, false, 
-					configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR), 
-					ex.getMessage());
+			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), ex.getMessage());
 		}
+	}
+
+	protected ResponseWrapper stopTask(Long id) {
+		Collection collection = collectionService.getById(id);
+		String collectionCode = collection.getCode();
+		
+		GenericCache cache = GenericCache.getInstance();
+		TwitterStreamTracker tracker = cache.getTwitterTracker(collectionCode);
+		CollectionTask task = cache.getTwitterConfig(collectionCode);
+
+		cache.delFailedCollection(collectionCode);
+		cache.deleteCounter(collectionCode);
+		cache.delTwtConfigMap(collectionCode);
+		cache.delTwitterTracker(collectionCode);
+		cache.delReconnectAttempts(collectionCode);
+
+		if (tracker != null) {
+			try {
+				tracker.close();
+			} catch (IOException e) {
+				return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), e.getMessage());
+			}
+			logger.info(collectionCode + ": " + "Collector has been successfully stopped.");
+		} else {
+			logger.info("No collector instances found to be stopped with the given id:" + collectionCode);
+		}
+
+		if (task != null) {
+			return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), null);
+		}
+		return null;
 	}
 
 }
