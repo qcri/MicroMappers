@@ -18,7 +18,32 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
 
     @Override
     public GdeltMMIC process(GdeltMMIC gdeltMMIC) throws Exception {
+
+        gdeltMMIC = this.processImageFile(gdeltMMIC);
+        gdeltMMIC = this.processArticleFile(gdeltMMIC);
+
+        gdeltMMIC.setState("processed");
+
+        return gdeltMMIC;
+    }
+
+    private GdeltMMIC processArticleFile(GdeltMMIC gdeltMMIC){
+        String articleFileURL = gdeltMMIC.getArticleURL();
+
+        if(articleFileURL != null){
+            String articleFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getId();
+
+            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);
+
+            gdeltMMIC.setLocalArticleUrl(articleFileName);
+        }
+
+        return gdeltMMIC;
+    }
+
+    private GdeltMMIC processImageFile(GdeltMMIC gdeltMMIC){
         String imgFileURL = gdeltMMIC.getImgURL();
+
         if(imgFileURL != null){
             if(imgFileURL.contains("//cdn.")){
                 imgFileURL = imgFileURL.substring(imgFileURL.indexOf("cdn."));
@@ -32,26 +57,6 @@ public class GdeltMMICMediaProcessor implements ItemProcessor<GdeltMMIC, GdeltMM
 
             gdeltMMIC.setLocalImgUrl(imgFileName);
         }
-
-        String articleFileURL = gdeltMMIC.getArticleURL();
-
-        if(articleFileURL != null){
-
-            if(articleFileURL.endsWith("/")){
-                articleFileURL = articleFileURL.replaceAll("/+$","") ;
-            }
-
-            String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
-
-            articleFileName = Constants.GDELT_MMIC_SIGNATURE + "_"+ gdeltMMIC.getId()+ "_" + articleFileName;
-
-
-            HttpDownloadUtility.UserAgentBasedDownloadFile(gdeltMMIC.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);
-
-            gdeltMMIC.setLocalArticleUrl(articleFileName);
-        }
-
-        gdeltMMIC.setState("processed");
 
         return gdeltMMIC;
     }

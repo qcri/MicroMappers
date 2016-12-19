@@ -17,6 +17,17 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
 	
     @Override
     public Gdelt3W process(Gdelt3W gdelt3W) throws Exception {
+
+        gdelt3W = this.processImageFile(gdelt3W);
+
+        gdelt3W = this.processArticleFile(gdelt3W);
+
+        gdelt3W.setState("processed");
+
+        return gdelt3W;
+    }
+
+    private Gdelt3W processImageFile(Gdelt3W gdelt3W){
         String imgFileURL = gdelt3W.getImgURL();
         if(imgFileURL != null){
             if(imgFileURL.contains("//cdn.")){
@@ -31,24 +42,20 @@ public class Gdelt3WMediaProcessor implements ItemProcessor<Gdelt3W, Gdelt3W> {
 
             gdelt3W.setLocalImgUrl(imgFileName);
         }
+        return gdelt3W;
 
+    }
+
+    private Gdelt3W processArticleFile(Gdelt3W gdelt3W){
         String articleFileURL = gdelt3W.getArticleURL();
 
         if(articleFileURL != null){
-
-            if(articleFileURL.endsWith("/")){
-                articleFileURL = articleFileURL.replaceAll("/+$","") ; ;
-            }
-            String articleFileName = articleFileURL.substring(articleFileURL.lastIndexOf("/") + 1, articleFileURL.length());
-            articleFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId()+ "_" + articleFileName;
+            String articleFileName = Constants.GDELT_3W_SIGNATURE + "_" + gdelt3W.getId();
 
             HttpDownloadUtility.UserAgentBasedDownloadFile(gdelt3W.getArticleURL() , configProperties.getProperty(MicromappersConfigurationProperty.GDELT_ARTICLE_PATH), articleFileName);
 
             gdelt3W.setLocalArticleUrl(articleFileName);
         }
-
-        gdelt3W.setState("processed");
-
         return gdelt3W;
     }
 }

@@ -51,40 +51,45 @@ public class SnopesFactFetch implements Tasklet {
                 logger.info("No items found !");
             }else{
                 int index = 0;
+                int maxIndex = items.size();
                 for(HtmlElement item : items){
-                    GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
+                    if(index < maxIndex){
+                        GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
 
-                    HtmlAnchor itemAnchor1 = ((HtmlAnchor)item.getByXPath("//div[@class='right-side']/h4[@class='title']/a").get(index));
+                        HtmlAnchor itemAnchor1 = ((HtmlAnchor)item.getByXPath("//div[@class='right-side']/h4[@class='title']/a").get(index));
 
-                    String itemUrl = itemAnchor1.getHrefAttribute() ;
+                        if(itemAnchor1 != null){
+                            String itemUrl = itemAnchor1.getHrefAttribute() ;
 
-                    if(globalEventDefinitionService.findByEventUrl(baseUrl+itemUrl) == null){
-                        String title = itemAnchor1.asText();
+                            if(globalEventDefinitionService.findByEventUrl(baseUrl+itemUrl) == null){
+                                String title = itemAnchor1.asText();
 
-                        globalEventDefinition.setSearchKeyword(itemUrl.replaceAll("/", "").replaceAll("-", ","));
-                        globalEventDefinition.setTitle(title);
-                        globalEventDefinition.setEventUrl(baseUrl+itemUrl);
+                                globalEventDefinition.setSearchKeyword(itemUrl.replaceAll("/", "").replaceAll("-", ","));
+                                globalEventDefinition.setTitle(title);
+                                globalEventDefinition.setEventUrl(baseUrl+itemUrl);
 
-                        HtmlElement itemAnchor2 = ((HtmlElement)item.getByXPath("//div[@class='right-side']/p").get(index));
-                        String description = itemAnchor2.asText();
-                        globalEventDefinition.setDescription(description);
+                                HtmlElement itemAnchor2 = ((HtmlElement)item.getByXPath("//div[@class='right-side']/p").get(index));
+                                String description = itemAnchor2.asText();
+                                globalEventDefinition.setDescription(description);
 
+                                HtmlElement itemAnchor3 = ((HtmlElement) item.getByXPath("//div[@class='right-side']/div[@class='meta']/a[@class='author']/span").get(index));
+                                String author = itemAnchor3.asText();
+                                globalEventDefinition.setAuthor(author);
 
-                        HtmlElement itemAnchor3 = ((HtmlElement) item.getByXPath("//div[@class='right-side']/div[@class='meta']/a[@class='author']/span").get(index));
-                        String author = itemAnchor3.asText();
-                        globalEventDefinition.setAuthor(author);
+                                globalEventDefinition = this.getEachFact(client, globalEventDefinition);
 
-                        globalEventDefinition = this.getEachFact(client, globalEventDefinition);
+                                globalEventDefinition.setState(Constants.SNOPES_STATE_ACTIVE);
 
-                        globalEventDefinition.setState(Constants.SNOPES_STATE_ACTIVE);
-
-                        globalEventDefinitionService.create(globalEventDefinition);
+                                globalEventDefinitionService.create(globalEventDefinition);
+                            }
+                        }
+                        index++;
                     }
-                    index++;
                 }
             }
         }catch(Exception e){
             logger.error("execute: " + e);
+            return RepeatStatus.FINISHED;
         }
         return RepeatStatus.FINISHED;
     }
