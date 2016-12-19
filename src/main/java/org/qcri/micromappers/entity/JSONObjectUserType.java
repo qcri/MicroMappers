@@ -1,18 +1,19 @@
 package org.qcri.micromappers.entity;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-public class JSONObjectUserType
-  implements UserType
+public class JSONObjectUserType implements UserType
 {
   public Object assemble(Serializable cached, Object owner)
     throws HibernateException
@@ -57,13 +58,7 @@ public class JSONObjectUserType
   {
     if (rs.getString(names[0]) != null)
     {
-      JSONObject jsonObject = null;
-	try {
-		jsonObject = new JSONObject(rs.getString(names[0]));
-	} catch (JSONException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+      JsonObject jsonObject = Json.createReader(new StringReader(rs.getString(names[0]))).readObject();
       return jsonObject;
     }
     return null;

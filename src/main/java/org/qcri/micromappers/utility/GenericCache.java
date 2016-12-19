@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.qcri.micromappers.models.CollectionTask;
-import org.qcri.micromappers.models.TwitterCollectionTask;
-import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
 /**
@@ -17,53 +15,32 @@ import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
  */
 public class GenericCache {
 
-    private String key;
-//    private Map<String, TwitterStreamTracker> twitterTrackerMap = null; //keeps twitter tracker object
+    private Map<String, TwitterStreamTracker> twitterTrackerMap = null; //keeps twitter tracker object
     private Map<String, Long> countersMap = null; //keeps downloaded docs counter
-    private Map<String, TwitterCollectionTask> twtConfigMap = null; // keeps twitter configuartions tokens and keys of a particular collections
-    private Map<String, String> lastDownloadedDocumentMap = null; // stores last downloaded document
     private Map<String, CollectionTask> failedCollections = null; // keeps failed collections
+    private Map<String, CollectionTask> twtConfigMap = null; // keeps twitter configuartions tokens and keys of a particular collections
 //    private CollectorStatus collectorStatus; // keeps collector status inforamtion
-    private final Map<String, String> SMSCollections;
 //    private Map<String, FacebookCollectionTask> fbConfigMap =  null;
 //    private Map<String, FacebookFeedTracker> fbTrackerMap = null; //keeps twitter tracker object
     private final Map<String, Integer> reconnectAttempts;
-    private final Map<String, Boolean> fbSyncObjMap;
-    private final Map<String, Integer> fbSyncStateMap;
-    
-    private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+//    private final Map<String, Boolean> fbSyncObjMap;
+//    private final Map<String, Integer> fbSyncStateMap;
     
     private GenericCache() {
-//        twitterTrackerMap = new HashMap<String, TwitterStreamTracker>();
+        twitterTrackerMap = new HashMap<String, TwitterStreamTracker>();
         countersMap = new ConcurrentHashMap<String, Long>();
-        twtConfigMap = new HashMap<String, TwitterCollectionTask>();
+        failedCollections = new HashMap<String, CollectionTask>();
+        twtConfigMap = new HashMap<String, CollectionTask>();
 //        fbConfigMap = new HashMap<String, FacebookCollectionTask>();
 //        fbTrackerMap = new HashMap<String, FacebookFeedTracker>();
-        lastDownloadedDocumentMap = new HashMap<String, String>();
-        failedCollections = new HashMap<String, CollectionTask>();
-        SMSCollections = new HashMap<String, String>();
 //        collectorStatus = new CollectorStatus();
         reconnectAttempts = new HashMap<String,Integer>();
-        fbSyncObjMap = new ConcurrentHashMap<String, Boolean>();
-        fbSyncStateMap = new ConcurrentHashMap<String, Integer>();
+//        fbSyncObjMap = new ConcurrentHashMap<String, Boolean>();
+//        fbSyncStateMap = new ConcurrentHashMap<String, Integer>();
     }
 
     public static GenericCache getInstance() {
         return GenericSingletonHolder.INSTANCE;
-    }
-
-    /**
-     * @return the key
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * @param key the key to set
-     */
-    public void setKey(String key) {
-        this.key = key;
     }
 
     private static class GenericSingletonHolder {
@@ -71,13 +48,13 @@ public class GenericCache {
         private static final GenericCache INSTANCE = new GenericCache();
     }
     
-    /*public void setCollectorStatus(CollectorStatus cStatus){
+   /* public void setCollectorStatus(CollectorStatus cStatus){
         this.collectorStatus=cStatus;
     }
     
     public CollectorStatus getCollectorStatus(){
         return this.collectorStatus;
-    }
+    }*/
 
     public void setTwitterTracker(String key, TwitterStreamTracker tracker) {
         this.twitterTrackerMap.put(key, tracker);
@@ -89,7 +66,7 @@ public class GenericCache {
 
     public TwitterStreamTracker getTwitterTracker(String key) {
         return this.twitterTrackerMap.get(key);
-    }*/
+    }
 
     public void setFailedCollection(String key, CollectionTask task) {
         this.failedCollections.put(key, task);
@@ -135,30 +112,22 @@ public class GenericCache {
         return collectionList;
     }
 
-    public void setLastDownloadedDoc(String cacheKey, String doc) {
-        this.lastDownloadedDocumentMap.put(cacheKey, doc);
-    }
-
-    public void delLastDownloadedDoc(String key) {
-        this.lastDownloadedDocumentMap.remove(key);
-    }
-
-    public String getLastDownloadedDoc(String key) {
-        return this.lastDownloadedDocumentMap.get(key);
-    }
-
-    public TwitterCollectionTask getTwtConfigMap(String key) {
+    public CollectionTask getTwtConfigMap(String key) {
         return twtConfigMap.get(key);
     }
-
+    
+    public void setTwtConfigMap(String key, CollectionTask config) {
+        this.twtConfigMap.put(key, config);
+    }
+    
+    public void delTwtConfigMap(String key) {
+        this.twtConfigMap.remove(key);
+    }
+    
    /* public FacebookCollectionTask getFbConfigMap(String key) {
         return fbConfigMap.get(key);
     }*/
     
-    public void setTwtConfigMap(String key, TwitterCollectionTask config) {
-        this.twtConfigMap.put(key, config);
-    }
-
    /* public void setFbConfigMap(String key, FacebookCollectionTask config) {
         this.fbConfigMap.put(key, config);
     }
@@ -171,56 +140,7 @@ public class GenericCache {
         this.fbConfigMap.remove(key);
     }*/
     
-    public Map<String, String> getSMSCollections() {
-        return SMSCollections;
-    }
 
-    public String getSMSCollection(String code) {
-        return SMSCollections.get(code);
-    }
-
-    public void putSMSCollection(String code, String status) {
-        this.SMSCollections.put(code, status);
-    }
-
-    public void removeSMSCollection(String code) {
-        this.SMSCollections.remove(code);
-    }
-
-    public synchronized void increaseSMSCount(String code) {
-        Long count = countersMap.get(code);
-        if(count == null)
-            count = 0L;
-        countersMap.put(code, ++count);
-    }
-
-    public synchronized Long getSMSCount(String code){
-        return countersMap.get(code);
-    }
-
-    public CollectionTask getSMSConfig(String code) {
-        CollectionTask task = new CollectionTask();
-        String status = SMSCollections.get(code);
-
-        task.setCollectionCode(code);
-        if (status != null) {
-            Long smsCounter = this.countersMap.get(code);
-            if(smsCounter == null)
-                smsCounter = 0L;
-
-            String lastDownloadedDoc = this.lastDownloadedDocumentMap.get(code);
-
-            task.setStatusCode(status);
-            task.setCollectionCount(smsCounter);
-            task.setLastDocument(lastDownloadedDoc);
-        } else {
-//            task.setStatusCode(configProperties.getProperty(CollectorConfigurationProperty.STATUS_CODE_COLLECTION_NOTFOUND));
-        }
-
-        return task;
-    }
-
-    
     public List<CollectionTask> getAllRunningCollectionTasks(){
          List<CollectionTask> collections = new ArrayList<CollectionTask>();
          
@@ -229,9 +149,7 @@ public class GenericCache {
                 CollectionTask oldTask = (CollectionTask) pairs.getValue();
                 CollectionTask task = oldTask.clone();
                 Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
-                String lastDownloadedDoc = this.lastDownloadedDocumentMap.get(task.getCollectionCode());
                 task.setCollectionCount(tweetsCounter);
-                task.setLastDocument(lastDownloadedDoc);
                 collections.add(task);
             }
         }
@@ -268,13 +186,11 @@ public class GenericCache {
                 Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
                 if(tweetsCounter == null)
                     tweetsCounter = 0L;
-                String lastDownloadedDoc = this.lastDownloadedDocumentMap.get(task.getCollectionCode());
                 task.setCollectionCount(tweetsCounter);
-                task.setLastDocument(lastDownloadedDoc);
                 mappersList.add(ommitKeys(task));
             }
         }
-       /* if (fbConfigMap != null) {
+      /*  if (fbConfigMap != null) {
             for (Map.Entry pairs : fbConfigMap.entrySet()) {
                 CollectionTask oldTask = (CollectionTask) pairs.getValue();
                 CollectionTask task = oldTask.clone();
@@ -290,41 +206,26 @@ public class GenericCache {
         return mappersList;
     }
 
-    private CollectionTask ommitKeys(CollectionTask task) {
+    public CollectionTask ommitKeys(CollectionTask task) {
 
         task.setAccessToken(null);
         task.setAccessTokenSecret(null);
         return task;
     }
 
-    public TwitterCollectionTask getTwitterConfig(String id) {
+    public CollectionTask getTwitterConfig(String key) {
 
-    	TwitterCollectionTask task =  null;
-        if (!(this.twtConfigMap.containsKey(id))) {
-            return null;
-        }
-        
-    	task = this.twtConfigMap.get(id).clone();
-        
-        if (task != null) {
-            Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
-            if(tweetsCounter == null)
-                tweetsCounter = 0L;
-            String lastDownloadedDoc = this.lastDownloadedDocumentMap.get(task.getCollectionCode());
-            task.setCollectionCount(tweetsCounter);
-            task.setLastDocument(lastDownloadedDoc);
-            task.setAccessToken(null);
-            task.setAccessTokenSecret(null);
-        } else {
-            task = (TwitterCollectionTask) this.failedCollections.get(id);
-            if (task != null) {
-                task.setAccessToken(null);
-                task.setAccessTokenSecret(null);
-            }
-        }
-
-        return task;
-
+    	 if (this.twtConfigMap.containsKey(key)) {
+             CollectionTask task = this.twtConfigMap.get(key).clone();
+             if (task != null) {
+                 Long tweetsCounter = this.countersMap.get(task.getCollectionCode());
+                 if(tweetsCounter == null)
+                     tweetsCounter = 0L;
+                 task.setCollectionCount(tweetsCounter);
+             }
+             return ommitKeys(task);
+         }
+         return null;
     }
 
    /* public FacebookCollectionTask getFacebookConfig(String id) {
@@ -363,7 +264,7 @@ public class GenericCache {
             if (storedQM != null) {
                 if (storedQM.equals(qm)) {
                     if (qm.getStatusCode() != null) {
-                        if (!(qm.getStatusCode().equals(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR)))) {
+                        if (!(qm.getStatusCode().equals(CollectionStatus.FATAL_ERROR.toString()))) {
                             return true;
                         }
                     }
@@ -373,20 +274,20 @@ public class GenericCache {
         return false;
     }
 
-    public boolean isConfigExists(CollectionTask qm) {
+    public boolean isConfigExists(CollectionTask task) {
 
     	// check for twitter collection
         for (Map.Entry pairs : twtConfigMap.entrySet()) {
-            CollectionTask storedQM = (CollectionTask) pairs.getValue();
-            if (storedQM.equals(qm)) {
+            CollectionTask storedTask = (CollectionTask) pairs.getValue();
+            if (storedTask.equals(task)) {
                 return true;
             }
         }
         
         // check for fb collection
-      /*  for (Map.Entry pairs : fbConfigMap.entrySet()) {
-            CollectionTask storedQM = (CollectionTask) pairs.getValue();
-            if (storedQM.equals(qm)) {
+        /*for (Map.Entry pairs : fbConfigMap.entrySet()) {
+            CollectionTask storedTask = (CollectionTask) pairs.getValue();
+            if (storedTask.equals(task)) {
                 return true;
             }
         }*/
@@ -410,7 +311,7 @@ public class GenericCache {
         countersMap.remove(key);
     }
 
-  /*  public List<TwitterStreamTracker> getAllTwitterTrackers() {
+    public List<TwitterStreamTracker> getAllTwitterTrackers() {
         List<TwitterStreamTracker> trackersList = new ArrayList<TwitterStreamTracker>();
         for (Map.Entry pairs : twitterTrackerMap.entrySet()) {
             String key = (String) pairs.getKey();
@@ -418,7 +319,7 @@ public class GenericCache {
         }
 
         return trackersList;
-    }*/
+    }
     
     //keep track to number of reconnect attempts for for various running collections
     public int incrAttempt(String key) {
@@ -474,7 +375,7 @@ public class GenericCache {
     	return collectionList;
     }*/
 
-    public Boolean getFbSyncObjMap(String key){
+    /*public Boolean getFbSyncObjMap(String key){
     	if(fbSyncObjMap.containsKey(key)){
     		return fbSyncObjMap.get(key);
     	}
@@ -504,5 +405,5 @@ public class GenericCache {
     
     public void delFbSyncStateMap(String key){
     	fbSyncStateMap.remove(key);
-    }
+    }*/
 }

@@ -1,5 +1,7 @@
 package org.qcri.micromappers.batch.scheduler;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -26,6 +28,7 @@ public class MyScheduler {
 	
 	public void run(){
 		try {
+			logger.info("\n\nSchedular started at " + new Date()+"\n\n");
 			execution = launcher.run(job, new JobParameters());
 			logger.info("Execution status: " + execution.getStatus());
 		} catch (JobExecutionAlreadyRunningException e1) {

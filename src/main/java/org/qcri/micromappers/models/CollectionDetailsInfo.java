@@ -15,8 +15,8 @@ public class CollectionDetailsInfo {
 
 	private String code;
 	private String name;
-	private String lastDocument;
 	private String provider;
+	private Long globalEventDefinitionId;
 	private Long count;
 	private CollectionStatus status;
 	private boolean isTrashed;
@@ -77,12 +77,6 @@ public class CollectionDetailsInfo {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getLastDocument() {
-		return lastDocument;
-	}
-	public void setLastDocument(String lastDocument) {
-		this.lastDocument = lastDocument;
-	}
 	public String getProvider() {
 		return provider;
 	}
@@ -118,5 +112,17 @@ public class CollectionDetailsInfo {
 	}
 	public void setCount(Long count) {
 		this.count = count;
+	}
+	/**
+	 * @return the globalEventDefinitionId
+	 */
+	public Long getGlobalEventDefinitionId() {
+		return globalEventDefinitionId;
+	}
+	/**
+	 * @param globalEventDefinitionId the globalEventDefinitionId to set
+	 */
+	public void setGlobalEventDefinitionId(Long globalEventDefinitionId) {
+		this.globalEventDefinitionId = globalEventDefinitionId;
 	}
 }

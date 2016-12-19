@@ -31,7 +31,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
     @Column(name = "state", length = 50)
     private String state;
 
-    @Column(name = "wheres", length = 6000)
+    @Column(name = "wheres", columnDefinition="TEXT")
     private String wheres;
 
     @Column(name = "who", length = 1000)

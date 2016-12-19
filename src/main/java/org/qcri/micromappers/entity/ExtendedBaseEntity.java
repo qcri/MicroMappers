@@ -7,12 +7,13 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 @MappedSuperclass
-public class ExtendedBaseEntity
-  extends BaseEntity
+public class ExtendedBaseEntity extends BaseEntity
 {
   private static final long serialVersionUID = 9219571511424036980L;
+  
   @Column(updatable=false, nullable=false, name="created_at")
   private Timestamp createdAt;
+  
   @Column(nullable=false, name="updated_at")
   private Timestamp updatedAt;
   

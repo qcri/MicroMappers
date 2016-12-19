@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
@@ -40,19 +41,20 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 @Configuration
 @EnableSocial
+@PropertySource("config.properties")
 public class SocialConfig extends SocialConfigurerAdapter
 {
-	@Value("${facebook.appKey}")
+	@Value("${FACEBOOK_APP_KEY}")
 	private String facebookAppKey;
-	@Value("${facebook.appSecret}")
+	@Value("${FACEBOOK_APP_SECRET}")
 	private String facebookAppSecret;
-	@Value("${twitter.appKey}")
+	@Value("${TWITTER_APP_KEY}")
 	private String twitterAppKey;
-	@Value("${twitter.appSecret}")
+	@Value("${TWITTER_APP_SECRET}")
 	private String twitterAppSecret;
-	@Value("${google.appKey}")
+	@Value("${GOOGLE_APP_KEY}")
 	private String googleAppKey;
-	@Value("${google.appSecret}")
+	@Value("${GOOGLE_APP_SECRET}")
 	private String googleAppSecret;
 	
 	@Value("${application.url}")
