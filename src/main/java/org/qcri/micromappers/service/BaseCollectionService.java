@@ -10,6 +10,9 @@ import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
+import org.qcri.micromappers.utility.ResponseCode;
+import org.qcri.micromappers.utility.ResponseWrapper;
+import org.qcri.micromappers.utility.RoleType;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,19 @@ public class BaseCollectionService{
 	@Autowired 
 	private Util util;
 
+	public Boolean isCurrentUserPermitted(Long collectionId){
+		Account user = util.getAuthenticatedUser();
+		if(user.getRole() == RoleType.ADMIN){
+			return Boolean.TRUE;
+		}else{
+			if(collaboratorService.isCollaboratorExists(collectionId, user.getId())){
+				return Boolean.TRUE;
+			}else{
+				return Boolean.FALSE;
+			}
+		}
+	}
+	
 	public Collection create(CollectionDetailsInfo collectionDetailsInfo)
 	{
 		Collection collection = null;
@@ -59,7 +75,7 @@ public class BaseCollectionService{
 		return collection;
 	}
 
-	public CollectionTask prepareCollectionTask(Long id){
+	public ResponseWrapper prepareCollectionTask(Long id){
 		try {
 			Collection collection = collectionService.getById(id);
 			if (!collection.getStatus().equals(CollectionStatus.TRASHED)) {
@@ -70,13 +86,16 @@ public class BaseCollectionService{
 					this.stop(alreadyRunningCollection.getId(), userId);
 				}*/
 	
-				return adaptCollectionToCollectionTask(collection);
+				CollectionTask adaptCollectionToCollectionTask = adaptCollectionToCollectionTask(collection);
+				return new ResponseWrapper(adaptCollectionToCollectionTask, true, ResponseCode.SUCCESS.toString(), null);
+			}else{
+				return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "This collection was trashed.");
 			}
 		} catch (MicromappersServiceException e) {
-			logger.error("Error while fetching the collection by Id: "+id);
-			throw new MicromappersServiceException("Error while fetching the collection by Id: "+id, e);
+			logger.error("Error while fetching the collection by Id: "+id, e);
+			//throw new MicromappersServiceException("Error while fetching the collection by Id: "+id, e);
+			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Error while getting the collection.");
 		}
-		return null;
 	}
 
 	private CollectionTask adaptCollectionToCollectionTask(Collection collection) {

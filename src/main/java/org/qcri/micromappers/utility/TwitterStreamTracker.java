@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;

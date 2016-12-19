@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.json.JsonObject;
 
@@ -105,31 +107,32 @@ public class TrackFilter implements Predicate<JsonObject> {
 		// Next, handle all #-tagged words in the tweet text
 		// For each #-tagged word, add also the word following the #-tag to the tweetTextSet 
 		Set<String> hashWordSet = new HashSet<String>();
-		for (String w: tweetTextSet) {
-			/*
-			String[] hashSplit = w.split("#");
-			for (int i = 0;i < hashSplit.length;i++) {
-				hashSplit[i] = hashSplit[i].trim();
-			}
-			Set<String> tokensSet = new HashSet<String>(Arrays.asList(hashSplit));
-			tokensSet.removeAll(Collections.singleton(""));
-			hashWordSet.addAll(tokensSet);
-			*/
+		
+		hashWordSet = tweetTextSet.stream().filter(w -> w.startsWith("#")).map(w -> w.substring(1)).collect(Collectors.toSet());
+		/*for (String w: tweetTextSet) {
+//			String[] hashSplit = w.split("#");
+//			for (int i = 0;i < hashSplit.length;i++) {
+//				hashSplit[i] = hashSplit[i].trim();
+//			}
+//			Set<String> tokensSet = new HashSet<String>(Arrays.asList(hashSplit));
+//			tokensSet.removeAll(Collections.singleton(""));
+//			hashWordSet.addAll(tokensSet);
 			if (w.startsWith("#")) {
 				// This is stricter check than the above commented code
 				String strippedHash = w.substring(1);
 				hashWordSet.add(strippedHash);
 			}
-		}
+		}*/
 		tweetTextSet.addAll(hashWordSet);
 		return tweetTextSet;
 	}
 
 	private Set<String> toLowerCase(Set<String> wordSet) {
 		Set<String> toLower = new HashSet<String>();
-		for (String word : wordSet) {
+		toLower = wordSet.stream().map(word -> word.toLowerCase()).collect(Collectors.toSet());
+		/*for (String word : wordSet) {
 			toLower.add(word.toLowerCase());
-		}
+		}*/
 		return toLower;
 	}
 
@@ -164,12 +167,14 @@ public class TrackFilter implements Predicate<JsonObject> {
 	private boolean matchSimplePredicates(Set<String> tweetTextSet) {
 		for (KeywordPredicate predicate: this.simpleWordBasedPredicates) {
 			boolean flag = true;
-			for (String word: predicate.getUnorderedWords()) {
+			
+			flag = predicate.getUnorderedWords().stream().allMatch(word -> tweetTextSet.contains(word));
+			/*for (String word: predicate.getUnorderedWords()) {
 				if (!tweetTextSet.contains(word)) {
 					flag = false;
 					break;
 				}
-			}
+			}*/
 			if (flag) {
 				return true;		// found a match!
 			}	
@@ -178,21 +183,24 @@ public class TrackFilter implements Predicate<JsonObject> {
 	}
 
 	private boolean matchPhrasePredicates(String tweetText, Set<String> tweetTextSet) {
-		for (KeywordPredicate predicate: this.phraseBasedPredicates) {
+		for (KeywordPredicate phrasePredicate: this.phraseBasedPredicates) {
 			boolean flag = true;
-			for (String word: predicate.getUnorderedWords()) {
+			
+			flag = phrasePredicate.getUnorderedWords().stream().allMatch(word -> tweetTextSet.contains(word));
+			
+			/*for (String word: phrasePredicate.getUnorderedWords()) {
 				//System.out.println("For unordered keyword in phrase predicate = " + word + ", contained in = " + tweetTextSet.contains(word));
 				if (!tweetTextSet.contains(word)) {
 					flag = false;
 					break;
 				}
-			}
+			}*/
 			if (!flag) {
 				//System.out.println("Simple word Predicate match NOT found ");
 				return false;		// Didn't find a match
 			}
 			// Otherwise, check for phrases too,  in original tweet text
-			for (String phrase: predicate.getPhraseSet()) {
+			for (String phrase: phrasePredicate.getPhraseSet()) {
 				flag = false;
 				//System.out.println("For phrase = " + phrase + ", contained in = " + tweetText.contains(phrase));
 				if (tweetText.contains(phrase)) {
@@ -235,12 +243,5 @@ public class TrackFilter implements Predicate<JsonObject> {
 		}
 		return list;
 	}
-
-	@Override
-	public String getFilterName() {
-		return this.getClass().getSimpleName();
-	}
-
-
 }
 

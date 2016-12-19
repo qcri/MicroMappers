@@ -18,8 +18,6 @@ package org.qcri.micromappers.service;
 import org.apache.log4j.Logger;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
-import org.springframework.social.connect.ConnectionKey;
-import org.springframework.social.connect.DuplicateConnectionException;
 import org.springframework.social.connect.web.ConnectInterceptor;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.util.MultiValueMap;

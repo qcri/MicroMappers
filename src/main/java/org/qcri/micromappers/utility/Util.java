@@ -13,7 +13,6 @@ import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.exception.MicromappersException;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.service.AccountService;
-import org.qcri.micromappers.service.DataFeedService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

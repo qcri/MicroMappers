@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public abstract interface CollaboratorRepository extends CrudRepository<Collaborator, Long>
 {
+	public Long countByCollectionIdAndAccountId(Long collectionId, Long accountId);
 }

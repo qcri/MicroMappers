@@ -2,6 +2,7 @@ package org.qcri.micromappers.utility;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -78,13 +79,13 @@ public class StrictLocationFilter implements Predicate<JsonObject> {
 		return false;
 	}
 
-	@Override
-	public String getFilterName() {
-		return this.getClass().getSimpleName();
-	}
 }
 
 class ParseException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3409099850391087122L;
 	public ParseException(String message) {
 		super(message);
 	}

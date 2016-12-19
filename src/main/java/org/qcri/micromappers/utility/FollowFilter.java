@@ -1,5 +1,8 @@
 package org.qcri.micromappers.utility;
 
+import java.util.Arrays;
+import java.util.function.Predicate;
+
 import javax.json.JsonObject;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -57,11 +60,14 @@ public class FollowFilter implements Predicate<JsonObject> {
 			}
 			// Otherwise check if any of the toFollow matches the tweet creator
 			if (ArrayUtils.isNotEmpty(toFollow)) {
-				for (String follow : toFollow) {
+				if(Arrays.asList(toFollow).stream().anyMatch(follow -> tweetFrom.equals(follow))){
+					return true;
+				}
+				/*for (String follow : toFollow) {
 					if (tweetFrom.equals(follow)) {		// Note: case may be important if comparing Twitter User names!
 						return true;
 					}
-				}
+				}*/
 			}
 			return false;	
 
@@ -70,11 +76,4 @@ public class FollowFilter implements Predicate<JsonObject> {
 			return false;
 		}
 	}
-
-	@Override
-	public String getFilterName() {
-		return this.getClass().getSimpleName();
-	}
-
-
 }

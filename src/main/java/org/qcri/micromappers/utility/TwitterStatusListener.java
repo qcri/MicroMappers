@@ -3,6 +3,7 @@ package org.qcri.micromappers.utility;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -15,7 +16,6 @@ import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.DataFeedService;
-import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.StallWarning;
@@ -82,12 +82,16 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		String json = TwitterObjectFactory.getRawJSON(status);
 		
 		JsonObject originalDoc = Json.createReader(new StringReader(json)).readObject();
-		for (Predicate<JsonObject> filter : filters) {
+		if(!(filters.stream().allMatch(f -> f.test(originalDoc)))){
+			return;
+		}
+		
+		/*for (Predicate<JsonObject> filter : filters) {
 			if (!filter.test(originalDoc)) {
 				//logger.info(originalDoc.get("text").toString() + ": failed on filter = " + filter.getFilterName());
 				return;
 			}
-		}
+		}*/
 
 		System.out.println("TweetId: " +originalDoc.getString("id_str"));
 		DataFeed dataFeed = new DataFeed();

@@ -39,4 +39,19 @@ public class CollaboratorService
 		throw new MicromappersServiceException("Exception while adding collaborator to a collection", e);
 	}
   } 
+  
+  public Boolean isCollaboratorExists(Long collectionId, Long accountId)
+  {
+	  try{
+		  Long count = collaboratorRepository.countByCollectionIdAndAccountId(collectionId, accountId);
+		  if(count !=null && count > 0){
+			  return Boolean.TRUE;
+		  }else{
+			  return Boolean.FALSE;
+		  }
+	  }catch (Exception e) {
+		logger.error("Error while checking isCollaboratorExists with collection Id and account Id", e);
+		throw new MicromappersServiceException("Error while checking isCollaboratorExists with collection Id and account Id", e);
+	}
+  } 
 }
