@@ -11,18 +11,18 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "collection_log")
 public class CollectionLog extends ExtendedBaseEntity {
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7919567101104671503L;
 
+	public CollectionLog() {
+		super();
+	}
+
 	public CollectionLog(Collection collection) {
 		super();
 		this.collection = collection;
-		this.count = collection.getCount();
-		this.startDate = collection.getStartDate();
-		this.endDate = collection.getEndDate();
 		this.geo = collection.getGeo();
 		this.track = collection.getTrack();
 		this.langFilters = collection.getLangFilters();
@@ -33,7 +33,7 @@ public class CollectionLog extends ExtendedBaseEntity {
 	@JoinColumn(name="collection_id", nullable = false)
 	private Collection collection;
 
-	@Column(name = "count")
+	@Column(name = "count", columnDefinition = "bigint default 0")
 	private Long count;
 
 	@Column(length = 5000, name = "track")
@@ -48,14 +48,14 @@ public class CollectionLog extends ExtendedBaseEntity {
 	@Column(name="lang_filters")
 	private String langFilters;
 
-	@Column(name="start_date")
+	@Column(name="start_date", nullable = false)
 	private Date startDate;
 
 	@Column(name="end_date")
 	private Date endDate;
 
 	@ManyToOne
-	@JoinColumn(name="updated_by")
+	@JoinColumn(name="updated_by", nullable = false)
 	private Account updatedBy;
 
 	public String getTrack() {

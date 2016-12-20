@@ -1,7 +1,5 @@
 package org.qcri.micromappers;
 
-import org.qcri.micromappers.entity.DataFeed;
-import org.qcri.micromappers.service.DataFeedService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;

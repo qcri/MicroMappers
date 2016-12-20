@@ -31,22 +31,13 @@ public class Collection extends ExtendedBaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "account_id", nullable=false)
 	private Account account;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "global_event_definition_id", nullable=false)
 	private GlobalEventDefinition globalEventDefinition;
 
-	@Column(name = "count", columnDefinition = "bigint default 0")
-	private Long count;
-
 	@Enumerated(EnumType.ORDINAL)
 	private CollectionStatus status;
-
-	@Column(name="start_date")
-	private Date startDate;
-
-	@Column(name="end_date")
-	private Date endDate;
 
 	@Column(length = 10, nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -126,20 +117,6 @@ public class Collection extends ExtendedBaseEntity {
 	}
 
 	/**
-	 * @return the count
-	 */
-	public Long getCount() {
-		return count;
-	}
-
-	/**
-	 * @param count the count to set
-	 */
-	public void setCount(Long count) {
-		this.count = count;
-	}
-
-	/**
 	 * @return the status
 	 */
 	public CollectionStatus getStatus() {
@@ -151,34 +128,6 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setStatus(CollectionStatus status) {
 		this.status = status;
-	}
-
-	/**
-	 * @return the startDate
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * @param startDate the startDate to set
-	 */
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * @return the endDate
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * @param endDate the endDate to set
-	 */
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
 	}
 
 	/**
@@ -348,7 +297,7 @@ public class Collection extends ExtendedBaseEntity {
 	public void setGlobalEventDefinition(GlobalEventDefinition globalEventDefinition) {
 		this.globalEventDefinition = globalEventDefinition;
 	}
-	
+
 	public void setGlobalEventDefinition(Long id) {
 		GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
 		globalEventDefinition.setId(id);

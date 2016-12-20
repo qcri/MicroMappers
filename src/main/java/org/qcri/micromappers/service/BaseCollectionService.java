@@ -46,7 +46,7 @@ public class BaseCollectionService{
 			}
 		}
 	}
-	
+
 	public Collection create(CollectionDetailsInfo collectionDetailsInfo)
 	{
 		Collection collection = null;
@@ -64,7 +64,6 @@ public class BaseCollectionService{
 		}
 
 		collection = adaptCollectionDetailsInfoToCollection(collectionDetailsInfo, user);
-		collection.setCount(0L);
 		try {
 			collectionService.create(collection);
 			collaboratorService.addCollaborator(collection, user);
@@ -79,13 +78,13 @@ public class BaseCollectionService{
 		try {
 			Collection collection = collectionService.getById(id);
 			if (!collection.getStatus().equals(CollectionStatus.TRASHED)) {
-	//TODO Will update below code 
+				//TODO Will update below code 
 				/*Long userId = collection.getAccount().getId();
 				Collection alreadyRunningCollection = collectionRepository.getRunningCollectionStatusByUser(userId);
 				if (alreadyRunningCollection != null) {
 					this.stop(alreadyRunningCollection.getId(), userId);
 				}*/
-	
+
 				CollectionTask adaptCollectionToCollectionTask = adaptCollectionToCollectionTask(collection);
 				return new ResponseWrapper(adaptCollectionToCollectionTask, true, ResponseCode.SUCCESS.toString(), null);
 			}else{
@@ -107,7 +106,7 @@ public class BaseCollectionService{
 			logger.error("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName());
 			throw new MicromappersServiceException("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName(), e);
 		}
-		
+
 		task.setAccessToken(userconnection.getAccessToken());
 		task.setAccessTokenSecret(userconnection.getSecret());
 		task.setStatusCode(collection.getStatus());

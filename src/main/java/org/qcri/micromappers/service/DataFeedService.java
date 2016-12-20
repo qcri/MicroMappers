@@ -23,7 +23,7 @@ public class DataFeedService
 
 	@Inject
 	private DataFeedRepository dataFeedRepository;
-	
+
 	@Inject
 	private Util util;
 
@@ -37,10 +37,16 @@ public class DataFeedService
 		}
 	}
 
+	/**
+	 * Returning DataFeed where parentFeed is null by provider and feedId
+	 * @param provider
+	 * @param feedId
+	 * @return
+	 */
 	public DataFeed findByProviderAndFeedId(CollectionType provider, Long feedId)
 	{
 		try{
-			return dataFeedRepository.findByProviderAndFeedId(provider, feedId);
+			return dataFeedRepository.findByProviderAndFeedIdAndParentFeedIsNull(provider, feedId);
 		}catch (Exception e) {
 			logger.error("Error while fetching dataFeed by provider & feedId", e);
 			throw new MicromappersServiceException("Error while fetching dataFeed by provider & feedId", e);
@@ -73,6 +79,6 @@ public class DataFeedService
 			Path filePath = Paths.get(parentPath.toString(), dataFeed.getFeedId().toString());
 			util.writeToFile(filePath, feed);
 		}
-		
+
 	}
 }

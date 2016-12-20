@@ -13,19 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  * @author Kushal
  * RESTFul APIs to start and stop Twitter collections.
- * TODO: remove non-API related operations such as startPersister to other appropriate classes.
  */
+
 @RestController
 @RequestMapping("/twitter")
 public class TwitterCollectionController extends BaseCollectionController {
 
 	@Autowired
 	private CollectionService collectionService;
-	
+
+	private GenericCache cache = GenericCache.getInstance();
+
 	public ResponseWrapper startTask(CollectionTask task) {
 		logger.info("Collection start request received for " + task.getCollectionCode());
 
@@ -45,7 +46,6 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 		//check if a task is already running with same configurations
 		logger.info("Checking OAuth parameters for " + collectionCode);
-		GenericCache cache = GenericCache.getInstance();
 		if (cache.isConfigExists(task)) {
 			String msg = "Provided OAuth configurations already in use. Please stop this collection and then start again.";
 			logger.info(collectionCode + ": " + msg);
@@ -61,13 +61,18 @@ public class TwitterCollectionController extends BaseCollectionController {
 			tracker.start();
 
 			String code = task.getCollectionCode();
-			cache.incrCounter(code, new Long(0));
+			cache.incrCounter(code, 0L);
 
 			// if twitter streaming connection successful then change the status code
 			task.setStatusCode(CollectionStatus.RUNNING);
 			task.setStatusMessage(null);
 			cache.setTwitterTracker(code, tracker);
 			cache.setTwtConfigMap(code, task);
+
+			//Adding a new log to CollectionLog
+			collectionLogService.addByCollectionCode(collectionCode);
+
+			//Updating the status of collection in db
 			collectionService.updateStatusByCode(code, CollectionStatus.RUNNING);
 			return new ResponseWrapper(null, true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
@@ -80,32 +85,39 @@ public class TwitterCollectionController extends BaseCollectionController {
 	protected ResponseWrapper stopTask(Long id) {
 		Collection collection = collectionService.getById(id);
 		String collectionCode = collection.getCode();
-		
-		GenericCache cache = GenericCache.getInstance();
-		TwitterStreamTracker tracker = cache.getTwitterTracker(collectionCode);
-		CollectionTask task = cache.getTwitterConfig(collectionCode);
+		CollectionTask task = null;
 
+		TwitterStreamTracker tracker = cache.getTwitterTracker(collectionCode);
+
+		if (tracker != null) {
+			try {
+				tracker.close();
+				task = cache.getTwitterConfig(collectionCode);
+				clearCache(collectionCode);
+			} catch (IOException e) {
+				task = cache.getTwitterConfig(collectionCode);
+				clearCache(collectionCode);
+				return new ResponseWrapper(task, true, CollectionStatus.NOT_RUNNING.toString(), e.getMessage());
+			}
+			logger.info(collectionCode + ": " + "Collector has been successfully stopped.");
+		} else {
+			task = cache.getTwitterConfig(collectionCode);
+			clearCache(collectionCode);
+			logger.info("No collector instances found to be stopped with the given id:" + collectionCode);
+		}
+
+		if (task != null) {
+			return new ResponseWrapper(task, true, CollectionStatus.NOT_RUNNING.toString(), null);
+		}
+		return null;
+	}
+
+	private void clearCache(String collectionCode) {
 		cache.delFailedCollection(collectionCode);
 		cache.deleteCounter(collectionCode);
 		cache.delTwtConfigMap(collectionCode);
 		cache.delTwitterTracker(collectionCode);
 		cache.delReconnectAttempts(collectionCode);
-
-		if (tracker != null) {
-			try {
-				tracker.close();
-			} catch (IOException e) {
-				return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), e.getMessage());
-			}
-			logger.info(collectionCode + ": " + "Collector has been successfully stopped.");
-		} else {
-			logger.info("No collector instances found to be stopped with the given id:" + collectionCode);
-		}
-
-		if (task != null) {
-			return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), null);
-		}
-		return null;
 	}
 
 }

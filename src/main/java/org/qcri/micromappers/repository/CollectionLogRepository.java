@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public abstract interface CollectionLogRepository extends CrudRepository<CollectionLog, Long>
 {
+	CollectionLog findFirstByCollectionIdOrderByStartDateDesc(Long collectionId);
 }
