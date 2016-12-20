@@ -29,28 +29,17 @@ public class TwitterStreamTracker implements Closeable {
 	
 	private TwitterStream twitterStream;
 	private FilterQuery query;
-//	private JedisPublisher publisherJedis;
 
 	public TwitterStreamTracker(CollectionTask task) throws ParseException{
 		logger.info("Waiting to aquire Jedis connection for collection " + task.getCollectionCode());
 		this.query = task2query(task);
 		Configuration config = task2configuration(task);
-//		this.publisherJedis = JedisPublisher.newInstance();
-//		logger.info("Jedis connection acquired for collection " + task.getCollectionCode());
-
-//		String channelName = configProperties.getProperty(MicromappersConfigurationProperty.COLLECTOR_CHANNEL) + "." + task.getCollectionCode();
-		/*LoadShedder shedder = new LoadShedder(
-				Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.PERSISTER_LOAD_LIMIT)),
-				Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.PERSISTER_LOAD_CHECK_INTERVAL_MINUTES)), 
-				true,channelName);*/
 		TwitterStatusListener listener = new TwitterStatusListener(task);
-//		listener.addFilter(new ShedderFilter(channelName, shedder));
 		if ("strict".equals(task.getGeoR())) {
 			listener.addFilter(new StrictLocationFilter(task));
 			logger.info("Added StrictLocationFilter for collection = " + task.getCollectionCode() + ", BBox: " + task.getGeoLocation());
 		}
 		
-		// Added by koushik
 		if (task.isToFollowAvailable()) {
 			listener.addFilter(new FollowFilter(task));
 			logger.info("Added FollowFilter for collection = " + task.getCollectionCode() + ", toFollow: " + task.getToFollow());
@@ -62,10 +51,6 @@ public class TwitterStreamTracker implements Closeable {
 			listener.addFilter(new TrackFilter(task));
 			logger.info("Added TrackFilter for collection = " + task.getCollectionCode() + ", toTrack: " + task.getToTrack());
 		}
-//		listener.addPublisher(publisherJedis);
-//		long threhold = Long.parseLong(configProperties.getProperty(MicromappersConfigurationProperty.COLLECTOR_REDIS_COUNTER_UPDATE_THRESHOLD));
-		String cacheKey = task.getCollectionCode();
-//		listener.addPublisher(new StatusPublisher(cacheKey, threhold));
 
 		twitterStream = new TwitterStreamFactory(config).getInstance();
 		twitterStream.addListener(listener);
@@ -83,7 +68,6 @@ public class TwitterStreamTracker implements Closeable {
 	public void close() throws IOException {
 		twitterStream.cleanUp();
 		twitterStream.shutdown();
-//		publisherJedis.close();
 		logger.info("AIDR-Fetcher: Collection stopped which was tracking " + query);
 	}
 	

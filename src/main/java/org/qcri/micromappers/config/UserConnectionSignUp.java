@@ -34,6 +34,7 @@ public class UserConnectionSignUp implements ConnectionSignUp
 				account.setApiKey(UUID.randomUUID().toString());
 				account.setRole(RoleType.NORMAL);
 				account.setUserName(profile.getEmail());
+				account.setMailEnabled(Boolean.FALSE);
 				accountService.create(account);
 			}
 			return profile.getUsername();
@@ -51,6 +52,7 @@ public class UserConnectionSignUp implements ConnectionSignUp
 				account.setApiKey(UUID.randomUUID().toString());
 				account.setRole(RoleType.NORMAL);
 				account.setUserName(profile.getEmail());
+				account.setMailEnabled(Boolean.FALSE);
 				accountService.create(account);
 			}
 			return profile.getEmail();

@@ -3,6 +3,7 @@ package org.qcri.micromappers.utility;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.function.Predicate;
 
 import javax.json.Json;
@@ -16,12 +17,16 @@ import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.DataFeedService;
+import org.qcri.micromappers.service.EmailService;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
+import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
 
 /**
@@ -41,6 +46,7 @@ import twitter4j.TwitterObjectFactory;
 class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListener{
 
 	private static Logger logger = Logger.getLogger(TwitterStatusListener.class.getName());
+	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
 
 	private CollectionTask task;
 
@@ -48,16 +54,20 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 	private Collection collection;
 	private static int max  = 3;
 	private static int min = 1;
+	private long timeToSleep = 0;
 	private long counter = 0;
 	private int threshold = 5;
 	private static GenericCache cache;
 	
 	private static DataFeedService dataFeedService;
 	private static CollectionService collectionService;
+	private static EmailService emailService;
+	
 	static{
 		cache = GenericCache.getInstance();
 		dataFeedService = MicroMappersApplication.getApplicationContext().getBean(DataFeedService.class);
 		collectionService = MicroMappersApplication.getApplicationContext().getBean(CollectionService.class);
+		emailService = MicroMappersApplication.getApplicationContext().getBean(EmailService.class);
 	}
 	
 	public TwitterStatusListener(CollectionTask task) {
@@ -120,7 +130,6 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 	@Override
 	public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
 		logger.debug(task.getCollectionName() + ": Track limitation notice: " + numberOfLimitedStatuses);
-		// TODO: thread safety
 		task.setStatusCode(CollectionStatus.RUNNING_WARNING);
 		task.setStatusMessage("Track limitation notice: " + numberOfLimitedStatuses);
 	}
@@ -130,52 +139,49 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		logger.error("Exception for collection " + task.getCollectionCode(), ex);
 		int attempt = cache.incrAttempt(task.getCollectionCode());
 		task.setStatusMessage(ex.getMessage());
-		/*if(ex instanceof TwitterException)
+		if(ex instanceof TwitterException)
 		{
-			if(((TwitterException) ex).getStatusCode() == -1)
-			{
-				if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_NET_FAILURE_RETRY_ATTEMPTS)))
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
-				else
-				{
+			if(((TwitterException) ex).getStatusCode() == -1){
+				if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_NET_FAILURE_RETRY_ATTEMPTS))){
+					task.setStatusCode(CollectionStatus.FATAL_ERROR);
+				}else{
 					timeToSleep = (long) (getRandom()*attempt*
 							Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_NET_FAILURE_WAIT_SECONDS)));
 					logger.warn("Error -1, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_WARNING));
+					task.setStatusCode(CollectionStatus.WARNING);
 					task.setStatusMessage("Collection Stopped due to Twitter Error. Reconnect Attempt: " + attempt);
 				}
 			}
-			else if(((TwitterException) ex).getStatusCode() == 420)
-			{
-				if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_RATE_LIMIT_RETRY_ATTEMPTS)))
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
-				else
-				{
+			else if(((TwitterException) ex).getStatusCode() == 420){
+				if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_RATE_LIMIT_RETRY_ATTEMPTS))){
+					task.setStatusCode(CollectionStatus.FATAL_ERROR);
+				}else{
 					timeToSleep = (long) (getRandom()*(2^(attempt-1))*
 							Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_RATE_LIMIT_WAIT_SECONDS)));
-					logger.warn("Error 420, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);					
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_WARNING));
+					logger.warn("Error 420, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);
+					task.setStatusCode(CollectionStatus.WARNING);
 					task.setStatusMessage("Collection Stopped due to Twitter Error. Reconnect Attempt: " + attempt);
 				}
 			}
-			else if(((TwitterException) ex).getStatusCode() == 503)
-			{
+			else if(((TwitterException) ex).getStatusCode() == 503){
 				if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_SERVICE_UNAVAILABLE_RETRY_ATTEMPTS))) {
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
+					task.setStatusCode(CollectionStatus.FATAL_ERROR);
 //					task.setSourceOutage(true);
 				} else {
 					timeToSleep = (long) (getRandom()*attempt*
 							Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_SERVICE_UNAVAILABLE_WAIT_SECONDS)));
-					logger.warn("Error 503, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);					
-					task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_WARNING));
+					logger.warn("Error 503, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);
+					task.setStatusCode(CollectionStatus.WARNING);
 					task.setStatusMessage("Collection Stopped due to Twitter Error. Reconnect Attempt: " + attempt);
 				}			 
 			}
-			else
-				task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
+			else{
+				task.setStatusCode(CollectionStatus.FATAL_ERROR);
+			}
+				
 			
-			if(task.getStatusCode().equals(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR))){
-//				CollectorErrorLog.sendErrorMail(task.getCollectionCode(),ex.toString());
+			if(task.getStatusCode().equals(CollectionStatus.FATAL_ERROR)){
+				emailService.sendErrorMail(task.getCollectionCode(),task.getStatusMessage() + "\n" + ex.toString());
 			}
 			else
 			{
@@ -190,15 +196,15 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		{
 			if(attempt > Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_SERVICE_UNAVAILABLE_RETRY_ATTEMPTS)))
 			{
-//				CollectorErrorLog.sendErrorMail(task.getCollectionCode(),ex.toString());
-				task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
+				emailService.sendErrorMail(task.getCollectionCode(),task.getStatusMessage() + "\n" + ex.toString());
+				task.setStatusCode(CollectionStatus.EXCEPTION);
 			}
 			else
 			{
 				timeToSleep = (long) (getRandom()*attempt*
 						Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.RECONNECT_SERVICE_UNAVAILABLE_WAIT_SECONDS)));
 				logger.warn("Error RejectedExecutionException, Waiting for " + timeToSleep + " seconds, attempt: " + attempt);					
-				task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_EXCEPTION));
+				task.setStatusCode(CollectionStatus.WARNING);
 				task.setStatusMessage("Collection Stopped due to RejectedExecutionException. Reconnect Attempt: " + attempt);
 				
 				try {
@@ -210,9 +216,9 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		}
 		else
 		{
-			task.setStatusCode(configProperties.getProperty(MicromappersConfigurationProperty.STATUS_CODE_COLLECTION_ERROR));
-//			CollectorErrorLog.sendErrorMail(task.getCollectionCode(),ex.toString());			
-		}*/
+			task.setStatusCode(CollectionStatus.FATAL_ERROR);
+			emailService.sendErrorMail(task.getCollectionCode(),task.getStatusMessage() + "\n" + ex.toString());			
+		}
 	}
 
 	@Override

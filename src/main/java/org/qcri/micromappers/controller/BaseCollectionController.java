@@ -7,6 +7,7 @@ import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.BaseCollectionService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.EmailService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
 import org.qcri.micromappers.utility.ResponseCode;
@@ -108,8 +109,8 @@ public abstract class BaseCollectionController {
 
         CollectionTask failedTask = cache.getFailedCollectionTask(collection.getCode());
         if (failedTask != null) {
-        	collectionService.updateStatusByCode(collection.getCode(), task.getStatusCode());
-            return new ResponseWrapper(failedTask, true, task.getStatusCode().toString(), task.getStatusMessage());
+        	collectionService.updateStatusByCode(collection.getCode(), failedTask.getStatusCode());
+            return new ResponseWrapper(failedTask, true, failedTask.getStatusCode().toString(), failedTask.getStatusMessage());
         }
 
         collectionService.updateStatusByCode(collection.getCode(), CollectionStatus.NOT_RUNNING);

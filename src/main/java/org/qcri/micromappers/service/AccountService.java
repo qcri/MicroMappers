@@ -1,9 +1,12 @@
 package org.qcri.micromappers.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,20 @@ public class AccountService
   }
   
   public Account findByUserName(String userName){
-	  return accountRepository.findByUserName(userName);
+	  try{
+		  return accountRepository.findByUserName(userName);
+	  }catch (Exception e) {
+		logger.error("Error while getting account by userName : "+ userName, e);
+		throw new MicromappersServiceException("Error while getting account by userName : "+ userName, e);
+	}
+  }
+  
+  public List<Account> findMailEnabled(){
+	  try{
+		  return accountRepository.findByMailEnabledTrue();
+	  }catch (Exception e) {
+		logger.error("Error while getting accounts for mailEnabled", e);
+		throw new MicromappersServiceException("Error while getting accounts for mailEnabled", e);
+	}
   }
 }
