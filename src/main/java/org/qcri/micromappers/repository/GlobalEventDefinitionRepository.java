@@ -1,13 +1,18 @@
 package org.qcri.micromappers.repository;
 
 import org.qcri.micromappers.entity.GlobalEventDefinition;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
+
+import java.util.List;
 
 /**
- * Created by jlucas on 12/11/16.
+ * Created by jlucas on 12/11/16.PagingAndSortingRepository
  */
-public abstract interface GlobalEventDefinitionRepository extends CrudRepository<GlobalEventDefinition, Long>{
+public abstract interface GlobalEventDefinitionRepository extends PagingAndSortingRepository<GlobalEventDefinition, Long> {
     GlobalEventDefinition findByEventUrl(String eventUrl);
+    Page<GlobalEventDefinition> findAll(Pageable pageable);
 }
 
 
