@@ -3,6 +3,7 @@ package org.qcri.micromappers.controller;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.service.AccountService;
+import org.qcri.micromappers.utility.EncryptUtils;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -27,20 +31,29 @@ public class HomeController {
 	//CurrentUser current_user = new CurrentUser();
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
-	public String loadHomePage(Model model){
+	public String loadHomePage(Model model, HttpServletRequest request){
 		return "index";
 	}
 
 	@RequestMapping(value="/signin", method = RequestMethod.GET)
-	public String signInPage(Model model){
-
+	public String signInPage(Model model, HttpServletRequest request){
 		return "signin";
+	}
+
+	@RequestMapping(value="/settings", method = RequestMethod.GET)
+	public String settingsInPage(Model model, HttpServletRequest request){
+		return "settings";
 	}
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
-	public String homePage(Model model){
+	public String homePage(Model model, HttpServletRequest request){
 		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(name== null || name.isEmpty()){
+			return "signin";
+		}
+		request.getSession().setAttribute("current_user", name);
 		model.addAttribute("current_user",name);
+		//return "redirect:settings";
 		return "home";
 	}
 	
@@ -48,6 +61,12 @@ public class HomeController {
 	@ResponseBody
 	public Object test(){
 		return util.getAuthenticatedUser();
+	}
+
+	@RequestMapping("logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "redirect:signin";
 	}
 
 }

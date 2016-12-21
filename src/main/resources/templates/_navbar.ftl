@@ -1,3 +1,5 @@
+<form id="signOut" action="${rc.getContextPath()}/signout" method="post" class="secondary-nav pull-right">
+    <input type="hidden" name="_csrf" value="${_csrf.token}" />
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container">
@@ -13,20 +15,25 @@
             <li><a href="http://aidr-web.qcri.org/MMAPI" target="_blank">Maps</a></li>
             <li><a href="http://micromappers.org/" target="_blank">About</a></li>
         </ul>
-
-
         <#if current_user?? >
-        <form id="signOut" action="${rc.getContextPath()}/signout" method="post" class="secondary-nav pull-right">
-		    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-		    <a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-white icon-signin"></i>Sign out</a>
-		</form>
-        	
+            <ul class="nav secondary-nav pull-right">
+                <li><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon icon-user"></i>&nbsp;&nbsp;${current_user}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href=""><i class="icon icon-user"></i>&nbsp;&nbsp;My Profile</a></li>
+                    <li><a href=""><i class="icon icon-th-large"></i>&nbsp;&nbsp;My Collections</a></li>
+                    <li><a href=""><i class="icon icon-cog"></i>&nbsp;&nbsp;My Settings</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-off"></i>&nbsp;&nbsp;Sign out</a></li>
+                </ul>
+                </li>
+            </ul>
         <#else>
             <ul class="nav secondary-nav pull-right">
-              <li><a href="${rc.getContextPath()}/signin"><i class="icon icon-white icon-signin"></i>Sign in</a></li>
+              <li><a href="${rc.getContextPath()}/signin"><i class="icon icon-white icon-signin"></i>&nbsp;&nbsp;Sign in</a></li>
             </ul>
         </#if>
       </div><!--/.nav-collapse -->
     </div>
   </div>
 </div>
+</form>
