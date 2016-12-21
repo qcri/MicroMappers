@@ -4,12 +4,18 @@
  */
 package org.qcri.micromappers.utility;
 
+import java.io.Serializable;
 
 /**
  * @author Kushal
  * This class is used to send response to the clients. 
  */
-public class ResponseWrapper {
+public class ResponseWrapper implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2144284030642138755L;
 	
 	protected String statusCode;
 	protected String message;

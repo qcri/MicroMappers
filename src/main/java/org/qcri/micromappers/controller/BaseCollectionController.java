@@ -10,7 +10,6 @@ import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
-import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,29 +64,20 @@ public abstract class BaseCollectionController {
 	@RequestMapping(value = "/start", method=RequestMethod.GET)
 	@ResponseBody
 	protected ResponseWrapper start(@RequestParam Long id) {
-		//    	Check if the current user can start this collection
-		Boolean permitted = baseCollectionService.isCurrentUserPermitted(id);
-		if(permitted == null || !permitted){
-			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Current User is not permitted to execute this task.");
-		}
-
+		
+		logger.info("Starting the collection having collectionId: "+id);
 		ResponseWrapper response = baseCollectionService.prepareCollectionTask(id);
 		if(response.getSuccess()){
 			return startTask((CollectionTask) response.getData());
 		}
 		return response;
 	}
-
+	
 	public abstract ResponseWrapper startTask(CollectionTask collectionTask);
 
 	@RequestMapping("/stop")
 	public ResponseWrapper stop(@RequestParam  Long id) {
-		//Check if the current user can stop this collection
-		Boolean permitted = baseCollectionService.isCurrentUserPermitted(id);
-		if(permitted == null || !permitted){
-			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Current User is not permitted to execute this task.");
-		}
-
+		logger.info("Stopping the collection having collectionId: "+id);
 		ResponseWrapper stopTaskResponse = stopTask(id);
 
 		if(stopTaskResponse == null) {
@@ -101,7 +91,7 @@ public abstract class BaseCollectionController {
 
 		return stopTaskResponse;
 	}
-
+	
 	protected abstract ResponseWrapper stopTask(Long id);
 
 	@RequestMapping("/status")
@@ -128,9 +118,14 @@ public abstract class BaseCollectionController {
 		return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), "Invalid key. No running collector found for the given id.");
 	}
 
-	//    @RequestMapping("/restart")
-	//    protected abstract ResponseWrapper restartCollection(@QueryParam("code") String collectionCode);
-
+    @RequestMapping("/restart")
+    protected ResponseWrapper restartCollection(@RequestParam("id") Long id){
+		logger.info("Stopping the collection having collectionId: "+id);
+    	stop(id);
+    	logger.info("Starting the collection having collectionId: "+id);
+		return start(id);
+    }
+    
 
 	/* @RequestMapping("/status/all")
     public List<CollectionTask> getStatusAll() {
