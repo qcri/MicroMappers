@@ -33,8 +33,6 @@ public class GlobalEventController {
 
         Page<GlobalEventDefinition> pages =  globalEventDefinitionService.listAllByPage(pageNumber);
 
-
-        int total = (int)pages.getTotalElements();
         PageInfo<GlobalEventDefinition> pageInfo = new PageInfo<>(pages);
         pageInfo.setList(pages.getContent());
 

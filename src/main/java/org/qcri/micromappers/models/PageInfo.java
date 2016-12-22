@@ -44,6 +44,8 @@ public class PageInfo<T> implements Serializable {
     private void init(Page<T> pages) {
 
         this.total = (int)pages.getTotalElements();
+
+       // this.pages = (this.total - 1) / this.pageSize + 1;
         this.pages = pages.getTotalPages();
         this.pageNumber = pages.getNumber() + 1;
 
@@ -89,63 +91,70 @@ public class PageInfo<T> implements Serializable {
         this.list = list;
     }
 
+    /**
+     * 得到当前页的内容
+     */
     public List<T> getList() {
         return list;
     }
 
+    /**
+     * 得到记录总数
+     */
     public int getTotal() {
-        return total;
+        return this.total;
     }
 
+    /**
+     * 得到每页显示多少条记录
+     */
     public int getPageSize() {
-        return pageSize;
+        return this.pageSize;
     }
 
+    /**
+     * 得到页面总数
+     */
     public int getPages() {
-        return pages;
+        return this.pages;
     }
 
+    /**
+     * 得到当前页号
+     */
     public int getPageNumber() {
-        return pageNumber;
+        return this.pageNumber;
+    }
+
+    /**
+     * 得到所有导航页号
+     */
+    public int[] getNavigatePageNumbers() {
+        return this.navigatePageNumbers;
+    }
+
+    public void setNavigatePageNumbers(int[] navigatePageNumbers) {
+        this.navigatePageNumbers = navigatePageNumbers;
     }
 
     public boolean isFirstPage() {
-        return isFirstPage;
+        return this.isFirstPage;
     }
 
     public boolean isLastPage() {
-        return isLastPage;
+        return this.isLastPage;
     }
 
     public boolean hasPreviousPage() {
-        return hasPreviousPage;
+        return this.hasPreviousPage;
     }
 
     public boolean hasNextPage() {
-        return hasNextPage;
+        return this.hasNextPage;
     }
 
     public int getPageStart() {
         return (pageNumber - 1) * pageSize;
     }
 
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("[").append("total=").append(total).append(",pages=")
-                .append(pages).append(",pageNumber=").append(pageNumber)
-                .append(",pageSize=").append(pageSize).append(",isFirstPage=")
-                .append(isFirstPage).append(",isLastPage=").append(isLastPage)
-                .append(",hasPreviousPage=").append(hasPreviousPage)
-                .append(",hasNextPage=").append(hasNextPage)
-                .append(",navigatePageNumbers=");
-        int len = navigatePageNumbers.length;
-        if (len > 0)
-            sb.append(navigatePageNumbers[0]);
-        for (int i = 1; i < len; i++) {
-            sb.append(" " + navigatePageNumbers[i]);
-        }
-        sb.append(",list.size=" + list.size());
-        sb.append("]");
-        return sb.toString();
-    }
 }
