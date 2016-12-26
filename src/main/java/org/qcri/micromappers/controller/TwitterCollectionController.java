@@ -70,7 +70,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 			cache.setTwtConfigMap(code, task);
 
 			//Adding a new log to CollectionLog
-			collectionLogService.addByCollectionCode(collectionCode);
+			collectionLogService.createByCollectionCode(collectionCode);
 
 			//Updating the status of collection in db
 			collectionService.updateStatusByCode(code, CollectionStatus.RUNNING);

@@ -10,4 +10,6 @@ public abstract interface AccountRepository extends CrudRepository<Account, Long
 	Account findByUserName(String userName);
 
 	List<Account> findByMailEnabledTrue();
+
+	Account findById(Long id);
 }

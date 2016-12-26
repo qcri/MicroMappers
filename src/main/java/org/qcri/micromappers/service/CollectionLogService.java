@@ -50,7 +50,7 @@ public class CollectionLogService
 		}
 	} 
 
-	public Boolean addByCollectionCode(String collectionCode)
+	public Boolean createByCollectionCode(String collectionCode)
 	{
 		try{
 			Collection collection = collectionService.getByCode(collectionCode);

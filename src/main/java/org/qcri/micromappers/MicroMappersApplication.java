@@ -5,10 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by jlucas on 11/25/16.
  */
+
+@EnableScheduling
 @SpringBootApplication(exclude = {BatchAutoConfiguration.class})
 @ImportResource("spring-batch-context.xml")
 public class MicroMappersApplication {

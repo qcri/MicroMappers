@@ -49,7 +49,7 @@ public class Util
 	public Account getAuthenticatedUser() throws MicromappersException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if(authentication!=null){
-			return accountService.findByUserName(authentication.getName());
+			return accountService.getByUserName(authentication.getName());
 		}else{
 			throw new MicromappersException("No user logged in ");
 		}

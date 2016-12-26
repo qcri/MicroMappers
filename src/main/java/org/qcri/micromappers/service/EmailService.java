@@ -34,7 +34,7 @@ public class EmailService {
 		String text = (new Date()) + "\n\n" + body;
 		simpleMailMessage.setText(text);
 		
-		List<Account> recipientAccounts = accountService.findMailEnabled();
+		List<Account> recipientAccounts = accountService.getMailEnabled();
 		String[] recipients = recipientAccounts.stream().map(p -> p.getUserName()).toArray(String[]::new);
 		
 		simpleMailMessage.setTo(recipients);

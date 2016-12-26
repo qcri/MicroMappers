@@ -1,8 +1,10 @@
 package org.qcri.micromappers.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.AccountDTO;
@@ -53,7 +55,7 @@ public abstract class BaseCollectionController {
 			collection = baseCollectionService.create(collectionDetailsInfo);
 			logger.info("New collection created with collectionCode : "+ collectionDetailsInfo.getCode());
 		}catch (MicromappersServiceException e) {
-			logger.error("Error while creating a new collection"+ e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 			return new ResponseWrapper(null, false, "Failure", "Error while creating a new collection : "+ e.getMessage());
 		}
 
@@ -83,7 +85,7 @@ public abstract class BaseCollectionController {
 	
 	public abstract ResponseWrapper startTask(CollectionTask collectionTask);
 
-	@RequestMapping("/stop")
+	@RequestMapping(value = "/stop", method=RequestMethod.GET)
 	public ResponseWrapper stop(@RequestParam  Long id) {
 		logger.info("Stopping the collection having collectionId: "+id);
 		ResponseWrapper stopTaskResponse = stopTask(id);
@@ -102,7 +104,7 @@ public abstract class BaseCollectionController {
 	
 	protected abstract ResponseWrapper stopTask(Long id);
 
-	@RequestMapping("/status")
+	@RequestMapping(value = "/status", method=RequestMethod.GET)
 	public ResponseWrapper getStatus(@RequestParam("id") Long id) {
 
 		Collection collection = collectionService.getById(id);
@@ -111,39 +113,33 @@ public abstract class BaseCollectionController {
 		CollectionTask task = cache.getTwitterConfig(collection.getCode());
 		if (task != null) {
 			collectionLogService.updateCount(id, task.getCollectionCount());
-			collectionService.updateStatusByCode(collection.getCode(), task.getStatusCode());
+			
+			if(collection.getStatus() != task.getStatusCode()){
+				collectionService.updateStatusByCode(collection.getCode(), task.getStatusCode());
+			}
+			
 			return new ResponseWrapper(task, true, task.getStatusCode().toString(), task.getStatusMessage());
 		}
 
 		CollectionTask failedTask = cache.getFailedCollectionTask(collection.getCode());
 		if (failedTask != null) {
 			collectionLogService.updateCount(id, failedTask.getCollectionCount());
-			collectionService.updateStatusByCode(collection.getCode(), failedTask.getStatusCode());
+			
+			if(collection.getStatus() != failedTask.getStatusCode()){
+				collectionService.updateStatusByCode(collection.getCode(), failedTask.getStatusCode());
+			}
+			
 			return new ResponseWrapper(failedTask, true, failedTask.getStatusCode().toString(), failedTask.getStatusMessage());
 		}
 
-		collectionService.updateStatusByCode(collection.getCode(), CollectionStatus.NOT_RUNNING);
+		if(collection.getStatus() != CollectionStatus.NOT_RUNNING){
+			collectionService.updateStatusByCode(collection.getCode(), CollectionStatus.NOT_RUNNING);
+		}
 		return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), "Invalid key. No running collector found for the given id.");
 	}
 	
-	@RequestMapping("/collaborators")
-	public ResponseWrapper getCollaborators(@RequestParam("id") Long id) {
 
-		List<AccountDTO> collaborators = null;
-		try{
-			collaborators = collaboratorService.getCollaboratorsByCollection(id);
-		}catch (MicromappersServiceException e) {
-			logger.error("Exception while fetching collaborators for the collectionId: "+id);
-		}
-		
-		if(collaborators == null){
-			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), null);
-		}
-		
-		return new ResponseWrapper(collaborators, true, ResponseCode.SUCCESS.toString(), null);
-	}
-
-    @RequestMapping("/restart")
+    @RequestMapping(value = "/restart", method=RequestMethod.GET)
     protected ResponseWrapper restart(@RequestParam("id") Long id){
 		logger.info("Stopping the collection having collectionId: "+id);
     	stop(id);
@@ -177,14 +173,72 @@ public abstract class BaseCollectionController {
 				return restart(collectionInfo.getId());
 			}
 		}
-		//Running collection right after creation
-//		if (runAfterCreate && collection != null) {
-//			return start(collection.getId());
-//		} 
-
 		return response;
 	}
     
+    
+    @RequestMapping(value = "/collaborators", method=RequestMethod.GET)
+	public ResponseWrapper getCollaborators(@RequestParam("id") Long id) {
+
+		List<Account> collaborators = null;
+		try{
+			collaborators = collaboratorService.getCollaboratorsByCollection(id);
+		}catch (MicromappersServiceException e) {
+			logger.error("Exception while fetching collaborators for the collectionId: "+id);
+		}
+		
+		if(collaborators == null){
+			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), null);
+		}
+		List<AccountDTO> collaboratorsDto = collaborators.stream().map(c -> c.toDTO()).collect(Collectors.toList());
+		return new ResponseWrapper(collaboratorsDto, true, ResponseCode.SUCCESS.toString(), null);
+	}
+    
+    
+    @RequestMapping(value = "/addCollaborator", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseWrapper addCollaborator(@RequestParam("id") Long id, @RequestParam Long accountId) throws Exception {
+        logger.info("Adding collaborator to Collection");
+        String msg = "Error while adding collaborator to collection.";
+        try{
+            if (id == null || accountId == null){
+            	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+            }
+            
+            Boolean success = collaboratorService.addCollaborator(id, accountId);
+
+            if(success != null && success == Boolean.TRUE) {
+            	return new ResponseWrapper(null, true, ResponseCode.SUCCESS.toString(), null);
+            }
+        	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+        }catch(Exception e){
+            logger.error(msg, e);
+            return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+        }
+    }
+    
+    @RequestMapping(value = "/removeCollaborator", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseWrapper removeCollaborator(@RequestParam("id") Long id, @RequestParam Long accountId) throws Exception {
+        logger.info("Removing collaborator from Collection");
+        String msg = "Error while removing collaborator to collection.";
+        try{
+            if (id == null || accountId == null){
+            	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+            }
+            
+            Boolean success = collaboratorService.removeCollaborator(id, accountId);
+
+            if(success != null && success == Boolean.TRUE) {
+            	return new ResponseWrapper(null, true, ResponseCode.SUCCESS.toString(), null);
+            }
+        	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+        }catch(Exception e){
+            logger.error(msg, e);
+            return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
+        }
+    }
+
 	/* @RequestMapping("/status/all")
     public List<CollectionTask> getStatusAll() {
         List<CollectionTask> allTasks = GenericCache.getInstance().getAllConfigs();

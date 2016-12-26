@@ -27,7 +27,7 @@ public class UserConnectionSignUp implements ConnectionSignUp
 			ConnectionData data = oauthConnection.createData();
 			UserProfile profile = oauthConnection.fetchUserProfile();
 			
-			Account account = accountService.findByUserName(profile.getEmail());
+			Account account = accountService.getByUserName(profile.getEmail());
 			if(account == null){
 				account = new Account();
 				account.setLocale("en");
@@ -45,7 +45,7 @@ public class UserConnectionSignUp implements ConnectionSignUp
 			ConnectionData data = oauthConnection.createData();
 			UserProfile profile = oauthConnection.fetchUserProfile();
 
-			Account account = accountService.findByUserName(profile.getEmail());
+			Account account = accountService.getByUserName(profile.getEmail());
 			if(account == null){
 				account = new Account();
 				account.setLocale("en");

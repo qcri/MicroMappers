@@ -9,4 +9,6 @@ public class Constants
   public static final String GDELT_MMIC_SIGNATURE = "MMIC";
   public static final String SNOPES_STATE_ACTIVE = "active";
   
+  public static final String SYSTEM_USER_NAME = "System";
+  
 }

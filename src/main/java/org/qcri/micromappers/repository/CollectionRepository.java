@@ -1,5 +1,7 @@
 package org.qcri.micromappers.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.qcri.micromappers.entity.Collection;
@@ -24,4 +26,6 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	@Modifying
     @Query("UPDATE Collection c SET c.status = :status WHERE c.id = :id")
 	public int updateStatusById(@Param("id") Long id, @Param("status") CollectionStatus status);
+	
+	public List<Collection> findByStatusIn(List<CollectionStatus> statusList);
 }

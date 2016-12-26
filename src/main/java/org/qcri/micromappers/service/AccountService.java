@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.AccountRepository;
+import org.qcri.micromappers.utility.Constants;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +23,7 @@ public class AccountService
 		return accountRepository.save(account);
 	}
 
-	public Account findByUserName(String userName){
+	public Account getByUserName(String userName){
 		try{
 			return accountRepository.findByUserName(userName);
 		}catch (Exception e) {
@@ -30,8 +31,17 @@ public class AccountService
 			throw new MicromappersServiceException("Error while getting account by userName : "+ userName, e);
 		}
 	}
+	
+	public Account getById(Long id){
+		try{
+			return accountRepository.findById(id);
+		}catch (Exception e) {
+			logger.error("Error while getting account by id : "+ id, e);
+			throw new MicromappersServiceException("Error while getting account by id : "+ id, e);
+		}
+	}
 
-	public List<Account> findMailEnabled(){
+	public List<Account> getMailEnabled(){
 		try{
 			return accountRepository.findByMailEnabledTrue();
 		}catch (Exception e) {
@@ -42,7 +52,7 @@ public class AccountService
 
 	public Account getSystemUser(){
 		try{
-			return accountRepository.findByUserName("System");
+			return accountRepository.findByUserName(Constants.SYSTEM_USER_NAME);
 		}catch (Exception e) {
 			logger.error("Error while getting System Account : ", e);
 			throw new MicromappersServiceException("Error while getting System Account : ", e);

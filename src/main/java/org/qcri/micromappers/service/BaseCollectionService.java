@@ -59,7 +59,7 @@ public class BaseCollectionService{
 			collectionService.saveOrUpdate(collection);
 			collaboratorService.addCollaborator(collection, user);
 		} catch (MicromappersServiceException e) {
-			logger.error("Error while creating a new collection", e);
+			logger.error(e.getMessage());
 			throw new MicromappersServiceException(e.getMessage(), e);
 		}
 		return collection;
