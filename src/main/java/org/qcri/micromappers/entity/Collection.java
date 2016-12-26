@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.qcri.micromappers.models.CollectionDetailsInfo;
+import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
@@ -302,6 +304,51 @@ public class Collection extends ExtendedBaseEntity {
 		GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
 		globalEventDefinition.setId(id);
 		setGlobalEventDefinition(globalEventDefinition);
+	}
+	
+	public CollectionTask toCollectionTask(UserConnection userConnection) {
+		CollectionTask task = new CollectionTask();
+		if(userConnection !=null){
+			task.setAccessToken(userConnection.getAccessToken());
+			task.setAccessTokenSecret(userConnection.getSecret());
+		}
+
+		task.setCollectionName(this.getName());
+		task.setCollectionCode(this.getCode());
+		task.setToFollow(this.getFollow());
+		task.setToTrack(this.getTrack());
+		task.setGeoLocation(this.getGeo());
+		task.setGeoR(this.getGeoR());
+		task.setLanguageFilter(this.getLangFilters());
+		task.setFetchInterval(this.getFetchInterval());
+		task.setProvider(this.getProvider());
+		task.setFetchInterval(this.getFetchInterval());
+		task.setFetchFrom(this.getFetchFrom());
+		task.setLastExecutionTime(this.getLastExecutionTime());
+		task.setStatusCode(this.getStatus());
+		return task;
+	}
+	
+	public CollectionDetailsInfo toCollectionDetailsInfo() {
+		CollectionDetailsInfo collectionDetailsInfo = new CollectionDetailsInfo();
+		collectionDetailsInfo.setId(this.getId());
+		collectionDetailsInfo.setCode(this.getCode());
+		collectionDetailsInfo.setDurationHours(this.getDurationHours());
+		collectionDetailsInfo.setFetchFrom(this.getFetchFrom());
+		collectionDetailsInfo.setFollow(this.getFollow());
+		collectionDetailsInfo.setGeo(this.getGeo());
+		collectionDetailsInfo.setGeoR(this.getGeoR());
+		collectionDetailsInfo.setGlobalEventDefinitionId(this.getGlobalEventDefinition().getId());
+		collectionDetailsInfo.setLangFilters(this.getLangFilters());
+		collectionDetailsInfo.setName(this.getName());
+		collectionDetailsInfo.setOwner(this.getAccount().getUserName());
+		collectionDetailsInfo.setProvider(this.getProvider().toString());
+		collectionDetailsInfo.setStatus(this.getStatus());
+		collectionDetailsInfo.setTrack(this.getTrack());
+		collectionDetailsInfo.setTrashed(this.isTrashed);
+		
+		return collectionDetailsInfo;
+
 	}
 
 }

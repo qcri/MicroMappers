@@ -1,5 +1,8 @@
 package org.qcri.micromappers.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
@@ -7,6 +10,7 @@ import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collaborator;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
+import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.repository.CollaboratorRepository;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +56,18 @@ public class CollaboratorService
 	  }catch (Exception e) {
 		logger.error("Error while checking isCollaboratorExists with collection Id and account Id", e);
 		throw new MicromappersServiceException("Error while checking isCollaboratorExists with collection Id and account Id", e);
+	}
+  } 
+  
+  public List<AccountDTO> getCollaboratorsByCollection(Long collectionId)
+  {
+	  try{
+		  List<Collaborator> collaborators = collaboratorRepository.findByCollectionId(collectionId);
+		  List<AccountDTO> collaboratorsDTO = collaborators.stream().map(c -> c.getAccount().toDTO()).collect(Collectors.toList());
+		  return collaboratorsDTO;
+	  }catch (Exception e) {
+		logger.error("Exception while getting collaborators for a collectionId: "+collectionId, e);
+		throw new MicromappersServiceException("Exception while getting collaborators for a collectionId: "+collectionId, e);
 	}
   } 
 }

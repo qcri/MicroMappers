@@ -16,7 +16,7 @@ public class CollectionService
   @Inject
   private CollectionRepository collectionRepository;
   
-  public Collection create(Collection collection)
+  public Collection saveOrUpdate(Collection collection)
   {
 	  try{
 		  return collectionRepository.save(collection);

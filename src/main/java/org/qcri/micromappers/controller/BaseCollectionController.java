@@ -1,15 +1,20 @@
 package org.qcri.micromappers.controller;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
+import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.BaseCollectionService;
+import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
+import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +37,9 @@ public abstract class BaseCollectionController {
 
 	@Autowired
 	CollectionLogService collectionLogService;
+	
+	@Autowired
+	CollaboratorService collaboratorService;
 
 	@RequestMapping(value = "/create", method=RequestMethod.POST)
 	@ResponseBody
@@ -58,7 +66,7 @@ public abstract class BaseCollectionController {
 			return start(collection.getId());
 		} 
 
-		return new ResponseWrapper(collection, true, "Successful", "Collection created Successfully");
+		return new ResponseWrapper(collection.toCollectionDetailsInfo(), true, "Successful", "Collection created Successfully");
 	}
 
 	@RequestMapping(value = "/start", method=RequestMethod.GET)
@@ -66,11 +74,11 @@ public abstract class BaseCollectionController {
 	protected ResponseWrapper start(@RequestParam Long id) {
 		
 		logger.info("Starting the collection having collectionId: "+id);
-		ResponseWrapper response = baseCollectionService.prepareCollectionTask(id);
-		if(response.getSuccess()){
-			return startTask((CollectionTask) response.getData());
+		ResponseWrapper preparedCollectionTask = baseCollectionService.prepareCollectionTask(id);
+		if(preparedCollectionTask.getSuccess()){
+			return startTask((CollectionTask) preparedCollectionTask.getData());
 		}
-		return response;
+		return preparedCollectionTask;
 	}
 	
 	public abstract ResponseWrapper startTask(CollectionTask collectionTask);
@@ -117,9 +125,26 @@ public abstract class BaseCollectionController {
 		collectionService.updateStatusByCode(collection.getCode(), CollectionStatus.NOT_RUNNING);
 		return new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(), "Invalid key. No running collector found for the given id.");
 	}
+	
+	@RequestMapping("/collaborators")
+	public ResponseWrapper getCollaborators(@RequestParam("id") Long id) {
+
+		List<AccountDTO> collaborators = null;
+		try{
+			collaborators = collaboratorService.getCollaboratorsByCollection(id);
+		}catch (MicromappersServiceException e) {
+			logger.error("Exception while fetching collaborators for the collectionId: "+id);
+		}
+		
+		if(collaborators == null){
+			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), null);
+		}
+		
+		return new ResponseWrapper(collaborators, true, ResponseCode.SUCCESS.toString(), null);
+	}
 
     @RequestMapping("/restart")
-    protected ResponseWrapper restartCollection(@RequestParam("id") Long id){
+    protected ResponseWrapper restart(@RequestParam("id") Long id){
 		logger.info("Stopping the collection having collectionId: "+id);
     	stop(id);
     	logger.info("Starting the collection having collectionId: "+id);
@@ -127,6 +152,39 @@ public abstract class BaseCollectionController {
     }
     
 
+    @RequestMapping(value = "/update", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseWrapper updateCollection(@RequestBody CollectionDetailsInfo collectionDetailsInfo) {
+
+    	ResponseWrapper response = null;
+		try{
+			logger.info("Updating collection with collectionCode: "+ collectionDetailsInfo.getCode());
+			response = baseCollectionService.update(collectionDetailsInfo);
+		}catch (MicromappersServiceException e) {
+			logger.error("Error while updating collection"+ e.getMessage(), e);
+			return new ResponseWrapper(null, false, "Failure", "Error while updating collection : "+ e.getMessage());
+		}
+
+		if(response.getSuccess() != null || response.getSuccess() == Boolean.TRUE){
+			CollectionDetailsInfo collectionInfo = (CollectionDetailsInfo) response.getData();
+			
+			ResponseWrapper status = getStatus(collectionInfo.getId());
+			String statusCode = status.getStatusCode();
+			
+			if(statusCode.equals(CollectionStatus.RUNNING.toString()) || 
+					statusCode.equals(CollectionStatus.RUNNING_WARNING.toString()) || 
+					statusCode.equals(CollectionStatus.WARNING.toString())){
+				return restart(collectionInfo.getId());
+			}
+		}
+		//Running collection right after creation
+//		if (runAfterCreate && collection != null) {
+//			return start(collection.getId());
+//		} 
+
+		return response;
+	}
+    
 	/* @RequestMapping("/status/all")
     public List<CollectionTask> getStatusAll() {
         List<CollectionTask> allTasks = GenericCache.getInstance().getAllConfigs();

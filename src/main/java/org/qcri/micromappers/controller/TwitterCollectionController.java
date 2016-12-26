@@ -74,7 +74,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			//Updating the status of collection in db
 			collectionService.updateStatusByCode(code, CollectionStatus.RUNNING);
-			return new ResponseWrapper(null, true, CollectionStatus.RUNNING.toString(), 
+			return new ResponseWrapper(cache.getTwitterConfig(code), true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
 		} catch (Exception ex) {
 			logger.error("Exception in creating TwitterStreamTracker for collection " + collectionCode, ex);

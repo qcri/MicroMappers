@@ -50,22 +50,13 @@ public class BaseCollectionService{
 	public Collection create(CollectionDetailsInfo collectionDetailsInfo)
 	{
 		Collection collection = null;
-
 		Account user = util.getAuthenticatedUser();
 
-		String track = collectionDetailsInfo.getTrack();
-
-		if(!StringUtils.isEmpty(track)) {
-			track = track.toLowerCase().trim();
-			collectionDetailsInfo.setTrack(track);
-		}
-		if(StringUtils.isEmpty(track)) {
-			return null;
-		}
-
-		collection = adaptCollectionDetailsInfoToCollection(collectionDetailsInfo, user);
+		collection = collectionDetailsInfo.toCollection();
+		collection.setAccount(user);
+		collection.setStatus(CollectionStatus.RUNNING);
 		try {
-			collectionService.create(collection);
+			collectionService.saveOrUpdate(collection);
 			collaboratorService.addCollaborator(collection, user);
 		} catch (MicromappersServiceException e) {
 			logger.error("Error while creating a new collection", e);
@@ -84,65 +75,55 @@ public class BaseCollectionService{
 				if (alreadyRunningCollection != null) {
 					this.stop(alreadyRunningCollection.getId(), userId);
 				}*/
+				UserConnection userConnection = null;
+				try{
+					userConnection = userConnectionService.getByProviderIdAndUserId(collection.getProvider().getValue(), collection.getAccount().getUserName());
+				}catch(Exception e){
+					logger.error("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName());
+					return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Error while getting the user.");
+				}
 
-				CollectionTask adaptCollectionToCollectionTask = adaptCollectionToCollectionTask(collection);
-				return new ResponseWrapper(adaptCollectionToCollectionTask, true, ResponseCode.SUCCESS.toString(), null);
+				CollectionTask collectionTask = collection.toCollectionTask(userConnection);
+				return new ResponseWrapper(collectionTask, true, ResponseCode.SUCCESS.toString(), null);
 			}else{
 				return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "This collection was trashed.");
 			}
 		} catch (MicromappersServiceException e) {
 			logger.error("Error while fetching the collection by Id: "+id, e);
-			//throw new MicromappersServiceException("Error while fetching the collection by Id: "+id, e);
 			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Error while getting the collection.");
 		}
 	}
 
-	private CollectionTask adaptCollectionToCollectionTask(Collection collection) {
-		CollectionTask task = new CollectionTask();
-		UserConnection userconnection = null;
-		try{
-			userconnection = userConnectionService.getByProviderIdAndUserId(collection.getProvider().getValue(), collection.getAccount().getUserName());
-		}catch(Exception e){
-			logger.error("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName());
-			throw new MicromappersServiceException("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName(), e);
+
+	public ResponseWrapper update(CollectionDetailsInfo collectionInfo) {
+		if(StringUtils.isBlank(collectionInfo.getCode())){
+			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection code not present.");
 		}
-
-		task.setAccessToken(userconnection.getAccessToken());
-		task.setAccessTokenSecret(userconnection.getSecret());
-		task.setStatusCode(collection.getStatus());
-		task.setCollectionName(collection.getName());
-		task.setCollectionCode(collection.getCode());
-		task.setToFollow(collection.getFollow());
-		task.setToTrack(collection.getTrack());
-		task.setGeoLocation(collection.getGeo());
-		task.setGeoR(collection.getGeoR());
-		task.setLanguageFilter(collection.getLangFilters());
-		task.setFetchInterval(collection.getFetchInterval());
-		task.setProvider(collection.getProvider());
-		task.setFetchInterval(collection.getFetchInterval());
-		task.setFetchFrom(collection.getFetchFrom());
-		task.setLastExecutionTime(collection.getLastExecutionTime());
-		return task;
+		
+		Collection collection = collectionService.getByCode(collectionInfo.getCode());
+		
+		if(collection != null){
+			collection.setProvider(CollectionType.valueOf(collectionInfo.getProvider()));
+			collection.setDurationHours(collectionInfo.getDurationHours());
+			collection.setFollow(collectionInfo.getFollow());
+			collection.setGeo(collectionInfo.getGeo());
+			collection.setGeoR(collectionInfo.getGeoR());
+			collection.setLangFilters(collectionInfo.getLangFilters());
+			collection.setFetchInterval(collectionInfo.getFetchInterval());
+			collection.setFetchFrom(collectionInfo.getFetchFrom());
+			if(StringUtils.isNotBlank(collectionInfo.getTrack())) {
+				collection.setTrack(collectionInfo.getTrack().toLowerCase().trim());
+			}
+			
+			try {
+				Collection updatedCollection = collectionService.saveOrUpdate(collection);
+				return new ResponseWrapper(updatedCollection.toCollectionDetailsInfo(), Boolean.TRUE, ResponseCode.SUCCESS.toString(), null);
+			} catch (MicromappersServiceException e) {
+				logger.error("Error while updating collection", e);
+				return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Error while updating collection.");
+			}
+		}else{
+			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection not found with the given collection code : " + collectionInfo.getCode());
+		}
 	}
-
-
-	private Collection adaptCollectionDetailsInfoToCollection(CollectionDetailsInfo collectionInfo, Account user) {
-		Collection collection = new Collection();
-		collection.setCode(collectionInfo.getCode());
-		collection.setName(collectionInfo.getName());
-		collection.setGlobalEventDefinition(collectionInfo.getGlobalEventDefinitionId());
-		collection.setAccount(user);
-		collection.setStatus(CollectionStatus.NOT_RUNNING);
-		collection.setProvider(CollectionType.valueOf(collectionInfo.getProvider()));
-		collection.setDurationHours(collectionInfo.getDurationHours());
-		collection.setTrack(collectionInfo.getTrack());
-		collection.setFollow(collectionInfo.getFollow());
-		collection.setGeo(collectionInfo.getGeo());
-		collection.setGeoR(collectionInfo.getGeoR());
-		collection.setLangFilters(collectionInfo.getLangFilters());
-		collection.setFetchInterval(collectionInfo.getFetchInterval());
-		collection.setFetchFrom(collectionInfo.getFetchFrom());
-		return collection;
-	}
-
 }

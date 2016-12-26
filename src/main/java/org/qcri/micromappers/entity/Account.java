@@ -6,6 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
+import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.utility.RoleType;
 
 @Entity
@@ -87,4 +88,11 @@ public class Account extends ExtendedBaseEntity
 		this.mailEnabled = mailEnabled;
 	}
 
+	public AccountDTO toDTO(){
+		AccountDTO accountDTO = new AccountDTO();
+		accountDTO.setId(this.getId());
+		accountDTO.setUserName(this.getUserName());
+		accountDTO.setLocale(this.getLocale());
+		return accountDTO;
+	}
 }

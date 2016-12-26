@@ -3,21 +3,33 @@
  */
 package org.qcri.micromappers.models;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.utility.CollectionStatus;
+import org.qcri.micromappers.utility.CollectionType;
 
 /**
  * @author Kushal
  *
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class CollectionDetailsInfo {
+public class CollectionDetailsInfo implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6329919374565981089L;
+	
+	private Long id;
 	private String code;
 	private String name;
 	private String provider;
 	private Long globalEventDefinitionId;
 	private Long count;
+	private String owner;
 	private CollectionStatus status;
 	private boolean isTrashed;
     private String track;
@@ -124,5 +136,52 @@ public class CollectionDetailsInfo {
 	 */
 	public void setGlobalEventDefinitionId(Long globalEventDefinitionId) {
 		this.globalEventDefinitionId = globalEventDefinitionId;
+	}
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+	/**
+	 * @return the owner
+	 */
+	public String getOwner() {
+		return owner;
+	}
+	/**
+	 * @param owner the owner to set
+	 */
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	
+	public Collection toCollection() {
+		Collection collection = new Collection();
+		collection.setId(this.getId());
+		collection.setCode(this.getCode());
+		collection.setName(this.getName());
+		collection.setGlobalEventDefinition(this.getGlobalEventDefinitionId());
+		//collection.setAccount(user);
+		collection.setStatus(this.getStatus());
+		collection.setProvider(CollectionType.valueOf(this.getProvider()));
+		collection.setDurationHours(this.getDurationHours());
+		collection.setFollow(this.getFollow());
+		collection.setGeo(this.getGeo());
+		collection.setGeoR(this.getGeoR());
+		collection.setLangFilters(this.getLangFilters());
+		collection.setFetchInterval(this.getFetchInterval());
+		collection.setFetchFrom(this.getFetchFrom());
+		
+		if(StringUtils.isNotBlank(this.getTrack())) {
+			collection.setTrack(this.getTrack().toLowerCase().trim());
+		}
+		return collection;
 	}
 }
