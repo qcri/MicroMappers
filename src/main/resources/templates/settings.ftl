@@ -8,7 +8,7 @@
   <meta name="author" content="">
 
   <!-- Le styles -->
-  <link href="${rc.getContextPath()}/vendor/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="${rc.getContextPath()}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <link href="${rc.getContextPath()}/css/fonts/stylesheet.css" rel="stylesheet">
   <link href="${rc.getContextPath()}/css/styles.css" rel="stylesheet">
@@ -23,8 +23,8 @@
   <link rel="shortcut icon" href="${rc.getContextPath()}/img/favicon.ico">
 
   <!-- Le javascript -->
-  <script type="text/javascript" src="${rc.getContextPath()}/vendor/jquery.js"></script>
-  <script type="text/javascript" src="${rc.getContextPath()}/vendor/bootstrap/2.2.1/js/bootstrap.js"></script>
+  <script src="${rc.getContextPath()}/vendor/jquery.min.js"></script>
+  <script src="${rc.getContextPath()}/vendor/bootstrap-3.3.7/bootstrap.min.js"></script>
   <script type="text/javascript" src="${rc.getContextPath()}/vendor/modernizr.min.js"></script>
 </head>
 

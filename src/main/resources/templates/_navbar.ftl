@@ -1,39 +1,42 @@
 <form id="signOut" action="${rc.getContextPath()}/signout" method="post" class="secondary-nav pull-right">
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-       <a class="brand" href="http://clickers.micromappers.org"><img src="${rc.getContextPath()}/img/mm_logo.png"></a>
-       <div class="nav-collapse collapse">
-        <ul class="nav">
-            <li><a href="http://clickers.micromappers.org">Home</a></li>
-            <li><a href="http://aidr-web.qcri.org/MMAPI" target="_blank">Maps</a></li>
-            <li><a href="http://micromappers.org/" target="_blank">About</a></li>
-        </ul>
-        <#if current_user?? >
-            <ul class="nav secondary-nav pull-right">
-                <li><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon icon-user"></i>&nbsp;&nbsp;${current_user}<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href=""><i class="icon icon-user"></i>&nbsp;&nbsp;My Profile</a></li>
-                    <li><a href=""><i class="icon icon-th-large"></i>&nbsp;&nbsp;My Collections</a></li>
-                    <li><a href=""><i class="icon icon-cog"></i>&nbsp;&nbsp;My Settings</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-off"></i>&nbsp;&nbsp;Sign out</a></li>
-                </ul>
-                </li>
-            </ul>
-        <#else>
-            <ul class="nav secondary-nav pull-right">
-              <li><a href="${rc.getContextPath()}/signin"><i class="icon icon-white icon-signin"></i>&nbsp;&nbsp;Sign in</a></li>
-            </ul>
-        </#if>
-      </div><!--/.nav-collapse -->
-    </div>
-  </div>
-</div>
 </form>
+
+<nav class="navbar navbar-default">
+	<div class="container">
+    	<div class="navbar-header">
+      		<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" aria-expanded="false">
+	        	<span class="icon-bar"></span>
+	        	<span class="icon-bar"></span>
+				<span class="icon-bar"></span>                        
+      		</button>
+      		<a class="navbar-brand" "http://clickers.micromappers.org"><img height="35px" style = "margin-top:-10px" src="${rc.getContextPath()}/img/mm_logo.png"></a>
+    	</div>
+    	<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="${rc.getContextPath()}/home">Home <span class="sr-only">(current)</span></a></li>
+        		<li><a href="http://aidr-web.qcri.org/MMAPI" target="_blank">Maps</a></li>
+        		<li><a href="http://micromappers.org/" target="_blank">About</a></li>
+			</ul>
+			
+			<#if current_user?? >
+				<ul class="nav navbar-nav navbar-right">
+		      		<li class="dropdown">
+		          		<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user"></span>&nbsp;&nbsp;${current_user}<span class="caret"></span></a>
+		          		<ul class="dropdown-menu">
+		            		<li><a href=""><span class="icon icon-user"></span>&nbsp;&nbsp;My Profile</a></li>
+				            <li><a href=""><span class="icon icon-th-large"></span>&nbsp;&nbsp;My Collections</a></li>
+				            <li><a href=""><span class="icon icon-cog"></span>&nbsp;&nbsp;My Settings</a></li>
+				            <li class="divider"></li>
+				            <li><a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-off"></i>&nbsp;&nbsp;Sign out</a></li>
+						</ul>
+					</li>
+				</ul>
+			<#else>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="${rc.getContextPath()}/signin"><span class="icon icon-white icon-signin"></span>&nbsp;&nbsp;Sign in</a></li>
+				</ul>
+			</#if>
+		</div>
+	</div>
+</nav>

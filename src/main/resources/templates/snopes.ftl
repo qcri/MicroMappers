@@ -75,8 +75,8 @@
 <!-- Le javascript
 ================================================== -->
 <!-- Bootstrap core JavaScript -->
-<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/jquery.min.js')}}"></script>
+<script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/bootstrap-3.3.7/bootstrap.min.js')}}"></script>
 <!-- Placed at the end of the document so the pages load faster -->
 </body>
 </html>
