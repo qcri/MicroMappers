@@ -10,11 +10,11 @@
 	        	<span class="icon-bar"></span>
 				<span class="icon-bar"></span>                        
       		</button>
-      		<a class="navbar-brand" "http://clickers.micromappers.org"><img height="35px" style = "margin-top:-10px" src="${rc.getContextPath()}/img/mm_logo.png"></a>
+      		<a class="navbar-brand" href="${rc.getContextPath()}/home"><img height="35px" style = "margin-top:-10px" src="${rc.getContextPath()}/img/mm_logo.png"></a>
     	</div>
     	<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="${rc.getContextPath()}/home">Home <span class="sr-only">(current)</span></a></li>
+				<li><a href="${rc.getContextPath()}/home">Home</a></li>
         		<li><a href="http://aidr-web.qcri.org/MMAPI" target="_blank">Maps</a></li>
         		<li><a href="http://micromappers.org/" target="_blank">About</a></li>
 			</ul>

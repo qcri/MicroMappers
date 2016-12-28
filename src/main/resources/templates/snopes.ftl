@@ -6,77 +6,72 @@
 
 <div class="container" style="min-height:400px;">
 
-    <div class="row">
-        <table class="table table-striped table-bordered">
+	<div class="row">
+		<table class="table table-striped table-bordered">
             <thead>
-            <tr>
-                <th>Title</th>
-                <th>Summary</th>
-                <th>Tag</th>
-            </tr>
+	            <tr>
+	                <th>Title</th>
+	                <th>Summary</th>
+	                <th>Tag</th>
+	            </tr>
             </thead>
             <tbody>
-            <#list page.list as info>
-            <tr>
-                <td>
-                    <a href="/detail/${info.id}" title="${info.title}">
-                    ${info.title}
-                    </a>
-                </td>
-                <td title="${info.description}">
-                    ${info.description}
-                </td>
-                <td>${info.articleTag}</td>
-            </tr>
-            </#list>
+            	<#list page.list as info>
+		            <tr>
+		                <td>
+		                    <a href="/detail/${info.id}" title="${info.title}">
+		                    ${info.title}
+		                    </a>
+		                </td>
+		                <td title="${info.description}">
+		                    ${info.description}
+		                </td>
+		                <td>${info.articleTag}</td>
+		            </tr>
+            	</#list>
             </tbody>
             <tfoot>
-            <tr>
-                <td colspan="3" class="text-center">
-                    <div class="pagination pagination-centered" style="margin:0px;">
-                        <ul>
-                            <!-- First Page -->
-                        <#if page.isFirstPage()>
-                            <li><span aria-hidden="true">First</span></li>
-                        <#else>
-                            <li>
-                                <a href="/Micromappers/global/events/snopes?page=${page.pageNumber-1}" aria-label="Previous">
-                                    <span aria-hidden="true">Previous</span>
-                                </a>
-                            </li>
-                        </#if>
-                        <#list page.navigatePageNumbers as index>
-                            <li><a href="/Micromappers/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
-                        </#list>
-
-                            <!-- Last Page -->
-                        <#if page.isLastPage()>
-                            <li><span aria-hidden="true">Last</span></li>
-                        <#else>
-                            <li>
-                                <a href="/Micromappers/global/events/snopes?page=${page.pageNumber+1}" aria-label="Previous">
-                                    <span aria-hidden="true">Next</span>
-                                </a>
-                            </li>
-                        </#if>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
+	            <tr>
+	                <td colspan="3" class="text-center">
+	                    <div class="pagination pagination-centered" style="margin:0px;">
+	                        <ul>
+	                            <!-- First Page -->
+	                        <#if page.isFirstPage()>
+	                            <li><span aria-hidden="true">First</span></li>
+	                        <#else>
+	                            <li>
+	                                <a href="/Micromappers/global/events/snopes?page=${page.pageNumber-1}" aria-label="Previous">
+	                                    <span aria-hidden="true">Previous</span>
+	                                </a>
+	                            </li>
+	                        </#if>
+	                        <#list page.navigatePageNumbers as index>
+	                            <li><a href="/Micromappers/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
+	                        </#list>
+	
+	                            <!-- Last Page -->
+	                        <#if page.isLastPage()>
+	                            <li><span aria-hidden="true">Last</span></li>
+	                        <#else>
+	                            <li>
+	                                <a href="/Micromappers/global/events/snopes?page=${page.pageNumber+1}" aria-label="Previous">
+	                                    <span aria-hidden="true">Next</span>
+	                                </a>
+	                            </li>
+	                        </#if>
+	                        </ul>
+	                    </div>
+	                </td>
+	            </tr>
             </tfoot>
         </table>
     </div>
 
 </div> <!-- /container -->
 
-
 <#include "_footer.html">
-
-<!-- Le javascript
-================================================== -->
-<!-- Bootstrap core JavaScript -->
-<script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/jquery.min.js')}}"></script>
-<script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/bootstrap-3.3.7/bootstrap.min.js')}}"></script>
-<!-- Placed at the end of the document so the pages load faster -->
+<script>
+	<#include "cookies.js">
+</script>
 </body>
 </html>

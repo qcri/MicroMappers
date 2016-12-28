@@ -1,21 +1,19 @@
 package org.qcri.micromappers.controller;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.service.AccountService;
-import org.qcri.micromappers.utility.EncryptUtils;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
@@ -47,7 +45,7 @@ public class HomeController {
 	
 	@RequestMapping(value="/home", method = RequestMethod.GET)
 	public String homePage(Model model, HttpServletRequest request){
-		String name = SecurityContextHolder.getContext().getAuthentication().getName();
+		String name = util.getAuthenticatedUserName();
 		if(name== null || name.isEmpty()){
 			return "signin";
 		}

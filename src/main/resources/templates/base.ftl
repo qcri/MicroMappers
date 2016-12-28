@@ -8,9 +8,8 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="{{url_for('static', filename='${rc.getContextPath()}/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
-    <link href="{{url_for('static', filename='${rc.getContextPath()}/css/fonts/stylesheet.css')}}" rel="stylesheet">
     <link href="{{url_for('static', filename='${rc.getContextPath()}/css/styles.css')}}" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -22,9 +21,9 @@
     <link rel="shortcut icon" href="${rc.getContextPath()}/static/img/favicon.ico">
 
     <!-- Le javascript -->
-    <script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/jquery.min.js')}}"></script>
-    <script src="{{url_for('static', filename='${rc.getContextPath()}/vendor/bootstrap-3.3.7/bootstrap.min.js')}}"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='${rc.getContextPath()}/vendor/modernizr.min.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
   </head>
 
   <body>
