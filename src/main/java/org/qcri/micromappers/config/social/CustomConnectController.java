@@ -278,7 +278,7 @@ public class CustomConnectController extends ConnectController {
 		try {
 			OAuth1ConnectionFactory<?> connectionFactory = (OAuth1ConnectionFactory<?>) connectionFactoryLocator.getConnectionFactory(providerId);
 			Connection<?> connection = connectSupport.completeConnection(connectionFactory, request);
-			isDuplicate = handleDuplicateConnection(connection, connectionFactory, request);
+			isDuplicate = addOrUpdateDuplicateConnection(connection, connectionFactory, request);
 //			addConnection(connection, connectionFactory, request);
 		} catch (Exception e) {
 			sessionStrategy.setAttribute(request, PROVIDER_ERROR_ATTRIBUTE, e);
@@ -301,7 +301,7 @@ public class CustomConnectController extends ConnectController {
 		try {
 			OAuth2ConnectionFactory<?> connectionFactory = (OAuth2ConnectionFactory<?>) connectionFactoryLocator.getConnectionFactory(providerId);
 			Connection<?> connection = connectSupport.completeConnection(connectionFactory, request);
-			isDuplicate = handleDuplicateConnection(connection, connectionFactory, request);
+			isDuplicate = addOrUpdateDuplicateConnection(connection, connectionFactory, request);
 //			addConnection(connection, connectionFactory, request);
 		} catch (Exception e) {
 			sessionStrategy.setAttribute(request, PROVIDER_ERROR_ATTRIBUTE, e);
@@ -425,7 +425,7 @@ public class CustomConnectController extends ConnectController {
 	/**
 	 * May be overridden to allow custom processing of DuplicateConnectionException. 
 	 */
-	protected Boolean handleDuplicateConnection(Connection<?> connection, ConnectionFactory<?> connectionFactory, WebRequest request) {
+	protected Boolean addOrUpdateDuplicateConnection(Connection<?> connection, ConnectionFactory<?> connectionFactory, WebRequest request) {
 		UserConnection userConnection = userConnectionService.getByProviderIdAndProviderUserId(connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
 		if(userConnection != null){
 			if(userConnection.getUserId().equalsIgnoreCase(request.getUserPrincipal().getName())){

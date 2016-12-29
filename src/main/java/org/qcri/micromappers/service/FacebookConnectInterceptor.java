@@ -15,7 +15,14 @@
  */
 package org.qcri.micromappers.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.entity.UserConnection;
+import org.qcri.micromappers.utility.CollectionType;
+import org.qcri.micromappers.utility.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
@@ -26,10 +33,26 @@ import org.springframework.web.context.request.WebRequest;
 public class FacebookConnectInterceptor implements ConnectInterceptor<Facebook> {
 
 	private static Logger logger = Logger.getLogger(FacebookConnectInterceptor.class);
+
+	@Autowired
+	UserConnectionService userConnectionService;
+	
+	@Autowired
+	Util util;
 	
 	public void preConnect(ConnectionFactory<Facebook> connectionFactory, MultiValueMap<String, String> parameters, WebRequest request) {
 	}
 
 	public void postConnect(Connection<Facebook> connection, WebRequest request) {
+		Account user = util.getAuthenticatedUser();
+		List<UserConnection> connections = userConnectionService.getByProviderIdAndUserIdOrderByRankDesc(CollectionType.FACEBOOK.getValue(), user.getUserName());
+		
+		//Removing older connections after new connection arrives.
+		if(connections.size() > 1){
+			for(int index=1; index< connections.size(); index++){
+				logger.info("Removing older facebook userConnection for user: "+ user.getUserName());
+				userConnectionService.remove(connections.get(index));
+			}
+		}
 	}
 }

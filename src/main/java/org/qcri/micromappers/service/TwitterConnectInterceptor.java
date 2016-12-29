@@ -15,7 +15,14 @@
  */
 package org.qcri.micromappers.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.entity.UserConnection;
+import org.qcri.micromappers.utility.CollectionType;
+import org.qcri.micromappers.utility.Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.web.ConnectInterceptor;
@@ -29,9 +36,25 @@ public class TwitterConnectInterceptor implements ConnectInterceptor<Twitter> {
 
 	private static Logger logger = Logger.getLogger(TwitterConnectInterceptor.class);
 	
+	@Autowired
+	UserConnectionService userConnectionService;
+	
+	@Autowired
+	Util util;
+	
 	public void preConnect(ConnectionFactory<Twitter> provider, MultiValueMap<String, String> parameters, WebRequest request) {
 	}
 
 	public void postConnect(Connection<Twitter> connection, WebRequest request) {
+		Account user = util.getAuthenticatedUser();
+		List<UserConnection> connections = userConnectionService.getByProviderIdAndUserIdOrderByRankDesc(CollectionType.TWITTER.getValue(),user.getUserName());
+		
+		//Removing older connections after new connection arrives.
+		if(connections.size() > 1){
+			for(int index=1; index< connections.size(); index++){
+				logger.info("Removing older twitter userConnection for user: "+ user.getUserName());
+				userConnectionService.remove(connections.get(index));
+			}
+		}
 	}
 }
