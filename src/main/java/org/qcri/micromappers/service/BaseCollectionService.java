@@ -54,7 +54,7 @@ public class BaseCollectionService{
 
 		collection = collectionDetailsInfo.toCollection();
 		collection.setAccount(user);
-		collection.setStatus(CollectionStatus.RUNNING);
+		collection.setStatus(CollectionStatus.NOT_RUNNING);
 		try {
 			collectionService.saveOrUpdate(collection);
 			collaboratorService.addCollaborator(collection, user);
@@ -126,4 +126,5 @@ public class BaseCollectionService{
 			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection not found with the given collection code : " + collectionInfo.getCode());
 		}
 	}
+	
 }

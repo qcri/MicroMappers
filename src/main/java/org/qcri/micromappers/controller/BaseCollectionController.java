@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
@@ -251,4 +252,13 @@ public abstract class BaseCollectionController {
         return allTasks;
     }
 	 */
+    
+    @RequestMapping(value = "/existName.action", method = RequestMethod.GET)
+	@ResponseBody
+	public Object existName(@RequestParam String name) throws Exception {
+    	boolean collectionNameExists = collectionService.isCollectionNameExists(name.trim().toLowerCase());
+    	JSONObject response = new JSONObject();
+    	response.put("valid", !collectionNameExists);
+    	return response;
+	}
 }

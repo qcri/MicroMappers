@@ -89,5 +89,17 @@ public class CollectionService
 			throw new MicromappersServiceException("Error while getting running collections from db", e);
 		}
 	}
-
+	
+	public Boolean isCollectionNameExists(String name){
+		try{
+			Long count = collectionRepository.countByNameIgnoreCase(name);
+			if(count !=null && count > 0){
+				return Boolean.TRUE;
+			}
+			return Boolean.FALSE;
+		}catch (Exception e) {
+			logger.error("Error while checking isCollectionNameExists", e);
+			throw new MicromappersServiceException("Error while checking isCollectionNameExists", e);
+		}
+	} 
 }

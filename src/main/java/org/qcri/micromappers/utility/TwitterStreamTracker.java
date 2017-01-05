@@ -31,7 +31,6 @@ public class TwitterStreamTracker implements Closeable {
 	private FilterQuery query;
 
 	public TwitterStreamTracker(CollectionTask task) throws ParseException{
-		logger.info("Waiting to aquire Jedis connection for collection " + task.getCollectionCode());
 		this.query = task2query(task);
 		Configuration config = task2configuration(task);
 		TwitterStatusListener listener = new TwitterStatusListener(task);

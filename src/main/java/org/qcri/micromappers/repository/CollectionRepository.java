@@ -28,4 +28,6 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	public int updateStatusById(@Param("id") Long id, @Param("status") CollectionStatus status);
 	
 	public List<Collection> findByStatusIn(List<CollectionStatus> statusList);
+
+	public Long countByNameIgnoreCase(String name);
 }

@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.service.AccountService;
+import org.qcri.micromappers.utility.ResponseCode;
+import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -55,10 +57,16 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value="/collection/create", method = RequestMethod.GET)
+	public String createCollection(Model model, HttpServletRequest request){
+		return "collection/create";
+	}
+	
 	@RequestMapping(value="/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Object test(){
-		return util.getAuthenticatedUser();
+	public ResponseWrapper test(){
+		
+		return new ResponseWrapper("Kushal Kant Goyal", true, ResponseCode.SUCCESS.toString(), "KKG");
 	}
 
 	@RequestMapping("logout")

@@ -12,6 +12,9 @@
 						<a href="${rc.getContextPath()}/connect" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
+						<a href="${rc.getContextPath()}/collection/create" class="btn btn-primary">
+						Create Collection <i class="icon-chevron-right"></i>
+						</a>
 					</div>
 				</div>
 				<div id="dashboard" class="col-md-6">
