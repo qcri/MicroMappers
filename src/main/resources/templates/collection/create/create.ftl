@@ -27,7 +27,7 @@
 							<label class="control-label col-sm-3" for="provider">Collection Source :</label>
 							<div class="col-sm-6">
 								<select class="form-control" name="provider">
-									<option value="TWITTER">Twitter</option>
+									<option value="TWITTER" selected>Twitter</option>
 <!-- 									<option value="FACEBOOK">Facebook</option> -->
 <!-- 									<option value="BOTH">Both</option> -->
 								</select>
@@ -50,6 +50,12 @@
 									></textarea>
 							</div>
 						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-offset-3 checkbox-inline" style="padding-left: 35px; padding-top: 0px">
+								<input type="checkbox" value="true" id="runAfterCreate">Run after create.
+							</label>
+						</div>
+						
 					</div>
 					
 					
@@ -126,7 +132,7 @@
 		<script>
 			<#include "cookies.js">
 			<#include "lang.js">
-			<#include "collection/create.js"> 
+			<#include "/collection/create/create.js"> 
 		</script>
 	</body>
 </html>

@@ -50,8 +50,8 @@ $(document).ready(function() {
 
 $("#collectionCreate").submit(function(e) {
     if($('#collectionCreate').valid()){
-        var url = "${rc.getContextPath()}/twitter/create?runAfterCreate=true"; // the script where you handle the form input.
         
+        //Getting th selected languages
         var langFilters = [];
         $("#lang :selected").each(function( index ) {
             if($( this ).val().trim() != ""){
@@ -76,6 +76,13 @@ $("#collectionCreate").submit(function(e) {
                 globalEventDefinitionId: 1
         };
         
+        var runAfterCreate = false;
+        if($('#runAfterCreate').is(':checked')){
+            runAfterCreate = true;
+        }
+        
+        var url = "${rc.getContextPath()}/"+data.provider.toLocaleLowerCase()+"/create?runAfterCreate="+runAfterCreate; // the script where you handle the form input.
+        
         $.ajax({
             type: "POST",
             url: url,
@@ -87,7 +94,7 @@ $("#collectionCreate").submit(function(e) {
                 if(data.success){
                     
                     alert(data.message);
-                    location.href = "../home";
+                    location.href = "${rc.getContextPath()}/home";
                 }else{
                     alert(data.message);
                 }

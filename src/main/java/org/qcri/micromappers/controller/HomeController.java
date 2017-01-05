@@ -59,7 +59,7 @@ public class HomeController {
 	
 	@RequestMapping(value="/collection/create", method = RequestMethod.GET)
 	public String createCollection(Model model, HttpServletRequest request){
-		return "collection/create";
+		return "collection/create/create";
 	}
 	
 	@RequestMapping(value="/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
