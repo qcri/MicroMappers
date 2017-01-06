@@ -31,30 +31,28 @@
 					<tfoot>
 						<tr>
 							<td colspan="3" class="text-center">
-								<div class="pagination pagination-centered" style="margin:0px;">
-									<ul>
+								<div style="margin:0px;">
+									<ul class="pagination pull-right">
 										<!-- First Page -->
 										<#if page.isFirstPage()>
-										<li><span aria-hidden="true">First</span></li>
+											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
 										<#else>
-										<li>
-											<a href="/Micromappers/global/events/snopes?page=${page.pageNumber-1}" aria-label="Previous">
-											<span aria-hidden="true">Previous</span>
-											</a>
-										</li>
+											<li><a href="/Micromappers/global/events/snopes?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 										</#if>
+										
 										<#list page.navigatePageNumbers as index>
-										<li><a href="/Micromappers/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
+											<#if page.getPageNumber() == index>
+												<li class="active">
+											<#else>
+												<li>
+											</#if>
+												<a href="/Micromappers/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
 										</#list>
 										<!-- Last Page -->
 										<#if page.isLastPage()>
-										<li><span aria-hidden="true">Last</span></li>
+											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
 										<#else>
-										<li>
-											<a href="/Micromappers/global/events/snopes?page=${page.pageNumber+1}" aria-label="Previous">
-											<span aria-hidden="true">Next</span>
-											</a>
-										</li>
+											<li ><a href="/Micromappers/global/events/snopes?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 										</#if>
 									</ul>
 								</div>

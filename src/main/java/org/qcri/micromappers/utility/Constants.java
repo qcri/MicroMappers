@@ -11,4 +11,6 @@ public class Constants
   
   public static final String SYSTEM_USER_NAME = "System";
   
+  public static final Integer DEFAULT_PAGE_SIZE = 10;
+  
 }

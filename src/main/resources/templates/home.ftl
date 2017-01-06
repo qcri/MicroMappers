@@ -12,16 +12,16 @@
 						<a href="${rc.getContextPath()}/connect" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
-						<a href="${rc.getContextPath()}/collection/create" class="btn btn-primary">
+						<a href="${rc.getContextPath()}/collection/view/create" class="btn btn-primary">
 						Create Collection <i class="icon-chevron-right"></i>
 						</a>
 					</div>
 				</div>
 				<div id="dashboard" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-dashboard"></i> My Jobs</h4>
-						<p>Monitor the background jobs</p>
-						<a href="" class="btn btn-primary">
+						<h4><i class="icon-dashboard"></i> My Collections</h4>
+						<p>Monitor the background collections</p>
+						<a href="${rc.getContextPath()}/collection/view/list" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
 					</div>
@@ -60,7 +60,7 @@
 				<div id="users-list" class="col-md-6">
 					<div class="well">
 						<h4><i class="icon-list"></i> My Collaborators</h4>
-						<p>Export a list of users}</p>
+						<p>Export a list of users</p>
 						<a href="" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>

@@ -6,10 +6,15 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollectionRepository;
 import org.qcri.micromappers.utility.CollectionStatus;
+import org.qcri.micromappers.utility.Constants;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -59,7 +64,7 @@ public class CollectionService
 			}
 		}catch (Exception e) {
 			logger.error("Error while updating collection status by code", e);
-			throw new MicromappersServiceException("Error while updating collection status by code", e);
+			return Boolean.FALSE;
 		}
 	}
 
@@ -73,7 +78,7 @@ public class CollectionService
 			}
 		}catch (Exception e) {
 			logger.error("Error while updating collection status by id", e);
-			throw new MicromappersServiceException("Error while updating collection status by id", e);
+			return Boolean.FALSE;
 		}
 	}
 
@@ -101,5 +106,22 @@ public class CollectionService
 			logger.error("Error while checking isCollectionNameExists", e);
 			throw new MicromappersServiceException("Error while checking isCollectionNameExists", e);
 		}
-	} 
+	}
+	
+	
+	public Page<Collection> getAllByPage(Account account, Integer pageNumber) {
+		
+        PageRequest request =
+                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+
+        return collectionRepository.findByAccount(account, request);
+    }
+
+	public Boolean delete(Long id) {
+		return updateStatusById(id, CollectionStatus.TRASHED);
+	}
+	
+	public Boolean untrash(Long id) {
+		return updateStatusById(id, CollectionStatus.NOT_RUNNING);
+	}
 }

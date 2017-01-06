@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,11 +27,10 @@ public class GlobalEventController {
     GlobalEventDefinitionService globalEventDefinitionService;
 
     @RequestMapping(value={"","/","snopes"})
-    public String index(Model model, HttpServletRequest request) {
-        String page = request.getParameter("page");
-        page = StringUtils.defaultIfBlank(page, "1");
+    public String index(Model model, HttpServletRequest request,
+    		@RequestParam(value = "page", defaultValue = "1") String page) {
+    	
         int pageNumber = Integer.valueOf(page);
-
         Page<GlobalEventDefinition> pages =  globalEventDefinitionService.listAllByPage(pageNumber);
 
         PageInfo<GlobalEventDefinition> pageInfo = new PageInfo<>(pages);

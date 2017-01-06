@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.service.AccountService;
+import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.Util;
@@ -24,6 +25,9 @@ public class HomeController {
 	
 	@Autowired
 	AccountService accountService;
+
+	@Autowired
+	CollectionService collectionService;
 	
 	@Autowired 
 	private Util util;
@@ -57,11 +61,6 @@ public class HomeController {
 		return "home";
 	}
 	
-	@RequestMapping(value="/collection/create", method = RequestMethod.GET)
-	public String createCollection(Model model, HttpServletRequest request){
-		return "collection/create/create";
-	}
-	
 	@RequestMapping(value="/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseWrapper test(){
@@ -74,5 +73,5 @@ public class HomeController {
 		session.invalidate();
 		return "redirect:signin";
 	}
-
+	
 }

@@ -20,7 +20,7 @@ $(document).ready(function() {
                 trigger: "focus blur",
                 validators: {
                     remote: {
-                        url: '${rc.getContextPath()}/twitter/existName.action',
+                        url: '${rc.getContextPath()}/collection/existName.action',
                         data: function(validator, $field, value) {
                             return {
                                 name: document.getElementsByName('name')[0].value

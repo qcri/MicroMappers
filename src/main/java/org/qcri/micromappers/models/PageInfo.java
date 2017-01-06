@@ -1,10 +1,9 @@
 package org.qcri.micromappers.models;
 
-import org.qcri.micromappers.entity.GlobalEventDefinition;
-import org.springframework.data.domain.Page;
-
 import java.io.Serializable;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
 
 /**
  * Created by jlucas on 12/21/16.
@@ -91,44 +90,26 @@ public class PageInfo<T> implements Serializable {
         this.list = list;
     }
 
-    /**
-     * 得到当前页的内容
-     */
     public List<T> getList() {
         return list;
     }
 
-    /**
-     * 得到记录总数
-     */
     public int getTotal() {
         return this.total;
     }
 
-    /**
-     * 得到每页显示多少条记录
-     */
     public int getPageSize() {
         return this.pageSize;
     }
 
-    /**
-     * 得到页面总数
-     */
     public int getPages() {
         return this.pages;
     }
 
-    /**
-     * 得到当前页号
-     */
     public int getPageNumber() {
         return this.pageNumber;
     }
 
-    /**
-     * 得到所有导航页号
-     */
     public int[] getNavigatePageNumbers() {
         return this.navigatePageNumbers;
     }

@@ -1,23 +1,15 @@
 package org.qcri.micromappers.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
-import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.service.BaseCollectionService;
-import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
-import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +33,6 @@ public abstract class BaseCollectionController {
 	@Autowired
 	CollectionLogService collectionLogService;
 	
-	@Autowired
-	CollaboratorService collaboratorService;
-
 	@RequestMapping(value = "/create", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseWrapper createCollection(@RequestBody CollectionDetailsInfo collectionDetailsInfo,
@@ -95,7 +84,7 @@ public abstract class BaseCollectionController {
 			stopTaskResponse = new ResponseWrapper(null, true, CollectionStatus.NOT_RUNNING.toString(),
 					"Invalid key. No running collector found for the given id.");
 		}else{
-			//Update the endDate and colleciton count in collectionLog
+			//Update the endDate and collection count in collectionLog
 			collectionLogService.stop(id, ((CollectionTask) stopTaskResponse.getData()).getCollectionCount());
 		}
 		collectionService.updateStatusById(id, CollectionStatus.NOT_RUNNING);
@@ -175,90 +164,5 @@ public abstract class BaseCollectionController {
 			}
 		}
 		return response;
-	}
-    
-    
-    @RequestMapping(value = "/collaborators", method=RequestMethod.GET)
-	public ResponseWrapper getCollaborators(@RequestParam("id") Long id) {
-
-		List<Account> collaborators = null;
-		try{
-			collaborators = collaboratorService.getCollaboratorsByCollection(id);
-		}catch (MicromappersServiceException e) {
-			logger.error("Exception while fetching collaborators for the collectionId: "+id);
-		}
-		
-		if(collaborators == null){
-			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), null);
-		}
-		List<AccountDTO> collaboratorsDto = collaborators.stream().map(c -> c.toDTO()).collect(Collectors.toList());
-		return new ResponseWrapper(collaboratorsDto, true, ResponseCode.SUCCESS.toString(), null);
-	}
-    
-    
-    @RequestMapping(value = "/addCollaborator", method = RequestMethod.PUT)
-    @ResponseBody
-    public ResponseWrapper addCollaborator(@RequestParam("id") Long id, @RequestParam Long accountId) throws Exception {
-        logger.info("Adding collaborator to Collection");
-        String msg = "Error while adding collaborator to collection.";
-        try{
-            if (id == null || accountId == null){
-            	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-            }
-            
-            Boolean success = collaboratorService.addCollaborator(id, accountId);
-
-            if(success != null && success == Boolean.TRUE) {
-            	return new ResponseWrapper(null, true, ResponseCode.SUCCESS.toString(), null);
-            }
-        	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-        }catch(Exception e){
-            logger.error(msg, e);
-            return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-        }
-    }
-    
-    @RequestMapping(value = "/removeCollaborator", method = RequestMethod.DELETE)
-    @ResponseBody
-    public ResponseWrapper removeCollaborator(@RequestParam("id") Long id, @RequestParam Long accountId) throws Exception {
-        logger.info("Removing collaborator from Collection");
-        String msg = "Error while removing collaborator to collection.";
-        try{
-            if (id == null || accountId == null){
-            	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-            }
-            
-            Boolean success = collaboratorService.removeCollaborator(id, accountId);
-
-            if(success != null && success == Boolean.TRUE) {
-            	return new ResponseWrapper(null, true, ResponseCode.SUCCESS.toString(), null);
-            }
-        	return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-        }catch(Exception e){
-            logger.error(msg, e);
-            return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), msg);
-        }
-    }
-
-	/* @RequestMapping("/status/all")
-    public List<CollectionTask> getStatusAll() {
-        List<CollectionTask> allTasks = GenericCache.getInstance().getAllConfigs();
-        return allTasks;
-    }*/
-	/* 
-    @RequestMapping("/failed/all")
-    public List<CollectionTask> getAllFailedCollections() {
-        List<CollectionTask> allTasks = GenericCache.getInstance().getAllFailedCollections();
-        return allTasks;
-    }
-	 */
-    
-    @RequestMapping(value = "/existName.action", method = RequestMethod.GET)
-	@ResponseBody
-	public Object existName(@RequestParam String name) throws Exception {
-    	boolean collectionNameExists = collectionService.isCollectionNameExists(name.trim().toLowerCase());
-    	JSONObject response = new JSONObject();
-    	response.put("valid", !collectionNameExists);
-    	return response;
 	}
 }

@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.utility.CollectionStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -30,4 +33,6 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	public List<Collection> findByStatusIn(List<CollectionStatus> statusList);
 
 	public Long countByNameIgnoreCase(String name);
+
+	public Page<Collection> findByAccount(Account account, Pageable page);
 }
