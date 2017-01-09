@@ -120,4 +120,12 @@ public class CollectionLogService
 			return Boolean.FALSE;
 		}
 	}
+	
+	public Long getCountByCollectionId(Long collectionId){
+		Long count = collectionLogRepository.getCollectionCountByCollectionId(collectionId);
+		if(count == null){
+			count = 0L;
+		}
+		return count;
+	}
 }

@@ -11,6 +11,7 @@ import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.AccountDTO;
+import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
@@ -219,6 +220,34 @@ public class CollectionController {
     @RequestMapping(value="/view/create", method = RequestMethod.GET)
 	public String createCollection(Model model, HttpServletRequest request){
 		return "collection/create/create";
+	}
+    
+    
+    /**This method is used to display the details of a collection.
+     * @param model
+     * @param request
+     * @param id
+     * @return collection/details/details
+     */
+    @RequestMapping(value="/view/details", method = RequestMethod.GET)
+	public String getCollectionDetails(Model model, HttpServletRequest request, @RequestParam("id") Long id){
+    	
+    	Collection collection = collectionService.getById(id);
+    	CollectionDetailsInfo collectionDetailsInfo = null;
+    	List<Account> collaborators = null;
+    	Long collectionCount = 0L;
+    	if(collection != null){
+    		collectionDetailsInfo = collection.toCollectionDetailsInfo();
+    		collaborators = collaboratorService.getCollaboratorsByCollection(id);
+    		collectionCount = collectionLogService.getCountByCollectionId(id);
+    	}
+    	model.addAttribute("collectionInfo", collectionDetailsInfo);
+    	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
+    	
+    	String collaboratorsString = collaborators.stream().map(c -> c.getUserName()).collect(Collectors.joining(","));
+    	model.addAttribute("collectionCollaborators",collaboratorsString);
+    	model.addAttribute("collectionCount",collectionCount);
+		return "collection/details/details";
 	}
 
 }

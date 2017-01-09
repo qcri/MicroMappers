@@ -31,7 +31,7 @@
 								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="view details" TARGET="_blank"><strong>&nbsp;Info</strong></a>
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="/Micromappers/collection/view/create?snopes=${info.id}"><strong>&nbsp;Create</strong></a></span>
+								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?snopes=${info.id}"><strong>&nbsp;Create</strong></a></span>
                                 </span>
 
 						</tr>
@@ -46,7 +46,7 @@
 										<#if page.isFirstPage()>
 											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
 										<#else>
-											<li><a href="/Micromappers/global/events/snopes?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+											<li><a href="${rc.getContextPath()}/global/events/snopes?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 										</#if>
 										
 										<#list page.navigatePageNumbers as index>
@@ -55,13 +55,13 @@
 											<#else>
 												<li>
 											</#if>
-												<a href="/Micromappers/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
+												<a href="${rc.getContextPath()}/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
 										</#list>
 										<!-- Last Page -->
 										<#if page.isLastPage()>
 											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
 										<#else>
-											<li ><a href="/Micromappers/global/events/snopes?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+											<li ><a href="${rc.getContextPath()}/global/events/snopes?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 										</#if>
 									</ul>
 								</div>

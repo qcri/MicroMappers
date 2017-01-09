@@ -16,19 +16,6 @@ public class CollectionLog extends ExtendedBaseEntity {
 	 */
 	private static final long serialVersionUID = 7919567101104671503L;
 
-	public CollectionLog() {
-		super();
-	}
-
-	public CollectionLog(Collection collection) {
-		super();
-		this.collection = collection;
-		this.geo = collection.getGeo();
-		this.track = collection.getTrack();
-		this.langFilters = collection.getLangFilters();
-		this.follow = collection.getFollow();
-	}
-
 	@ManyToOne
 	@JoinColumn(name="collection_id", nullable = false)
 	private Collection collection;
@@ -58,6 +45,19 @@ public class CollectionLog extends ExtendedBaseEntity {
 	@JoinColumn(name="updated_by", nullable = false)
 	private Account updatedBy;
 
+	public CollectionLog() {
+		super();
+	}
+
+	public CollectionLog(Collection collection) {
+		super();
+		this.collection = collection;
+		this.geo = collection.getGeo();
+		this.track = collection.getTrack();
+		this.langFilters = collection.getLangFilters();
+		this.follow = collection.getFollow();
+	}
+	
 	public String getTrack() {
 		return track;
 	}

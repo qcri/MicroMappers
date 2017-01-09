@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.qcri.micromappers.entity.GdeltMaster;
+import org.qcri.micromappers.models.GdeltMaster;
 import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
