@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.service.AccountService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.ResponseCode;
@@ -52,10 +53,12 @@ public class HomeController {
 	@RequestMapping(value="/home", method = RequestMethod.GET)
 	public String homePage(Model model, HttpServletRequest request){
 		String name = util.getAuthenticatedUserName();
+		Account account = util.getAuthenticatedUser();
 		if(name== null || name.isEmpty()){
 			return "signin";
 		}
 		request.getSession().setAttribute("current_user", name);
+		request.getSession().setAttribute("account", account);
 		model.addAttribute("current_user",name);
 		//return "redirect:settings";
 		return "home";

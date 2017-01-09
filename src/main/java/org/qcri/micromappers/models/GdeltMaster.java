@@ -1,4 +1,4 @@
-package org.qcri.micromappers.entity;
+package org.qcri.micromappers.models;
 
 /**
  * Created by jlucas on 11/26/16.

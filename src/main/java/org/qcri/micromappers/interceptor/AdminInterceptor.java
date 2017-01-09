@@ -1,6 +1,6 @@
 package org.qcri.micromappers.interceptor;
 
-import org.qcri.micromappers.entity.CurrentUser;
+import org.qcri.micromappers.entity.Account;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,9 +16,10 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
         Object obj = request.getSession().getAttribute("current_user");
+        Object obj2 = request.getSession().getAttribute("account");
         String xrequest = request.getHeader("x-requested-with");
 
-        if (obj == null || !(obj instanceof CurrentUser)) {
+        if (obj == null || !(obj2 instanceof Account)) {
             if("XMLHttpRequest".equalsIgnoreCase(xrequest)) {
                 response.setHeader("sessionstatus", "timeout");
             }else {
