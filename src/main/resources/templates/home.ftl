@@ -41,7 +41,7 @@
 					<div class="well">
 						<h4><i class="icon-check"></i> News Global Events</h4>
 						<p>Manage project categories</p>
-						<a href="" class="btn btn-primary">
+						<a href="${rc.getContextPath()}/global/events/glides" class="btn btn-primary">
 						View <i class="icon-chevron-right"></i>
 						</a>
 					</div>
