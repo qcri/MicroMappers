@@ -17,14 +17,14 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="">
-								${info.glideCode}
-								</a>
+                                <a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank">${info.glideCode}</a>
 							</td>
 							<td title="${info.updated}">
 								${info.updated}
 							</td>
-							<td>View</td>
+							<td><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank">Info</a>&nbsp|&nbsp
+                                <a href="/Micromappers/collection/view/create?glideCode=${info.glideCode}">Create</a>
+							</td>
 						</tr>
 						</#list>
 					</tbody>

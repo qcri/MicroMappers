@@ -11,6 +11,7 @@
 							<th>Title</th>
 							<th>Summary</th>
 							<th>Tag</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -25,6 +26,8 @@
 								${info.description}
 							</td>
 							<td>${info.articleTag}</td>
+							<td><a href="${info.eventUrl}" title="view details" TARGET="_blank">Info</a>&nbsp|&nbsp
+                                <a href="/Micromappers/collection/view/create?snopes=${info.id}">Create</a></td>
 						</tr>
 						</#list>
 					</tbody>
