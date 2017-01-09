@@ -22,8 +22,12 @@
 							<td title="${info.updated}">
 								${info.updated}
 							</td>
-							<td><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank">Info</a>&nbsp|&nbsp
-                                <a href="/Micromappers/collection/view/create?glideCode=${info.glideCode}">Create</a>
+							<td><span class="label label-info">
+								<i class="icon-info-sign"></i><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank"><strong>&nbsp;Info</strong></a>
+								</span>&nbsp;&nbsp;
+								<span class="label label-info">
+								<i class="icon-cogs"></i><a href="/Micromappers/collection/view/create?glideCode=${info.glideCode}"><strong>&nbsp;Create</strong></a></span>
+                                </span>
 							</td>
 						</tr>
 						</#list>

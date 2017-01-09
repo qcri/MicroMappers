@@ -8,10 +8,10 @@
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th>Title</th>
-							<th>Summary</th>
-							<th>Tag</th>
-							<th>Action</th>
+							<th style="width: 20%">Title</th>
+							<th style="width: 40%">Summary</th>
+							<th style="width: 25%">Tag</th>
+							<th style="width: 15%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -26,14 +26,20 @@
 								${info.description}
 							</td>
 							<td>${info.articleTag}</td>
-							<td><a href="${info.eventUrl}" title="view details" TARGET="_blank">Info</a>&nbsp|&nbsp
-                                <a href="/Micromappers/collection/view/create?snopes=${info.id}">Create</a></td>
+							<td>
+								<span class="label label-info">
+								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="view details" TARGET="_blank"><strong>&nbsp;Info</strong></a>
+								</span>&nbsp;&nbsp;
+								<span class="label label-info">
+								<i class="icon-cogs"></i><a href="/Micromappers/collection/view/create?snopes=${info.id}"><strong>&nbsp;Create</strong></a></span>
+                                </span>
+
 						</tr>
 						</#list>
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="3" class="text-center">
+							<td colspan="4" class="text-center">
 								<div style="margin:0px;">
 									<ul class="pagination pull-right">
 										<!-- First Page -->
