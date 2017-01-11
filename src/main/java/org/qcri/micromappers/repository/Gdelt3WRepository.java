@@ -15,5 +15,7 @@ import java.util.List;
 public abstract interface Gdelt3WRepository extends PagingAndSortingRepository<Gdelt3W, Long> {
     @Query("SELECT d FROM Gdelt3W d WHERE d.state=:state and d.glideCode  = :glideCode")
     Page<Gdelt3W> findbyGlideCode(Pageable pageable, @Param("glideCode")String glideCode, @Param("state")String state);
-    //List<Gdelt3W> findbyGlideCode(String glideCode);
+
+    @Query("SELECT d FROM Gdelt3W d WHERE d.state=:state and d.glideCode  = :glideCode")
+    List<Gdelt3W> findAllbyGlideCode(@Param("glideCode")String glideCode, @Param("state")String state);
 }

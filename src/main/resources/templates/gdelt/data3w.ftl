@@ -41,31 +41,37 @@
             <tfoot>
             <tr>
                 <td colspan="7" class="text-center">
-                    <div style="margin:0px;">
-                        <ul class="pagination pull-right">
-                            <!-- First Page -->
-						<#if page.isFirstPage()>
-                            <li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
-						<#else>
-                            <li><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-						</#if>
+                    <table style="width: 100%">
+                        <tr>
+                            <td><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber}&dw=y">Download</a>
+                            &nbsp;&nbsp;&nbsp;</td>
+                            <td><div style="margin:0px;">
+                                <ul class="pagination pull-right">
+                                    <!-- First Page -->
+                                <#if page.isFirstPage()>
+                                    <li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
+                                <#else>
+                                    <li><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                                </#if>
 
-						<#list page.navigatePageNumbers as index>
-							<#if page.getPageNumber() == index>
-                            <li class="active">
-							<#else>
-                            <li>
-							</#if>
-                            <a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${index?counter}">${index?counter}</a></li>
-						</#list>
-                            <!-- Last Page -->
-						<#if page.isLastPage()>
-                            <li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
-						<#else>
-                            <li ><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-						</#if>
-                        </ul>
-                    </div>
+                                <#list page.navigatePageNumbers as index>
+                                    <#if page.getPageNumber() == index>
+                                    <li class="active">
+                                    <#else>
+                                    <li>
+                                    </#if>
+                                    <a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${index?counter}">${index?counter}</a></li>
+                                </#list>
+                                    <!-- Last Page -->
+                                <#if page.isLastPage()>
+                                    <li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
+                                <#else>
+                                    <li ><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+                                </#if>
+                                </ul>
+                            </div></td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
             </tfoot>

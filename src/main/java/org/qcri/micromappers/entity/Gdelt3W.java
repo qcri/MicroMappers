@@ -1,8 +1,12 @@
 package org.qcri.micromappers.entity;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 import javax.persistence.*;
+
+import static org.apache.commons.lang3.StringEscapeUtils.*;
 
 /**
  * Created by jlucas on 12/4/16.
@@ -149,5 +153,43 @@ public class Gdelt3W  extends ExtendedBaseEntity {
 
     public void setJsWheres(JSONArray jsWheres) {
         this.jsWheres = jsWheres;
+    }
+
+    @Override
+    public String toString(){
+        String seperator = ",";
+        String end_line="\r\n";
+
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(StringEscapeUtils.escapeCsv(this.glideCode));
+
+        sb.append(seperator);
+
+
+        sb.append(StringEscapeUtils.escapeCsv(this.articleURL));
+
+        sb.append(seperator);
+
+
+        sb.append(StringEscapeUtils.escapeCsv(this.imgURL));
+
+        sb.append(seperator);
+
+
+        sb.append(StringEscapeUtils.escapeCsv(this.who));
+        sb.append(seperator);
+
+
+        if(this.getWheres() !=null){
+            sb.append(StringEscapeUtils.escapeCsv(StringEscapeUtils.escapeJson(this.getWheres())));
+        }
+        else{
+            sb.append("");
+        }
+
+        sb.append(end_line);
+
+        return sb.toString();
     }
 }
