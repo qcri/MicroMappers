@@ -26,15 +26,14 @@
 								<i class="icon-info-sign"></i><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank"><strong>&nbsp;Info</strong></a>
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?glideCode=${info.glideCode}"><strong>&nbsp;Create</strong></a></span>
+								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeid=${info.id}"><strong>&nbsp;Create</strong></a></span>
                                 </span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?type=3w&glideCode=${info.glideCode}"><strong>&nbsp;3w</strong></a></span>
+								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}"><strong>&nbsp;3w</strong></a></span>
                                 </span>&nbsp;&nbsp;
-								<!--<span class="label label-info">
-								<i class="icon-book"></i><a href="/Micromappers/gdelt/list?type=img&glideCode=
-								"><strong>&nbsp;Image</strong></a></span>
-                                </span>-->
+								<span class="label label-info">
+								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}"><strong>&nbsp;MMIC</strong></a></span>
+                                </span>
 							</td>
 						</tr>
 						</#list>
