@@ -3,6 +3,10 @@
 	<#include "_header.html">
 	<body>
 		<#include "_navbar.ftl">
+		<#if eventType?? && eventTypeId?? >
+			<input type="hidden" id="eventType" value="${eventType}">
+			<input type="hidden" id="eventTypeId" value="${eventTypeId}">
+		</#if>
 		<div class="container" style="min-height:400px;">
 		
 			<form id="collectionCreate" class="form-horizontal">
@@ -46,8 +50,7 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="track">Keywords :</label>
 							<div class="col-sm-6"> 
-								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords"
-									></textarea>
+								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
 							</div>
 						</div>
 						<div class="form-group">

@@ -236,8 +236,8 @@ public class CollectionController {
      * @return collection/create/create.ftl
      */
     @RequestMapping(value="/view/create", method = RequestMethod.GET)
-	public String createCollection(Model model, HttpServletRequest request, @RequestParam("type") String type,
-			@RequestParam("typeId") Long typeId){
+	public String createCollection(Model model, HttpServletRequest request, @RequestParam(value = "type", required=false) String type,
+			@RequestParam(value = "typeId", required=false) Long typeId){
     	
     	if(StringUtils.isNotBlank(type) && typeId != null){
     		if(type.equals("snopes")){
@@ -245,14 +245,9 @@ public class CollectionController {
         		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
         	}
     		
-    		if(type.equals("gdelt")){
-        		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
-        		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
-        	}
+    		model.addAttribute("eventType", type);
+        	model.addAttribute("eventTypeId", typeId);
     	}
-    	
-    	
-    	
     	
 		return "collection/create/create";
 	}

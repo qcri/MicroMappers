@@ -60,6 +60,9 @@ $("#collectionCreate").submit(function(e) {
             
         });
 
+        var eventTypeId = $("#eventTypeId").val();
+        var eventType = $("#eventType").val();
+        
         var data = {
                 name: document.getElementsByName('name')[0].value.toLowerCase().trim(),
                 code: document.getElementsByName('name')[0].value.toLowerCase().trim().replace(" ", "_") + "_" + (new Date()).getTime(),
@@ -71,10 +74,11 @@ $("#collectionCreate").submit(function(e) {
                 geoR: document.getElementsByName('geoR')[0].value.toLowerCase().trim(),*/
                 langFilters: langFilters.join(","),
                 provider: document.getElementsByName('provider')[0].value,
- 
-                //TODO: change the below configuration. It is static for now only.           
-                globalEventDefinitionId: 1
         };
+        
+        if(eventType != null && eventType === "snopes" && eventTypeId != null){
+            data["globalEventDefinitionId"] = eventTypeId;
+        }
         
         var runAfterCreate = false;
         if($('#runAfterCreate').is(':checked')){
@@ -92,7 +96,7 @@ $("#collectionCreate").submit(function(e) {
             success: function(data){
                 if(data.success){
                     showInfoAlert(data.message);
-                    location.href = "${rc.getContextPath()}/home";
+                    location.href = "${rc.getContextPath()}/collection/view/details?id="+data.data.id;
                 }else{
                     showErrorAlert(data.message);
                 }

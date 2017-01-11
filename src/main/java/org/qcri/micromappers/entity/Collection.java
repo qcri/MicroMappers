@@ -35,7 +35,7 @@ public class Collection extends ExtendedBaseEntity {
 	private Account account;
 
 	@ManyToOne
-	@JoinColumn(name = "global_event_definition_id", nullable=false)
+	@JoinColumn(name = "global_event_definition_id")
 	private GlobalEventDefinition globalEventDefinition;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -338,7 +338,9 @@ public class Collection extends ExtendedBaseEntity {
 		collectionDetailsInfo.setFollow(this.getFollow());
 		collectionDetailsInfo.setGeo(this.getGeo());
 		collectionDetailsInfo.setGeoR(this.getGeoR());
-		collectionDetailsInfo.setGlobalEventDefinitionId(this.getGlobalEventDefinition().getId());
+		if(this.getGlobalEventDefinition() != null){
+			collectionDetailsInfo.setGlobalEventDefinitionId(this.getGlobalEventDefinition().getId());
+		}
 		collectionDetailsInfo.setLangFilters(this.getLangFilters());
 		collectionDetailsInfo.setName(this.getName());
 		collectionDetailsInfo.setOwner(this.getAccount().getUserName());

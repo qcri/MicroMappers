@@ -167,7 +167,9 @@ public class CollectionDetailsInfo implements Serializable{
 		collection.setId(this.getId());
 		collection.setCode(this.getCode());
 		collection.setName(this.getName());
-		collection.setGlobalEventDefinition(this.getGlobalEventDefinitionId());
+		if(this.getGlobalEventDefinitionId() != null){
+			collection.setGlobalEventDefinition(this.getGlobalEventDefinitionId());
+		}
 		//collection.setAccount(user);
 		collection.setStatus(this.getStatus());
 		collection.setProvider(CollectionType.valueOf(this.getProvider()));
