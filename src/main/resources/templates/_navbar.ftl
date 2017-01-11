@@ -38,3 +38,37 @@
 		</div>
 	</div>
 </nav>
+
+<!-- Alert Box -->
+<div id="showAlert" class="alert alert-dismissible col-md-4 col-md-offset-4" role="alert" style="display:none; position:fixed; top:0px;">
+	<span id="alertText" style="word-wrap: break-word;white-space:normal;"></span>
+	<button type="button" class="close" id="alertCloseButton" aria-label="Close">
+	  <span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<script>
+	$('#alertCloseButton').on('click', function(e) {
+	    e.preventDefault();
+	    $('#showAlert').hide();
+	});
+	
+	function showInfoAlert(msg){
+	    $('#showAlert').removeClass('alert-danger');
+	    $('#showAlert').addClass('alert-success');
+	    $('#alertText').html(msg);
+	    $('#showAlert').show();
+	    $('#showAlert').fadeIn('slow');
+	    
+	    setTimeout(function(){$('#showAlert').hide();}, 3000);
+	}
+
+	function showErrorAlert(msg){
+	    $('#showAlert').removeClass('alert-success');
+	    $('#showAlert').addClass('alert-danger');
+	    $('#alertText').html(msg);
+	    $('#showAlert').show();
+	    $('#showAlert').fadeIn('slow');
+	    
+	    setTimeout(function(){$('#showAlert').hide();}, 3000);
+	}
+</script>

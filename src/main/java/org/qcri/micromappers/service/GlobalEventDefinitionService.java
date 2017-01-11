@@ -3,7 +3,9 @@ package org.qcri.micromappers.service;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
+import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.GlobalEventDefinitionRepository;
 import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
@@ -36,4 +38,14 @@ public class GlobalEventDefinitionService {
 
         return globalEventDefinitionRepository.findAll(request);
     }
+    
+    public GlobalEventDefinition getById(Long id)
+	{
+		try{
+			return globalEventDefinitionRepository.findById(id);
+		}catch (Exception e) {
+			logger.error("Error while fetching global event definition by id", e);
+			throw new MicromappersServiceException("Error while fetching global event definition by id", e);
+		}
+	}
 }

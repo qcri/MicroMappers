@@ -89,14 +89,12 @@ $("#collectionCreate").submit(function(e) {
             dataType:"json",
             data: JSON.stringify(data),
             
-            success: function(data)
-            {
+            success: function(data){
                 if(data.success){
-                    
-                    alert(data.message);
+                    showInfoAlert(data.message);
                     location.href = "${rc.getContextPath()}/home";
                 }else{
-                    alert(data.message);
+                    showErrorAlert(data.message);
                 }
             }
         });

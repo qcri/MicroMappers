@@ -31,14 +31,17 @@
 					<tbody>
 						<tr>
 							<td>Status:</td>
+							<script>initializeCountScheduler=false</script>
 							<#if collectionInfo.status =="RUNNING">
 								<td class="text-right text-success">
+								<script>initializeCountScheduler=true</script>
 							
 							<#elseif collectionInfo.status =="NOT_RUNNING" > 
 								<td class="text-right text-muted">
 							
 							<#elseif collectionInfo.status =="RUNNING_WARNING" || collectionInfo.status =="WARNING"> 
 								<td class="text-right text-warning">
+								<script>initializeCountScheduler=true</script>
 								
 							<#elseif collectionInfo.status =="TRASHED" > 
 								<td class="text-right text-info">
@@ -49,7 +52,7 @@
 						</tr>
 						<tr>
 							<td>Total Collection:</td>
-							<td class="text-right">${collectionCount}</td>
+							<td class="text-right" id="collectionCount" data-id="${collectionInfo.id}">${collectionCount}</td>
 						</tr>
 						<tr>
 							<td>Created:</td>

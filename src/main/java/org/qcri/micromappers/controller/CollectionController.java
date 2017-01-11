@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
@@ -16,6 +18,7 @@ import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
@@ -51,6 +54,9 @@ public class CollectionController {
 	
 	@Autowired
 	private BaseCollectionController baseCollectionController;
+
+    @Autowired
+    GlobalEventDefinitionService globalEventDefinitionService;
 
 
 	/** It is used to fetch the list of collaborators for a collection. 
@@ -152,6 +158,18 @@ public class CollectionController {
     	return response;
 	}
     
+    /** Returning the collection count from db.
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/count", method=RequestMethod.GET)
+	@ResponseBody
+	public ResponseWrapper getCount(@RequestParam("id") Long id) {
+
+		Long collectionCount = collectionLogService.getCountByCollectionId(id);
+		return new ResponseWrapper(collectionCount, true, ResponseCode.SUCCESS.toString(), null);
+	}
+    
     
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
@@ -218,7 +236,24 @@ public class CollectionController {
      * @return collection/create/create.ftl
      */
     @RequestMapping(value="/view/create", method = RequestMethod.GET)
-	public String createCollection(Model model, HttpServletRequest request){
+	public String createCollection(Model model, HttpServletRequest request, @RequestParam("type") String type,
+			@RequestParam("typeId") Long typeId){
+    	
+    	if(StringUtils.isNotBlank(type) && typeId != null){
+    		if(type.equals("snopes")){
+        		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
+        		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
+        	}
+    		
+    		if(type.equals("gdelt")){
+        		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
+        		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
+        	}
+    	}
+    	
+    	
+    	
+    	
 		return "collection/create/create";
 	}
     

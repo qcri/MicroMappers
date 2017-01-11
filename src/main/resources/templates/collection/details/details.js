@@ -8,10 +8,10 @@ $('#stopCollectionButton').click(function() {
         success: function(data)
         {
             if(data.success){
-                alert(data.message);
+                showInfoAlert(data.message);
                 location.reload();
             }else{
-                alert(data.message);
+                showErrorAlert(data.message);
             }
         }
     });
@@ -27,10 +27,10 @@ $('#startCollectionButton').click(function() {
         success: function(data)
         {
             if(data.success){
-                alert(data.message);
+                showInfoAlert(data.message);
                 location.reload();
             }else{
-                alert(data.message);
+                showErrorAlert(data.message);
             }
         }
     });
@@ -46,11 +46,30 @@ $('#restoreCollectionButton').click(function() {
         success: function(data)
         {
             if(data.success){
-                alert(data.message);
+                showInfoAlert(data.message);
                 location.reload();
             }else{
-                alert(data.message);
+                showErrorAlert(data.message);
             }
         }
     });
 });
+
+function autoRefreshCollectionCount()
+{    
+     var id = $('#collectionCount').data('id');
+     $.get( "${rc.getContextPath()}/twitter/status?id="+id );
+     
+     $.get( "${rc.getContextPath()}/collection/count?id="+id )
+         .done(function( data ) {
+             $('#collectionCount').html(data.data);
+     });
+}
+
+function countScheduler() {
+    setInterval('autoRefreshCollectionCount()', 5000); // refresh collection count after every 5 secs
+};
+
+if(initializeCountScheduler){
+    setInterval('autoRefreshCollectionCount()', 5000);
+}

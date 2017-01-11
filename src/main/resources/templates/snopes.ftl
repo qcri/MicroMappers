@@ -31,7 +31,7 @@
 								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="view details" TARGET="_blank"><strong>&nbsp;Info</strong></a>
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeid=${info.id}"><strong>&nbsp;Create</strong></a></span>
+								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}"><strong>&nbsp;Create</strong></a></span>
                                 </span>
 
 						</tr>

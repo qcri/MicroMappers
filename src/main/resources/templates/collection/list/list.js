@@ -32,10 +32,10 @@ $('#deleteYes').click(function() {
         success: function(data)
         {
             if(data.success){
-                alert(data.message);
+                showInfoAlert(data.message);
                 location.reload();
             }else{
-                alert(data.message);
+                showErrorAlert(data.message);
             }
         }
     });
@@ -53,10 +53,10 @@ $('#restoreYes').click(function() {
         success: function(data)
         {
             if(data.success){
-                alert(data.message);
+                showInfoAlert(data.message);
                 location.reload();
             }else{
-                alert(data.message);
+                showErrorAlert(data.message);
             }
         }
     });

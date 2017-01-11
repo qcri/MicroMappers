@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public abstract interface GlobalEventDefinitionRepository extends PagingAndSortingRepository<GlobalEventDefinition, Long> {
     GlobalEventDefinition findByEventUrl(String eventUrl);
     Page<GlobalEventDefinition> findAll(Pageable pageable);
+	GlobalEventDefinition findById(Long id);
 }
 
 
