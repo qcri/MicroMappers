@@ -27,7 +27,14 @@
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
 								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?glideCode=${info.glideCode}"><strong>&nbsp;Create</strong></a></span>
-                                </span>
+                                </span>&nbsp;&nbsp;
+								<span class="label label-info">
+								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?type=3w&glideCode=${info.glideCode}"><strong>&nbsp;3w</strong></a></span>
+                                </span>&nbsp;&nbsp;
+								<!--<span class="label label-info">
+								<i class="icon-book"></i><a href="/Micromappers/gdelt/list?type=img&glideCode=
+								"><strong>&nbsp;Image</strong></a></span>
+                                </span>-->
 							</td>
 						</tr>
 						</#list>

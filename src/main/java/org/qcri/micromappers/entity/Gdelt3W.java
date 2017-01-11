@@ -1,5 +1,7 @@
 package org.qcri.micromappers.entity;
 
+import org.json.simple.JSONArray;
+
 import javax.persistence.*;
 
 /**
@@ -36,6 +38,8 @@ public class Gdelt3W  extends ExtendedBaseEntity {
 
     @Column(name = "who", length = 1000)
     private String who;
+
+    private JSONArray jsWheres;
 
     public Gdelt3W() {
     }
@@ -139,4 +143,11 @@ public class Gdelt3W  extends ExtendedBaseEntity {
         this.state = state;
     }
 
+    public JSONArray getJsWheres() {
+        return jsWheres;
+    }
+
+    public void setJsWheres(JSONArray jsWheres) {
+        this.jsWheres = jsWheres;
+    }
 }
