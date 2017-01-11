@@ -1,5 +1,7 @@
 package org.qcri.micromappers.entity;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import javax.persistence.*;
 
 /**
@@ -158,5 +160,37 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
 
     public void setGlideCode(String glideCode) {
         this.glideCode = glideCode;
+    }
+
+    @Override
+    public String toString(){
+        String seperator = ",";
+        String end_line="\r\n";
+
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(StringEscapeUtils.escapeCsv(this.glideCode));
+
+        sb.append(seperator);
+
+        sb.append(StringEscapeUtils.escapeCsv(this.languageCode));
+
+        sb.append(seperator);
+
+
+        sb.append(StringEscapeUtils.escapeCsv(this.articleURL));
+
+        sb.append(seperator);
+
+
+        sb.append(StringEscapeUtils.escapeCsv(this.imgURL));
+
+        sb.append(seperator);
+
+
+
+        sb.append(end_line);
+
+        return sb.toString();
     }
 }

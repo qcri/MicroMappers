@@ -166,6 +166,9 @@ public class Gdelt3W  extends ExtendedBaseEntity {
 
         sb.append(seperator);
 
+        sb.append(StringEscapeUtils.escapeCsv(this.languageCode));
+
+        sb.append(seperator);
 
         sb.append(StringEscapeUtils.escapeCsv(this.articleURL));
 

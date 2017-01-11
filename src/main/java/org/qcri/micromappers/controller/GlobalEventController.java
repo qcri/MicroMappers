@@ -122,7 +122,7 @@ public class GlobalEventController {
         List<Gdelt3W> gdelt3Ws = gdelt3WService.findAllByGlideCode(glideCode);
 
         response.setContentType("text/csv");
-        String reportName = glideCode+"_"+new Date().getTime()+".csv";
+        String reportName = glideCode+"_3w_"+new Date().getTime()+".csv";
         response.setHeader("Content-disposition", "attachment;filename="+reportName);
 
         gdelt3Ws.forEach((temp) -> {
@@ -141,9 +141,10 @@ public class GlobalEventController {
     }
 
     @RequestMapping(value={"/gdelt/datammic"})
-    public String getMMICData(Model model, HttpServletRequest request,
+    public String getMMICData(Model model, HttpServletRequest request, HttpServletResponse response,
                             @RequestParam(value = "page", defaultValue = "1") String page,
-                              @RequestParam(value = "glideCode") String glideCode) {
+                              @RequestParam(value = "glideCode") String glideCode,
+                              @RequestParam(value = "dw", defaultValue = "") String dw) {
 
         int pageNumber = Integer.valueOf(page);
         Page<GdeltMMIC> pages =  gdeltMMICService.findbyGlideCode(pageNumber, glideCode);
@@ -154,9 +155,38 @@ public class GlobalEventController {
 
         model.addAttribute("page", pageInfo);
         model.addAttribute("glideCode",glideCode);
+
+        if(dw != null){
+            if(!dw.isEmpty())
+            {
+                this.downloadMMICData(response, glideCode);
+            }
+        }
+
         return "/gdelt/datammic";
     }
 
+    private void downloadMMICData(HttpServletResponse response, String glideCode){
+        List<GdeltMMIC> gdeltMMICs = gdeltMMICService.findAllByGlideCode(glideCode);
+
+        response.setContentType("text/csv");
+        String reportName = glideCode+"_mmic_"+new Date().getTime()+".csv";
+        response.setHeader("Content-disposition", "attachment;filename="+reportName);
+
+        gdeltMMICs.forEach((temp) -> {
+            try {
+                response.getOutputStream().print(temp.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        try {
+            response.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

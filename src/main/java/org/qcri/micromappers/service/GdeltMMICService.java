@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by jlucas on 1/9/17.
@@ -29,5 +30,9 @@ public class GdeltMMICService {
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
 
         return gdeltMMICRepository.findbyGlideCode(request, glideCode, "processed");
+    }
+
+    public List<GdeltMMIC> findAllByGlideCode(String glideCode){
+        return gdeltMMICRepository.findAllbyGlideCode(glideCode, "processed");
     }
 }
