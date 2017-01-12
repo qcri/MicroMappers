@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.AccountDTO;
@@ -19,6 +20,7 @@ import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.GlideMasterService;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.ResponseCode;
@@ -58,6 +60,9 @@ public class CollectionController {
 
     @Autowired
     GlobalEventDefinitionService globalEventDefinitionService;
+    
+    @Autowired
+    GlideMasterService glideMasterService;
 
 
 	/** It is used to fetch the list of collaborators for a collection. 
@@ -150,7 +155,7 @@ public class CollectionController {
      * @return json having valid=true/false
      * @throws Exception
      */
-    @RequestMapping(value = "/existName.action", method = RequestMethod.GET)
+    @RequestMapping(value = "/existName", method = RequestMethod.GET)
 	@ResponseBody
 	public Object existName(@RequestParam String name) throws Exception {
     	boolean collectionNameExists = collectionService.isCollectionNameExists(name.trim().toLowerCase());
@@ -246,8 +251,10 @@ public class CollectionController {
         		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
         		model.addAttribute("eventTitle", WordUtils.capitalize(type) + ": " +globalEventDefinition.getTitle());
         	}
-    		/*if(type.equals("gdelt")){
-    		}*/
+    		if(type.equals("gdelt")){
+    			GlideMaster glideMaster = glideMasterService.getById(typeId);
+    			model.addAttribute("eventTitle", WordUtils.capitalize(type) + ": " +glideMaster.getGlideCode());
+    		}
     		
     		model.addAttribute("eventType", type);
         	model.addAttribute("eventTypeId", typeId);

@@ -12,4 +12,6 @@ public abstract interface UserConnectionRepository extends CrudRepository<UserCo
   public abstract UserConnection findFirstByProviderIdAndProviderUserId(String providerId, String providerUserId);
 
   public abstract List<UserConnection> findByProviderIdAndUserIdOrderByRankDesc(String providerId, String userId);
+
+  public abstract List<UserConnection> findDistinctProviderIdByUserId(String userId);
 }

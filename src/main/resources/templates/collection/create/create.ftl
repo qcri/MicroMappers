@@ -38,8 +38,8 @@
 							<div class="col-sm-6">
 								<select class="form-control" name="provider">
 									<option value="TWITTER" selected>Twitter</option>
-<!-- 									<option value="FACEBOOK">Facebook</option> -->
-<!-- 									<option value="BOTH">Both</option> -->
+									<!-- <option value="FACEBOOK">Facebook</option>
+									<option value="ALL">All</option> -->
 								</select>
 							</div>
 						</div>
