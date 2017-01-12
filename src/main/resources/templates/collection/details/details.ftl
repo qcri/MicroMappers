@@ -7,7 +7,28 @@
 		<table style="width:100%">
 			<tr>
 				<td class="col-md-9" style="word-wrap: break-word;max-width: 160px;white-space:normal;">
-					<h2>${collectionInfo.name}</h2>
+					<h3>${collectionInfo.name}
+					<small>
+					<script>initializeCountScheduler=false</script>
+							<#if collectionInfo.status =="RUNNING">
+								<p class="text-success">
+								<script>initializeCountScheduler=true</script>
+							
+							<#elseif collectionInfo.status =="NOT_RUNNING" > 
+								<p class="text-muted">
+							
+							<#elseif collectionInfo.status =="RUNNING_WARNING" || collectionInfo.status =="WARNING"> 
+								<p class="text-warning">
+								<script>initializeCountScheduler=true</script>
+								
+							<#elseif collectionInfo.status =="TRASHED" > 
+								<p class="text-info">
+							<#else>
+								<p class="text-danger">
+							</#if>
+							<b>${collectionInfo.status}</b>
+						</p></small></h3>
+					
 				</td>
 			
 				<td class="col-md-3" style="width:100%">
@@ -30,25 +51,8 @@
 				<table class="table table-striped">
 					<tbody>
 						<tr>
-							<td>Status:</td>
-							<script>initializeCountScheduler=false</script>
-							<#if collectionInfo.status =="RUNNING">
-								<td class="text-right text-success">
-								<script>initializeCountScheduler=true</script>
-							
-							<#elseif collectionInfo.status =="NOT_RUNNING" > 
-								<td class="text-right text-muted">
-							
-							<#elseif collectionInfo.status =="RUNNING_WARNING" || collectionInfo.status =="WARNING"> 
-								<td class="text-right text-warning">
-								<script>initializeCountScheduler=true</script>
-								
-							<#elseif collectionInfo.status =="TRASHED" > 
-								<td class="text-right text-info">
-							<#else>
-								<td class="text-right text-danger">
-							</#if>
-							<b>${collectionInfo.status}</b></td>
+							<td>Event Title:</td>
+							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${eventTitle}">${eventTitle}</td>
 						</tr>
 						<tr>
 							<td>Total Collection:</td>
@@ -56,27 +60,27 @@
 						</tr>
 						<tr>
 							<td>Created:</td>
-							<td class="text-right">${collectionCreatedAt}</td>
+							<td class="text-right" title="${collectionCreatedAt}">${collectionCreatedAt}</td>
 						</tr>
 						<tr>
 							<td>Language:</td>
 							<#if collectionInfo.langFilters == "">
-								<td class="text-right">Any language</td>
+								<td class="text-right" title="Any language">Any language</td>
 							<#else>
-								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;">${collectionInfo.langFilters}</td>
+								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.langFilters}">${collectionInfo.langFilters}</td>
 							</#if>
 						</tr>
 						<tr>
 							<td>Keywords:</td>
-							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;">${collectionInfo.track}</td>
+							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.track}">${collectionInfo.track}</td>
 						</tr>
 						<tr>
 							<td>CreatedBy:</td>
-							<td class="text-right">${collectionInfo.owner}</td>
+							<td class="text-right" title="${collectionInfo.owner}">${collectionInfo.owner}</td>
 						</tr>
 						<tr>
 							<td>Collaborators:</td>
-							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;">${collectionCollaborators}</td>
+							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionCollaborators}">${collectionCollaborators}</td>
 						</tr>
 					</tbody>
 				</table>

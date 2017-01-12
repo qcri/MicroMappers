@@ -22,6 +22,12 @@
 					<!--General Tab -->
 					<div id="general" class="tab-pane fade in active">
 						<div class="form-group">
+							<label class="control-label col-sm-3" for="eventTitle">Event Title :</label>
+							<div class="col-sm-6">
+								<label class="form-control-static" style="font-weight: normal;" title="${eventTitle}">${eventTitle}</label>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="control-label col-sm-3" for="name">Collection Name :</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control" name="name" placeholder="Collection Name" disabled required value="${collectionInfo.name}">

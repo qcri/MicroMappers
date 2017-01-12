@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.qcri.micromappers.entity.Account;
@@ -243,7 +244,10 @@ public class CollectionController {
     		if(type.equals("snopes")){
         		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
         		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
+        		model.addAttribute("eventTitle", WordUtils.capitalize(type) + ": " +globalEventDefinition.getTitle());
         	}
+    		/*if(type.equals("gdelt")){
+    		}*/
     		
     		model.addAttribute("eventType", type);
         	model.addAttribute("eventTypeId", typeId);
@@ -270,6 +274,10 @@ public class CollectionController {
     		collectionDetailsInfo = collection.toCollectionDetailsInfo();
     		collaborators = collaboratorService.getCollaboratorsByCollection(id);
     		collectionCount = collectionLogService.getCountByCollectionId(id);
+    		if(collectionDetailsInfo.getGlobalEventDefinitionId() != null){
+    			GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(collectionDetailsInfo.getGlobalEventDefinitionId());
+    			model.addAttribute("eventTitle", "Snopes: " + globalEventDefinition.getTitle());
+    		}
     	}
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
@@ -287,6 +295,10 @@ public class CollectionController {
     	CollectionDetailsInfo collectionDetailsInfo = null;
     	if(collection != null){
     		collectionDetailsInfo = collection.toCollectionDetailsInfo();
+    		if(collectionDetailsInfo.getGlobalEventDefinitionId() != null){
+    			GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(collectionDetailsInfo.getGlobalEventDefinitionId());
+    			model.addAttribute("eventTitle", "Snopes: " + globalEventDefinition.getTitle());
+    		}
     	}
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	
