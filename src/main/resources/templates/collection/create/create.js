@@ -85,7 +85,7 @@ $("#collectionCreate").submit(function(e) {
             runAfterCreate = true;
         }
         
-        var url = "${rc.getContextPath()}/"+data.provider.toLocaleLowerCase()+"/create?runAfterCreate="+runAfterCreate; // the script where you handle the form input.
+        var url = "${rc.getContextPath()}/"+data.provider.toLocaleLowerCase()+"/create?runAfterCreate="+runAfterCreate;
         
         $.ajax({
             type: "POST",

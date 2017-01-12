@@ -10,7 +10,7 @@
 						<tr>
 							<th>Name</th>
 							<th>Status</th>
-							<th>Delete/Restore</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -22,23 +22,28 @@
 								</a>
 							</td>
 							<td>${info.status}</td>
-							<#if info.status == "TRASHED">
 							<td>
-								<p data-placement="top" data-toggle="tooltip" title="Restore">
-									<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-									<span class="glyphicon glyphicon-repeat"></span>
-									</button>
-								</p>
+								<#if info.status == "TRASHED">
+									<span data-placement="top" data-toggle="tooltip" title="Restore">
+										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+										<span class="glyphicon glyphicon-repeat"></span>
+										</button>
+									</span>
+								<#else>
+									<span data-placement="top" data-toggle="tooltip" title="Delete">
+										<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+										<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</span>
+								
+								</#if>
+								
+								<span data-placement="top" data-toggle="tooltip" title="Edit">
+									<i class="confirm-edit btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
+										<span class="glyphicon glyphicon-edit"></span>
+									</i>
+								</span>
 							</td>
-							<#else>
-							<td>
-								<p data-placement="top" data-toggle="tooltip" title="Delete">
-									<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-									<span class="glyphicon glyphicon-trash"></span>
-									</button>
-								</p>
-							</td>
-							</#if>
 						</tr>
 						</#list>
 					</tbody>

@@ -242,7 +242,7 @@ public class CollectionController {
     	if(StringUtils.isNotBlank(type) && typeId != null){
     		if(type.equals("snopes")){
         		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
-        		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
+        		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
         	}
     		
     		model.addAttribute("eventType", type);
@@ -278,6 +278,19 @@ public class CollectionController {
     	model.addAttribute("collectionCollaborators",collaboratorsString);
     	model.addAttribute("collectionCount",collectionCount);
 		return "collection/details/details";
+	}
+    
+    @RequestMapping(value="/view/update", method = RequestMethod.GET)
+	public String updateCollection(Model model, HttpServletRequest request, @RequestParam("id") Long id){
+    	
+    	Collection collection = collectionService.getById(id);
+    	CollectionDetailsInfo collectionDetailsInfo = null;
+    	if(collection != null){
+    		collectionDetailsInfo = collection.toCollectionDetailsInfo();
+    	}
+    	model.addAttribute("collectionInfo", collectionDetailsInfo);
+    	
+		return "collection/update/update";
 	}
 
 }
