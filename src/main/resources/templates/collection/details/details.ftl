@@ -9,6 +9,9 @@
 				<td class="col-md-9" style="word-wrap: break-word;max-width: 160px;white-space:normal;">
 					<h3>${collectionInfo.name}
 					<small style="font-size:60%">
+					<#if current_user != collectionInfo.owner>
+						by ${collectionInfo.owner}
+					</#if>
 					<script>initializeCountScheduler=false</script>
 							<#if collectionInfo.status =="RUNNING">
 								<p class="text-success">

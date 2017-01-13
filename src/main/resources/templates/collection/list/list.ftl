@@ -19,8 +19,10 @@
 						<tr>
 							<td>
 								<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.name}">
-								${info.name}
-								</a>
+								${info.name}</a>
+								<#if current_user != info.owner>
+									by ${info.owner}
+								</#if>
 							</td>
 							<td>${info.status}</td>
 							<td>

@@ -2,20 +2,18 @@ package org.qcri.micromappers.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.entity.Collaborator;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
-import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.repository.CollectionRepository;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -26,6 +24,9 @@ public class CollectionService
 	private static Logger logger = Logger.getLogger(CollectionService.class);
 	@Inject
 	private CollectionRepository collectionRepository;
+	
+	@Inject
+	private CollaboratorService collaboratorService;
 
 	public Collection saveOrUpdate(Collection collection)
 	{
@@ -112,12 +113,19 @@ public class CollectionService
 	}
 	
 	
+	/** Return all the collections in which the user is collaborator
+	 * @param account
+	 * @param pageNumber
+	 * @return all the collections in which the user is collaborator
+	 */
 	public Page<Collection> getAllByPage(Account account, Integer pageNumber) {
 		
         PageRequest request =
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+        Page<Collaborator> pagedCollaborators = collaboratorService.getAllByPageAndAccount(account, request);
 
-        return collectionRepository.findByAccount(account, request);
+        Page<Collection> pagedCollections = pagedCollaborators.map(pc -> pc.getCollection());
+        return pagedCollections;
 	}
 
 	public Boolean delete(Long id) {

@@ -11,6 +11,8 @@ import org.qcri.micromappers.entity.Collaborator;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollaboratorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -136,4 +138,10 @@ public class CollaboratorService
 			throw new MicromappersServiceException("Exception while getting collaborator for a collectionId: "+collectionId + " and accountId: "+accountId, e);
 		}
 	} 
+	
+	public Page<Collaborator> getAllByPageAndAccount(Account account, PageRequest pageRequest) {
+		
+        return collaboratorRepository.findByAccount(account, pageRequest);
+	}
+	
 }
