@@ -22,9 +22,13 @@
 					<!--General Tab -->
 					<div id="general" class="tab-pane fade in active">
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="eventTitle">Event Title :</label>
+							<label class="control-label col-sm-3" for="eventTitle">Event :</label>
 							<div class="col-sm-6">
-								<label class="form-control-static" style="font-weight: normal;" title="${eventTitle}">${eventTitle}</label>
+								<#if collectionInfo.globalEventDefinition??>
+									<label class="form-control-static" style="font-weight: normal;" title="${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">Snopes: ${collectionInfo.globalEventDefinition.title}</a></label>
+								<#elseif collectionInfo.glideMaster??>
+									<label class="form-control-static" style="font-weight: normal;" title="${collectionInfo.glideMaster.glideCode}"><a href="http://reliefweb.int/disaster/${collectionInfo.glideMaster.glideCode}" target="_blank">Gdelt: ${collectionInfo.glideMaster.glideCode}</a></label>
+								</#if>
 							</div>
 						</div>
 						<div class="form-group">

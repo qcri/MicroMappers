@@ -89,8 +89,12 @@ function createCollection() {
             provider: document.getElementsByName('provider')[0].value,
     };
     
-    if(eventType != null && eventType === "snopes" && eventTypeId != null){
-        data["globalEventDefinitionId"] = eventTypeId;
+    if(eventType != null && eventType.toLowerCase() === "snopes" && eventTypeId != null){
+        data.globalEventDefinition = {};
+        data.globalEventDefinition.id = eventTypeId;
+    }else if(eventType != null && eventType.toLowerCase() === "gdelt" && eventTypeId != null){
+        data.glideMasterId = {};
+        data.glideMasterId.id = eventTypeId;
     }
     
     var runAfterCreate = false;

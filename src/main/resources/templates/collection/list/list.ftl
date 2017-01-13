@@ -10,6 +10,7 @@
 						<tr>
 							<th>Name</th>
 							<th>Status</th>
+							<th>Event</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -22,6 +23,16 @@
 								</a>
 							</td>
 							<td>${info.status}</td>
+							<td>
+								<#if info.globalEventDefinition?? >
+									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}">
+										${info.globalEventDefinition.title}
+									</a>
+								<#elseif info.glideMaster?? >
+									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" target="_blank" >${info.glideMaster.glideCode}</a>
+								</#if>
+								
+							</td>
 							<td>
 								<#if info.status == "TRASHED">
 									<span data-placement="top" data-toggle="tooltip" title="Restore">
@@ -49,7 +60,7 @@
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="3" class="text-center">
+							<td colspan="4" class="text-center">
 								<div style="margin:0px;">
 									<ul class="pagination pull-right">
 										<!-- First Page -->

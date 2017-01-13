@@ -51,8 +51,13 @@
 				<table class="table table-striped">
 					<tbody>
 						<tr>
-							<td>Event Title:</td>
-							<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${eventTitle}">${eventTitle}</td>
+							<td>Event:</td>
+							<#if collectionInfo.globalEventDefinition??>
+								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Snopes: ${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">Snopes: ${collectionInfo.globalEventDefinition.title}</a></td>
+							<#elseif collectionInfo.glideMaster??>
+								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Gdelt: ${collectionInfo.glideMaster.glideCode}"><a href="http://reliefweb.int/disaster/${collectionInfo.glideMaster.glideCode}" target="_blank">Gdelt: ${collectionInfo.glideMaster.glideCode}</a></td>
+							</#if>
+							
 						</tr>
 						<tr>
 							<td>Total Collection:</td>

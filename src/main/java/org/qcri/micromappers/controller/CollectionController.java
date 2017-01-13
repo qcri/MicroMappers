@@ -225,10 +225,11 @@ public class CollectionController {
         
         Account account = util.getAuthenticatedUser();
         
-        Page<Collection> pages =  collectionService.getAllByPage(account, pageNumber);
-
-        PageInfo<Collection> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
+        Page<Collection> pagedCollection =  collectionService.getAllByPage(account, pageNumber);
+        Page<CollectionDetailsInfo> pagedCollectionDetailsInfo = pagedCollection.map(pc -> pc.toCollectionDetailsInfo());
+        
+        PageInfo<CollectionDetailsInfo> pageInfo = new PageInfo<>(pagedCollectionDetailsInfo);
+        pageInfo.setList(pagedCollectionDetailsInfo.getContent());
 
         model.addAttribute("page", pageInfo);
         return "collection/list/list";
@@ -246,14 +247,14 @@ public class CollectionController {
 			@RequestParam(value = "typeId", required=false) Long typeId){
     	
     	if(StringUtils.isNotBlank(type) && typeId != null){
-    		if(type.equals("snopes")){
+    		if(type.equalsIgnoreCase("snopes")){
         		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
         		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
-        		model.addAttribute("eventTitle", WordUtils.capitalize(type) + ": " +globalEventDefinition.getTitle());
+        		model.addAttribute("eventInfo", globalEventDefinition);
         	}
-    		if(type.equals("gdelt")){
+    		if(type.equalsIgnoreCase("gdelt")){
     			GlideMaster glideMaster = glideMasterService.getById(typeId);
-    			model.addAttribute("eventTitle", WordUtils.capitalize(type) + ": " +glideMaster.getGlideCode());
+    			model.addAttribute("eventInfo", glideMaster);
     		}
     		
     		model.addAttribute("eventType", type);
@@ -281,10 +282,6 @@ public class CollectionController {
     		collectionDetailsInfo = collection.toCollectionDetailsInfo();
     		collaborators = collaboratorService.getCollaboratorsByCollection(id);
     		collectionCount = collectionLogService.getCountByCollectionId(id);
-    		if(collectionDetailsInfo.getGlobalEventDefinitionId() != null){
-    			GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(collectionDetailsInfo.getGlobalEventDefinitionId());
-    			model.addAttribute("eventTitle", "Snopes: " + globalEventDefinition.getTitle());
-    		}
     	}
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
@@ -302,10 +299,6 @@ public class CollectionController {
     	CollectionDetailsInfo collectionDetailsInfo = null;
     	if(collection != null){
     		collectionDetailsInfo = collection.toCollectionDetailsInfo();
-    		if(collectionDetailsInfo.getGlobalEventDefinitionId() != null){
-    			GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(collectionDetailsInfo.getGlobalEventDefinitionId());
-    			model.addAttribute("eventTitle", "Snopes: " + globalEventDefinition.getTitle());
-    		}
     	}
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	
