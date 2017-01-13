@@ -1,6 +1,7 @@
 package org.qcri.micromappers.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -43,6 +44,25 @@ public class UserConnectionService
 		}catch(Exception e){
 			logger.error("Exception while deleteing the userConnection for user: "+ userConnection.getUserId());
 			return Boolean.FALSE;
+		}
+	}
+	
+	/** Get all connected providers for a specific user
+	 * @param userId
+	 * @return
+	 */
+	public List<String> getDistinctProviderIdsByUserId(String userId) {
+		List<UserConnection> userConnections = userConnectionRepository.findDistinctProviderIdByUserId(userId);
+		List<String> distinctProviders = userConnections.stream().map(u -> u.getProviderId()).collect(Collectors.toList());
+		return distinctProviders;
+	}
+
+	public Boolean isProviderConnectedForUser(String providerId, String userName) {
+		UserConnection user = getByProviderIdAndUserId(providerId, userName);
+		if(user != null){
+			return true;
+		}else{
+			return false;
 		}
 	}
 }

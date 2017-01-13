@@ -6,6 +6,11 @@ $.ajaxSetup({
     }
 });
 
+$('.confirm-edit').on('click', function(e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    window.location="${rc.getContextPath()}/collection/view/update?id="+id;
+});
 
 $('.confirm-delete').on('click', function(e) {
     e.preventDefault();

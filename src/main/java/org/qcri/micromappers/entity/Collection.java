@@ -37,6 +37,10 @@ public class Collection extends ExtendedBaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "global_event_definition_id")
 	private GlobalEventDefinition globalEventDefinition;
+	
+	@ManyToOne
+	@JoinColumn(name = "glide_master_id")
+	private GlideMaster glideMaster;
 
 	@Enumerated(EnumType.ORDINAL)
 	private CollectionStatus status;
@@ -300,10 +304,18 @@ public class Collection extends ExtendedBaseEntity {
 		this.globalEventDefinition = globalEventDefinition;
 	}
 
-	public void setGlobalEventDefinition(Long id) {
-		GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
-		globalEventDefinition.setId(id);
-		setGlobalEventDefinition(globalEventDefinition);
+	/**
+	 * @return the glideMaster
+	 */
+	public GlideMaster getGlideMaster() {
+		return glideMaster;
+	}
+
+	/**
+	 * @param glideMaster the glideMaster to set
+	 */
+	public void setGlideMaster(GlideMaster glideMaster) {
+		this.glideMaster = glideMaster;
 	}
 	
 	public CollectionTask toCollectionTask(UserConnection userConnection) {
@@ -339,7 +351,10 @@ public class Collection extends ExtendedBaseEntity {
 		collectionDetailsInfo.setGeo(this.getGeo());
 		collectionDetailsInfo.setGeoR(this.getGeoR());
 		if(this.getGlobalEventDefinition() != null){
-			collectionDetailsInfo.setGlobalEventDefinitionId(this.getGlobalEventDefinition().getId());
+			collectionDetailsInfo.setGlobalEventDefinition(this.getGlobalEventDefinition());
+		}
+		if(this.getGlideMaster() != null){
+			collectionDetailsInfo.setGlideMaster(this.getGlideMaster());
 		}
 		collectionDetailsInfo.setLangFilters(this.getLangFilters());
 		collectionDetailsInfo.setName(this.getName());

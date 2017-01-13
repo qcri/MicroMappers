@@ -96,11 +96,11 @@ public class BaseCollectionService{
 
 
 	public ResponseWrapper update(CollectionDetailsInfo collectionInfo) {
-		if(StringUtils.isBlank(collectionInfo.getCode())){
-			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection code not present.");
+		if(collectionInfo.getId() == null){
+			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection id not present.");
 		}
 		
-		Collection collection = collectionService.getByCode(collectionInfo.getCode());
+		Collection collection = collectionService.getById(collectionInfo.getId());
 		
 		if(collection != null){
 			collection.setProvider(CollectionType.valueOf(collectionInfo.getProvider()));

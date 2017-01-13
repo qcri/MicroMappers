@@ -20,7 +20,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //Intercepts whether the requestor is collaborator/admin or not on the requested Collection
         registry.addInterceptor(getCollectionCollaboratorInterceptor()).addPathPatterns("/*/start", "/*/stop", "/*/restart", 
         		"/*/status", "/*/update", "/*/collaborators", "/*/addCollaborator" ,"/*/removeCollaborator",
-        		"/collection/delete", "/collection/untrash");
+        		"/collection/delete", "/collection/untrash", "/collection/count", "/collection/view/details", "/collection/view/update");
     }
     
     @Bean

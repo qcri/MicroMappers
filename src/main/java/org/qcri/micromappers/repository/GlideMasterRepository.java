@@ -1,7 +1,6 @@
 package org.qcri.micromappers.repository;
 
 import org.qcri.micromappers.entity.GlideMaster;
-import org.qcri.micromappers.models.GdeltMaster;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -11,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public abstract interface GlideMasterRepository extends PagingAndSortingRepository<GlideMaster, Long> {
     Page<GlideMaster> findAll(Pageable pageable);
+	GlideMaster findById(Long id);
 }
 
 

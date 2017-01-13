@@ -138,13 +138,20 @@ public abstract class BaseCollectionController {
     }
     
 
+    /** Updating the collection
+     * @param collectionDetailsInfo
+     * @param id is collectionId
+     * @return
+     */
     @RequestMapping(value = "/update", method=RequestMethod.POST)
 	@ResponseBody
-	public ResponseWrapper updateCollection(@RequestBody CollectionDetailsInfo collectionDetailsInfo) {
+	public ResponseWrapper updateCollection(@RequestBody CollectionDetailsInfo collectionDetailsInfo, 
+			@RequestParam("id") Long id) {
 
     	ResponseWrapper response = null;
 		try{
-			logger.info("Updating collection with collectionCode: "+ collectionDetailsInfo.getCode());
+			logger.info("Updating collection with collectionId: "+ id);
+			collectionDetailsInfo.setId(id);
 			response = baseCollectionService.update(collectionDetailsInfo);
 		}catch (MicromappersServiceException e) {
 			logger.error("Error while updating collection"+ e.getMessage(), e);

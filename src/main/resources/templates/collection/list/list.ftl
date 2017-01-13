@@ -10,7 +10,8 @@
 						<tr>
 							<th>Name</th>
 							<th>Status</th>
-							<th>Delete/Restore</th>
+							<th>Event</th>
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -18,33 +19,50 @@
 						<tr>
 							<td>
 								<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.name}">
-								${info.name}
-								</a>
+								${info.name}</a>
+								<#if current_user != info.owner>
+									by ${info.owner}
+								</#if>
 							</td>
 							<td>${info.status}</td>
-							<#if info.status == "TRASHED">
 							<td>
-								<p data-placement="top" data-toggle="tooltip" title="Restore">
-									<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-									<span class="glyphicon glyphicon-repeat"></span>
-									</button>
-								</p>
+								<#if info.globalEventDefinition?? >
+									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}">
+										${info.globalEventDefinition.title}
+									</a>
+								<#elseif info.glideMaster?? >
+									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" target="_blank" >${info.glideMaster.glideCode}</a>
+								</#if>
+								
 							</td>
-							<#else>
 							<td>
-								<p data-placement="top" data-toggle="tooltip" title="Delete">
-									<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-									<span class="glyphicon glyphicon-trash"></span>
-									</button>
-								</p>
+								<#if info.status == "TRASHED">
+									<span data-placement="top" data-toggle="tooltip" title="Restore">
+										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+										<span class="glyphicon glyphicon-repeat"></span>
+										</button>
+									</span>
+								<#else>
+									<span data-placement="top" data-toggle="tooltip" title="Delete">
+										<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+										<span class="glyphicon glyphicon-trash"></span>
+										</button>
+									</span>
+								
+								</#if>
+								
+								<span data-placement="top" data-toggle="tooltip" title="Edit">
+									<i class="confirm-edit btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
+										<span class="glyphicon glyphicon-edit"></span>
+									</i>
+								</span>
 							</td>
-							</#if>
 						</tr>
 						</#list>
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="3" class="text-center">
+							<td colspan="4" class="text-center">
 								<div style="margin:0px;">
 									<ul class="pagination pull-right">
 										<!-- First Page -->

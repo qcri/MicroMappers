@@ -6,10 +6,12 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.AccountDTO;
@@ -18,6 +20,7 @@ import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.GlideMasterService;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.ResponseCode;
@@ -57,6 +60,9 @@ public class CollectionController {
 
     @Autowired
     GlobalEventDefinitionService globalEventDefinitionService;
+    
+    @Autowired
+    GlideMasterService glideMasterService;
 
 
 	/** It is used to fetch the list of collaborators for a collection. 
@@ -149,7 +155,7 @@ public class CollectionController {
      * @return json having valid=true/false
      * @throws Exception
      */
-    @RequestMapping(value = "/existName.action", method = RequestMethod.GET)
+    @RequestMapping(value = "/existName", method = RequestMethod.GET)
 	@ResponseBody
 	public Object existName(@RequestParam String name) throws Exception {
     	boolean collectionNameExists = collectionService.isCollectionNameExists(name.trim().toLowerCase());
@@ -219,10 +225,11 @@ public class CollectionController {
         
         Account account = util.getAuthenticatedUser();
         
-        Page<Collection> pages =  collectionService.getAllByPage(account, pageNumber);
-
-        PageInfo<Collection> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
+        Page<Collection> pagedCollection =  collectionService.getAllByPage(account, pageNumber);
+        Page<CollectionDetailsInfo> pagedCollectionDetailsInfo = pagedCollection.map(pc -> pc.toCollectionDetailsInfo());
+        
+        PageInfo<CollectionDetailsInfo> pageInfo = new PageInfo<>(pagedCollectionDetailsInfo);
+        pageInfo.setList(pagedCollectionDetailsInfo.getContent());
 
         model.addAttribute("page", pageInfo);
         return "collection/list/list";
@@ -240,10 +247,15 @@ public class CollectionController {
 			@RequestParam(value = "typeId", required=false) Long typeId){
     	
     	if(StringUtils.isNotBlank(type) && typeId != null){
-    		if(type.equals("snopes")){
+    		if(type.equalsIgnoreCase("snopes")){
         		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
-        		model.addAttribute("keywords", globalEventDefinition.getSearchKeyword());
+        		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
+        		model.addAttribute("eventInfo", globalEventDefinition);
         	}
+    		if(type.equalsIgnoreCase("gdelt")){
+    			GlideMaster glideMaster = glideMasterService.getById(typeId);
+    			model.addAttribute("eventInfo", glideMaster);
+    		}
     		
     		model.addAttribute("eventType", type);
         	model.addAttribute("eventTypeId", typeId);
@@ -274,10 +286,23 @@ public class CollectionController {
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
     	
-    	String collaboratorsString = collaborators.stream().map(c -> c.getUserName()).collect(Collectors.joining(","));
+    	String collaboratorsString = collaborators.stream().map(c -> c.getUserName()).collect(Collectors.joining(", "));
     	model.addAttribute("collectionCollaborators",collaboratorsString);
     	model.addAttribute("collectionCount",collectionCount);
 		return "collection/details/details";
+	}
+    
+    @RequestMapping(value="/view/update", method = RequestMethod.GET)
+	public String updateCollection(Model model, HttpServletRequest request, @RequestParam("id") Long id){
+    	
+    	Collection collection = collectionService.getById(id);
+    	CollectionDetailsInfo collectionDetailsInfo = null;
+    	if(collection != null){
+    		collectionDetailsInfo = collection.toCollectionDetailsInfo();
+    	}
+    	model.addAttribute("collectionInfo", collectionDetailsInfo);
+    	
+		return "collection/update/update";
 	}
 
 }

@@ -8,6 +8,8 @@ import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
@@ -27,7 +29,8 @@ public class CollectionDetailsInfo implements Serializable{
 	private String code;
 	private String name;
 	private String provider;
-	private Long globalEventDefinitionId;
+	private GlobalEventDefinition globalEventDefinition;
+	private GlideMaster glideMaster;
 	private Long count;
 	private String owner;
 	private CollectionStatus status;
@@ -126,18 +129,6 @@ public class CollectionDetailsInfo implements Serializable{
 		this.count = count;
 	}
 	/**
-	 * @return the globalEventDefinitionId
-	 */
-	public Long getGlobalEventDefinitionId() {
-		return globalEventDefinitionId;
-	}
-	/**
-	 * @param globalEventDefinitionId the globalEventDefinitionId to set
-	 */
-	public void setGlobalEventDefinitionId(Long globalEventDefinitionId) {
-		this.globalEventDefinitionId = globalEventDefinitionId;
-	}
-	/**
 	 * @return the id
 	 */
 	public Long getId() {
@@ -167,8 +158,11 @@ public class CollectionDetailsInfo implements Serializable{
 		collection.setId(this.getId());
 		collection.setCode(this.getCode());
 		collection.setName(this.getName());
-		if(this.getGlobalEventDefinitionId() != null){
-			collection.setGlobalEventDefinition(this.getGlobalEventDefinitionId());
+		if(this.getGlobalEventDefinition() != null){
+			collection.setGlobalEventDefinition(this.getGlobalEventDefinition());
+		}
+		if(this.getGlideMaster() != null){
+			collection.setGlideMaster(this.getGlideMaster());
 		}
 		//collection.setAccount(user);
 		collection.setStatus(this.getStatus());
@@ -186,4 +180,29 @@ public class CollectionDetailsInfo implements Serializable{
 		}
 		return collection;
 	}
+	/**
+	 * @return the globalEventDefinition
+	 */
+	public GlobalEventDefinition getGlobalEventDefinition() {
+		return globalEventDefinition;
+	}
+	/**
+	 * @param globalEventDefinition the globalEventDefinition to set
+	 */
+	public void setGlobalEventDefinition(GlobalEventDefinition globalEventDefinition) {
+		this.globalEventDefinition = globalEventDefinition;
+	}
+	/**
+	 * @return the glideMaster
+	 */
+	public GlideMaster getGlideMaster() {
+		return glideMaster;
+	}
+	/**
+	 * @param glideMaster the glideMaster to set
+	 */
+	public void setGlideMaster(GlideMaster glideMaster) {
+		this.glideMaster = glideMaster;
+	}
+	
 }

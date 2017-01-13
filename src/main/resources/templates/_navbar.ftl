@@ -59,7 +59,7 @@
 	    $('#showAlert').show();
 	    $('#showAlert').fadeIn('slow');
 	    
-	    setTimeout(function(){$('#showAlert').hide();}, 3000);
+	    setTimeout(function(){$('#showAlert').hide();}, 5000);
 	}
 
 	function showErrorAlert(msg){
@@ -69,6 +69,6 @@
 	    $('#showAlert').show();
 	    $('#showAlert').fadeIn('slow');
 	    
-	    setTimeout(function(){$('#showAlert').hide();}, 3000);
+	    setTimeout(function(){$('#showAlert').hide();}, 5000);
 	}
 </script>
