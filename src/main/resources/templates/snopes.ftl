@@ -5,6 +5,9 @@
 		<#include "_navbar.ftl">
 		<div class="container" style="min-height:400px;">
 			<div class="row">
+                <div class="btn-group">
+                    <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+                </div>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>

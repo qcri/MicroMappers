@@ -8,7 +8,7 @@
 				<div id="dashboard" class="col-md-6">
 					<div class="well">
 						<h4><i class="icon-dashboard"></i> My Social Media Tokens</h4>
-						<p>Manage your token to data collection</p>
+						<p>Manage Your Social Media tokens</p>
 						<a href="${rc.getContextPath()}/connect" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
@@ -33,7 +33,7 @@
 						<h4><i class="icon-star"></i> Snopes Global Events</h4>
 						<p>Monitor Snopes news</p>
 						<a href="${rc.getContextPath()}/global/events/snopes" class="btn btn-primary">
-						View <i class="icon-chevron-right"></i>
+                            Manage <i class="icon-chevron-right"></i>
 						</a>
                         <a href="${rc.getContextPath()}/global/events/snopes/dashboard" class="btn btn-primary">
                             Dashboard <i class="icon-chevron-right"></i>
@@ -45,7 +45,7 @@
 						<h4><i class="icon-check"></i> Global Disaster Events</h4>
 						<p>Monitor World Diaster Information</p>
 						<a href="${rc.getContextPath()}/global/events/glides" class="btn btn-primary">
-						View <i class="icon-chevron-right"></i>
+                            Manage <i class="icon-chevron-right"></i>
 						</a>
                         <a href="${rc.getContextPath()}/global/events/glides/dashboard" class="btn btn-primary">
                             Dashboard <i class="icon-chevron-right"></i>
