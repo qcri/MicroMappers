@@ -286,7 +286,7 @@ public class CollectionController {
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
     	
-    	String collaboratorsString = collaborators.stream().map(c -> c.getUserName()).collect(Collectors.joining(","));
+    	String collaboratorsString = collaborators.stream().map(c -> c.getUserName()).collect(Collectors.joining(", "));
     	model.addAttribute("collectionCollaborators",collaboratorsString);
     	model.addAttribute("collectionCount",collectionCount);
 		return "collection/details/details";

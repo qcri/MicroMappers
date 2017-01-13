@@ -12,6 +12,7 @@
 					<#if current_user != collectionInfo.owner>
 						by ${collectionInfo.owner}
 					</#if>
+					<a href="${rc.getContextPath()}/collection/view/update?id=${collectionInfo.id}"><span class="glyphicon glyphicon-edit" title="Edit"></span></a>
 					<script>initializeCountScheduler=false</script>
 							<#if collectionInfo.status =="RUNNING">
 								<p class="text-success">
