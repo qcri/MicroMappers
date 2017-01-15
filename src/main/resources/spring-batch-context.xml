@@ -47,11 +47,16 @@
 			</flow>
 			<flow>
 				<step id="step1" allow-start-if-complete="true" next="step2">
-					<tasklet ref="firstTasklet"></tasklet>
+					<tasklet ref="gdeltFetchTasklet"></tasklet>
 				</step>
 				<step id="step2" allow-start-if-complete="true" next="step3">
 					<tasklet transaction-manager="transactionManager">
-						<chunk reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="50" />
+						<chunk skip-limit="1000" reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="100">
+							<skippable-exception-classes>
+								<include class="org.hibernate.exception.DataException"/>
+								<include class="org.postgresql.util.PSQLException"/>
+							</skippable-exception-classes>
+						</chunk>
 						<listeners>
 							<listener ref="StepListener" />
 						</listeners>
@@ -59,8 +64,14 @@
 				</step>
 				<step id="step3" allow-start-if-complete="true" next="step4">
 					<tasklet transaction-manager="transactionManager">
-						<chunk reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
-							   commit-interval="50"/>
+						<chunk skip-limit="1000" reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
+							   commit-interval="100">
+							<skippable-exception-classes>
+								<include class="org.springframework.batch.item.file.FlatFileParseException"/>
+								<include class="org.hibernate.exception.DataException"/>
+								<include class="org.postgresql.util.PSQLException"/>
+							</skippable-exception-classes>
+						</chunk>
 						<listeners>
 							<listener ref="StepListener3W"/>
 						</listeners>
@@ -68,13 +79,13 @@
 				</step>
 				<step id="step4" allow-start-if-complete="true" next="step5">
 					<tasklet transaction-manager="transactionManager">
-						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="50" />
+						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="100" />
 					</tasklet>
 				</step>
 				<step id="step5" allow-start-if-complete="true">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
-							   commit-interval="50"/>
+							   commit-interval="100"/>
 					</tasklet>
 				</step>
 			</flow>
@@ -82,7 +93,7 @@
 	</job>
 
 	<!-- tasklet -->
-	<bean id="firstTasklet" class="org.qcri.micromappers.batch.tasklet.FetchGdeltMaster"></bean>
+	<bean id="gdeltFetchTasklet" class="org.qcri.micromappers.batch.tasklet.FetchGdeltMaster"></bean>
 	<bean id="SnopesFactFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesFactFetch"></bean>
 	<bean id="SnopesNewsFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesNewsFetch"></bean>
 
@@ -98,7 +109,6 @@
 	<!-- ItemReader reads a complete line one by one from input file -->
 	<bean id="flatFileItemReader" class="org.springframework.batch.item.file.FlatFileItemReader"  scope="step">
 		<property name="linesToSkip" value="1" />
-		<!--<property name="resource" value="file:/Users/jlucas/Documents/JavaDev/data/resources/20161128174500.mmic.txt" />-->
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
 				<property name="fieldSetMapper">
@@ -159,14 +169,12 @@
 		<property name="filePattern" value="file:${GDELT_JSON_UPDATE_PATH}/*.mm3w.*.json"/>
 	</bean>
 
-	<!-- <bean id="jobListener" class="com.websystique.springbatch.ExamResultJobListener" />-->
-
 
 	<bean id="myScheduler" class="org.qcri.micromappers.batch.scheduler.MyScheduler"/>
 	<!-- this is where we are scheduling the job to run using our scheduler every 15 min, note how the method of the
 	     scheduler and the cron expression to be used are being specified -->
 	<task:scheduled-tasks>
-		<task:scheduled ref="myScheduler" method="run" cron="0 0/15 * * * ?"/>
+		<task:scheduled ref="myScheduler" method="run" cron="0 0/30 * * * ?"/>
 	</task:scheduled-tasks>
 
 </beans>			

@@ -1,6 +1,7 @@
 package org.qcri.micromappers.batch.mapper;
 
 
+import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.GdeltMMIC;
 import org.springframework.batch.item.file.mapping.FieldSetMapper;
 import org.springframework.batch.item.file.transform.FieldSet;
@@ -11,20 +12,16 @@ import org.springframework.validation.BindException;
  */
 public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
 
+    private static Logger logger = Logger.getLogger(GdeltMMICFieldSetMapper.class);
+
     @Override
     public GdeltMMIC mapFieldSet(FieldSet fieldSet) throws BindException {
        //languageCode,articleURL,timestamp,location,lat,lon,imgURL,glidecode
         System.out.println("fieldSet : " + fieldSet.getFieldCount());
         GdeltMMIC gdeltMaster = new GdeltMMIC();
         if(fieldSet.getFieldCount() > 8){
-            gdeltMaster.setLanguageCode(fieldSet.readRawString(0));
-            gdeltMaster.setArticleURL(fieldSet.readRawString(1) + fieldSet.readRawString(2));
-            gdeltMaster.setTimestamp(fieldSet.readRawString(3));
-            gdeltMaster.setLocation(fieldSet.readRawString(4));
-            gdeltMaster.setLat(fieldSet.readRawString(5));
-            gdeltMaster.setLon(fieldSet.readRawString(6));
-            gdeltMaster.setImgURL(fieldSet.readRawString(7)+fieldSet.readRawString(8));
-            gdeltMaster.setGlideCode(fieldSet.readRawString(9));
+            logger.info("GdeltMMIC Field size is greater 8 : actual size - " + fieldSet.getFieldCount());
+            return null;
         }
         else {
             gdeltMaster.setLanguageCode(fieldSet.readRawString(0));
