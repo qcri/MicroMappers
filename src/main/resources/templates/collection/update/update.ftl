@@ -11,8 +11,14 @@
  					<input type="hidden" id="collectionId" value="${collectionInfo.id}">
 					<input type="hidden" id="oldLangFilters" value="${collectionInfo.langFilters}">
 				</#if>
-			   <h3 style="margin-top:-1%">Update Collection</h3>
-			   
+				<div class="btn-group">
+					<a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+				<#if collectionInfo.globalEventDefinition??>
+					<a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="icon-tags"></i>&nbsp;Snopes Global Events</a>
+				<#else>
+					<a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="icon-tags"></i>&nbsp;Global Disaster Events</a>
+				</#if>
+				</div>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#general">General</a></li>
 <!-- 					<li><a data-toggle="tab" href="#advanced">Advanced</a></li> -->

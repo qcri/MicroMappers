@@ -5,12 +5,13 @@
 		<#include "_navbar.ftl">
 		<div class="container" style="min-height:400px;">
 			<div class="row">
+                <div class="btn-group">
+                    <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+                </div>
 				<div class="col-lg-12 text-center">
-					<h1>MicroMappers</h1>
-					<p class="lead">Social Message Purification</p>
+                    <p class="lead">Manage Your Social Media Tokens</p>
 					<ul class="list-unstyled">
 						<li>
-							Welcome
 							<#if connectionMap["twitter"]?size gt 0 >
 							<h4>Hi <span style="color:blue">${(connectionMap["twitter"])[0].getDisplayName()}</span>, you have already connected to twitter. If you want to connect again, please <a href="${rc.getContextPath()}/connect/twitter">click here</a></h4>
 							<#else>

@@ -10,9 +10,15 @@
 		<div class="container" style="min-height:400px;">
 		
 			<form id="collectionCreate" class="form-horizontal">
-   
-			   <h3 style="margin-top:-1%">Create Collection</h3>
-			   
+
+                <div class="btn-group">
+                    <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+					<#if eventType?? && eventType='snopes'>
+                        <a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="icon-tags"></i>&nbsp;Snopes Global Events</a>
+					<#else>
+                        <a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="icon-tags"></i>&nbsp;Global Disaster Events</a>
+					</#if>
+                </div>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#general">General</a></li>
 <!-- 					<li><a data-toggle="tab" href="#advanced">Advanced</a></li> -->
