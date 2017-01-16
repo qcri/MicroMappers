@@ -6,6 +6,8 @@ import javax.transaction.Transactional;
 
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +37,8 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	public Long countByNameIgnoreCase(String name);
 
 	public Page<Collection> findByAccount(Account account, Pageable page);
+
+	public Collection getByAccountAndGlobalEventDefinition(Account account, GlobalEventDefinition globalEventDefinition);
+
+	public Collection getByAccountAndGlideMaster(Account account,GlideMaster glideMaster);
 }

@@ -53,6 +53,17 @@ public class BaseCollectionService{
 		Account user = util.getAuthenticatedUser();
 
 		collection = collectionDetailsInfo.toCollection();
+		if(collection.getGlobalEventDefinition() != null){
+			Collection collectionWithAccountAndGlobalEventDefinition = collectionService.getByAccountAndGlobalEventDefinition(user, collection.getGlobalEventDefinition());
+			if(collectionWithAccountAndGlobalEventDefinition != null){
+				throw new MicromappersServiceException("A collection already existed for this user with this event.");
+			}
+		}else if(collection.getGlideMaster() != null){
+			Collection collectionWithAccountAndGlideMaster = collectionService.getByAccountAndGlideMaster(user, collection.getGlideMaster());
+			if(collectionWithAccountAndGlideMaster != null){
+				throw new MicromappersServiceException("A collection already existed for this user with this event.");
+			}
+		}
 		collection.setAccount(user);
 		collection.setStatus(CollectionStatus.NOT_RUNNING);
 		try {

@@ -62,4 +62,8 @@ public class MicromappersServiceException extends MicromappersException {
 	public MicromappersServiceException(String message,Throwable cause) {
 		super(message,cause);
 	}
+	
+	public MicromappersServiceException(String message) {
+		super(message);
+	}
 }

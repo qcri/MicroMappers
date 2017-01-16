@@ -246,14 +246,26 @@ public class CollectionController {
 	public String createCollection(Model model, HttpServletRequest request, @RequestParam(value = "type", required=false) String type,
 			@RequestParam(value = "typeId", required=false) Long typeId){
     	
+    	Account authenticatedUser = util.getAuthenticatedUser();
+    	
     	if(StringUtils.isNotBlank(type) && typeId != null){
     		if(type.equalsIgnoreCase("snopes")){
         		GlobalEventDefinition globalEventDefinition = globalEventDefinitionService.getById(typeId);
+        		Collection collection = collectionService.getByAccountAndGlobalEventDefinition(authenticatedUser, globalEventDefinition);
+        		if(collection != null){
+    				model.addAttribute("collectionId", collection.getId());
+    				return "collection/create/alreadyExistsError";
+    			}
         		model.addAttribute("keywords", globalEventDefinition.getArticleTag());
         		model.addAttribute("eventInfo", globalEventDefinition);
         	}
     		if(type.equalsIgnoreCase("gdelt")){
     			GlideMaster glideMaster = glideMasterService.getById(typeId);
+    			Collection collection = collectionService.getByAccountAndGlideMaster(authenticatedUser, glideMaster);
+    			if(collection != null){
+    				model.addAttribute("collectionId", collection.getId());
+    				return "collection/create/alreadyExistsError";
+    			}
     			model.addAttribute("eventInfo", glideMaster);
     		}
     		

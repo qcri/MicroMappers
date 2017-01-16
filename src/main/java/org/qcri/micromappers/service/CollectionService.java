@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collaborator;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollectionRepository;
 import org.qcri.micromappers.utility.CollectionStatus;
@@ -134,5 +136,25 @@ public class CollectionService
 	
 	public Boolean untrash(Long id) {
 		return updateStatusById(id, CollectionStatus.NOT_RUNNING);
+	}
+	
+	public Collection getByAccountAndGlobalEventDefinition(Account account, GlobalEventDefinition globalEventDefinition)
+	{
+		try{
+			return collectionRepository.getByAccountAndGlobalEventDefinition(account, globalEventDefinition);
+		}catch (Exception e) {
+			logger.error("Error while fetching collection by Account and GlobalEventDefinition", e);
+			throw new MicromappersServiceException("Error while fetching collection by Account and GlobalEventDefinition", e);
+		}
+	}
+	
+	public Collection getByAccountAndGlideMaster(Account account, GlideMaster glideMaster)
+	{
+		try{
+			return collectionRepository.getByAccountAndGlideMaster(account, glideMaster);
+		}catch (Exception e) {
+			logger.error("Error while fetching collection by Account and GlideMaster", e);
+			throw new MicromappersServiceException("Error while fetching collection by Account and GlideMaster", e);
+		}
 	}
 }

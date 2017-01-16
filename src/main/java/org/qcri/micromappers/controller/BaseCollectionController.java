@@ -10,6 +10,7 @@ import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.GenericCache;
+import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,22 +44,21 @@ public abstract class BaseCollectionController {
 		try{
 			logger.info("Creating a new collection with collectionCode: "+ collectionDetailsInfo.getCode());
 			collection = baseCollectionService.create(collectionDetailsInfo);
-			logger.info("New collection created with collectionCode : "+ collectionDetailsInfo.getCode());
 		}catch (MicromappersServiceException e) {
 			logger.error(e.getMessage(), e);
-			return new ResponseWrapper(null, false, "Failure", "Error while creating a new collection : "+ e.getMessage());
+			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Error while creating a new collection : "+ e.getMessage());
 		}
-
+		
 		if(collection == null) {
-			return new ResponseWrapper(null, false, "Failure", "Collection not created");
+			return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Collection not created");
 		}
-
+		logger.info("New collection created with collectionCode : "+ collectionDetailsInfo.getCode());
 		//Running collection right after creation
 		if (runAfterCreate && collection != null) {
 			return start(collection.getId());
 		} 
 
-		return new ResponseWrapper(collection.toCollectionDetailsInfo(), true, "Successful", "Collection created Successfully");
+		return new ResponseWrapper(collection.toCollectionDetailsInfo(), true, ResponseCode.SUCCESS.toString(), "Collection created Successfully");
 	}
 
 	@RequestMapping(value = "/start", method=RequestMethod.GET)
