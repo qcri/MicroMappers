@@ -85,6 +85,13 @@ public class GlobalEventController {
                             @RequestParam(value = "glideCode") String glideCode,
                             @RequestParam(value = "dw", defaultValue = "") String dw) {
 
+        if(dw != null){
+            if(!dw.isEmpty())
+            {
+                this.download3WData(response, glideCode);
+            }
+        }
+
         int pageNumber = Integer.valueOf(page);
         Page<Gdelt3W> pages =  gdelt3WService.findbyGlideCode(pageNumber, glideCode);
 
@@ -107,13 +114,6 @@ public class GlobalEventController {
 
         model.addAttribute("page", pageInfo);
         model.addAttribute("glideCode",glideCode);
-
-        if(dw != null){
-            if(!dw.isEmpty())
-            {
-                this.download3WData(response, glideCode);
-            }
-        }
 
         return "/gdelt/data3w";
     }
@@ -146,6 +146,13 @@ public class GlobalEventController {
                               @RequestParam(value = "glideCode") String glideCode,
                               @RequestParam(value = "dw", defaultValue = "") String dw) {
 
+        if(dw != null){
+            if(!dw.isEmpty())
+            {
+                this.downloadMMICData(response, glideCode);
+            }
+        }
+
         int pageNumber = Integer.valueOf(page);
         Page<GdeltMMIC> pages =  gdeltMMICService.findbyGlideCode(pageNumber, glideCode);
 
@@ -155,13 +162,6 @@ public class GlobalEventController {
 
         model.addAttribute("page", pageInfo);
         model.addAttribute("glideCode",glideCode);
-
-        if(dw != null){
-            if(!dw.isEmpty())
-            {
-                this.downloadMMICData(response, glideCode);
-            }
-        }
 
         return "/gdelt/datammic";
     }

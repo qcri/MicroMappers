@@ -18,4 +18,7 @@ public abstract interface Gdelt3WRepository extends PagingAndSortingRepository<G
 
     @Query("SELECT d FROM Gdelt3W d WHERE d.state=:state and d.glideCode  = :glideCode")
     List<Gdelt3W> findAllbyGlideCode(@Param("glideCode")String glideCode, @Param("state")String state);
+
+    @Query("SELECT d FROM Gdelt3W d WHERE d.state=:state")
+    List<Gdelt3W> findAllbyState(@Param("state")String state);
 }

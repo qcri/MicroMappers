@@ -8,9 +8,10 @@ public class Constants
   public static final String GDELT_3W_SIGNATURE = "3W";
   public static final String GDELT_MMIC_SIGNATURE = "MMIC";
   public static final String SNOPES_STATE_ACTIVE = "active";
+  public static final String GDELT_3W_MMIC_PROCESSED = "processed";
   
   public static final String SYSTEM_USER_NAME = "System";
   
-  public static final String DEFAULT_PAGE_SIZE = "10";
-  
+  public static final Integer DEFAULT_PAGE_SIZE = 10;
+  public static final Integer DEFAULT_NAVIGATION_PAGE_SIZE = 10;
 }

@@ -7,7 +7,7 @@
 			<div class="row">
 				<div id="dashboard" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-dashboard"></i> My Social Media Tokens</h4>
+						<h4><i class="icon-gears"></i> My Social Media Tokens</h4>
 						<p>Manage Your Social Media tokens</p>
 						<a href="${rc.getContextPath()}/connect" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
@@ -16,8 +16,8 @@
 				</div>
 				<div id="dashboard" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-dashboard"></i> My Collections</h4>
-						<p>Monitor collections</p>
+						<h4><i class="icon-list"></i> My Collections</h4>
+						<p>Monitor My collections</p>
 						<a href="${rc.getContextPath()}/collection/view/list" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
@@ -35,39 +35,33 @@
 						<a href="${rc.getContextPath()}/global/events/snopes" class="btn btn-primary">
                             Manage <i class="icon-chevron-right"></i>
 						</a>
-                        <a href="${rc.getContextPath()}/global/events/snopes/dashboard" class="btn btn-primary">
-                            Dashboard <i class="icon-chevron-right"></i>
-                        </a>
 					</div>
 				</div>
 				<div id="categories" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-check"></i> Global Disaster Events</h4>
+						<h4><i class="icon-check"></i> Disaster Global Events</h4>
 						<p>Monitor World Diaster Information</p>
 						<a href="${rc.getContextPath()}/global/events/glides" class="btn btn-primary">
                             Manage <i class="icon-chevron-right"></i>
 						</a>
-                        <a href="${rc.getContextPath()}/global/events/glides/dashboard" class="btn btn-primary">
-                            Dashboard <i class="icon-chevron-right"></i>
-                        </a>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div id="users" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-user"></i> Report</h4>
-						<p>Manage Report History</p>
-						<a href="" class="btn btn-primary">
-						Manage <i class="icon-chevron-right"></i>
+						<h4><i class="icon-dashboard"></i> MicroMappers Data Tracker</h4>
+                        <p>Monitor Data Trends</p>
+						<a href="${rc.getContextPath()}/dashboard/global" class="btn btn-primary">
+                            Dashboard <i class="icon-chevron-right"></i>
 						</a>
 					</div>
 				</div>
 				<div id="users-list" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-list"></i> My Collaborators</h4>
-						<p>Manage collaborators</p>
-						<a href="" class="btn btn-primary">
+						<h4><i class="icon-user"></i> My Collaborators</h4>
+						<p>Coming Soon</p>
+						<a href="" class="btn btn-primary disabled">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
 					</div>

@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by jlucas on 12/11/16.
  */
@@ -34,7 +36,7 @@ public class GlobalEventDefinitionService {
 
     public Page<GlobalEventDefinition> listAllByPage(Integer pageNumber) {
         PageRequest request =
-                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "createdAt");
+                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
 
         return globalEventDefinitionRepository.findAll(request);
     }
@@ -48,4 +50,8 @@ public class GlobalEventDefinitionService {
 			throw new MicromappersServiceException("Error while fetching global event definition by id", e);
 		}
 	}
+
+    public List<GlobalEventDefinition> findAllByState(String state){
+        return globalEventDefinitionRepository.findByState(state);
+    }
 }

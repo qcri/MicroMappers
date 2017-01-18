@@ -18,4 +18,8 @@ public abstract interface GdeltMMICRepository extends PagingAndSortingRepository
 
     @Query("SELECT d FROM GdeltMMIC d WHERE d.state=:state and d.glideCode  = :glideCode")
     List<GdeltMMIC> findAllbyGlideCode(@Param("glideCode")String glideCode, @Param("state")String state);
+
+    @Query("SELECT d FROM GdeltMMIC d WHERE d.state=:state")
+    List<GdeltMMIC> findAllbyState(@Param("state")String state);
+
 }
