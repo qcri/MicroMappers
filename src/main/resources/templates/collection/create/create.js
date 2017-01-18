@@ -93,8 +93,8 @@ function createCollection() {
         data.globalEventDefinition = {};
         data.globalEventDefinition.id = eventTypeId;
     }else if(eventType != null && eventType.toLowerCase() === "gdelt" && eventTypeId != null){
-        data.glideMasterId = {};
-        data.glideMasterId.id = eventTypeId;
+        data.glideMaster = {};
+        data.glideMaster.id = eventTypeId;
     }
     
     var runAfterCreate = false;
