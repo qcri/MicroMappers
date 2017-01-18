@@ -18,6 +18,7 @@ import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -118,12 +119,15 @@ public class CollectionService
 	/** Return all the collections in which the user is collaborator
 	 * @param account
 	 * @param pageNumber
+	 * @param sortDirection 
+	 * @param sortColumn 
+	 * @param pageSize 
 	 * @return all the collections in which the user is collaborator
 	 */
-	public Page<Collection> getAllByPage(Account account, Integer pageNumber) {
+	public Page<Collection> getAllByPage(Account account, Integer pageNumber, Integer pageSize, String sortColumn, Direction sortDirection) {
 		
         PageRequest request =
-                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+                new PageRequest(pageNumber - 1, pageSize, sortDirection, sortColumn);
         Page<Collaborator> pagedCollaborators = collaboratorService.getAllByPageAndAccount(account, request);
 
         Page<Collection> pagedCollections = pagedCollaborators.map(pc -> pc.getCollection());

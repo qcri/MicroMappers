@@ -27,7 +27,7 @@ public class GdeltMMICService {
     public Page<GdeltMMIC> findbyGlideCode(Integer pageNumber, String glideCode) {
 
         PageRequest request =
-                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "createdAt");
 
         return gdeltMMICRepository.findbyGlideCode(request, glideCode, "processed");
     }

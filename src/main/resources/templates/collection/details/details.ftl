@@ -11,7 +11,7 @@
 				<div class="table-responsive">
                     <table class="table" style="margin-bottom: 0px;">
                         <tr>
-                            <td class="col-md-9" style="/* word-wrap: break-word; *//* max-width: 160px; *//* white-space:normal; */border-top: 0px;">
+                            <td class="col-md-9" style="word-wrap: break-word; max-width: 160px; white-space:normal; border-top: 0px;">
                                 <h3>${collectionInfo.name}
                                     <small style="font-size:60%">
 									<#if current_user != collectionInfo.owner>

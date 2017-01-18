@@ -26,7 +26,7 @@ public class GlideMasterService {
 
     public Page<GlideMaster> listAllByPage(Integer pageNumber) {
         PageRequest request =
-                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "updated");
+                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "updated");
 
         return glideMasterRepository.findAll(request);
     }

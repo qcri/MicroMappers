@@ -25,7 +25,7 @@ public class Gdelt3WService {
     public Page<Gdelt3W> findbyGlideCode(Integer pageNumber, String glideCode) {
 
         PageRequest request =
-                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "createdAt");
 
         return gdelt3WRepository.findbyGlideCode(request, glideCode, "processed");
     }

@@ -22,11 +22,14 @@ import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.GlideMasterService;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionStatus;
+import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.ResponseCode;
 import org.qcri.micromappers.utility.ResponseWrapper;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -219,12 +222,14 @@ public class CollectionController {
      */
     @RequestMapping(value="/view/list", method = RequestMethod.GET)
     public String getAllCollections(Model model, HttpServletRequest request, 
-    		@RequestParam(value = "page", defaultValue = "1") String page) {
-        int pageNumber = Integer.valueOf(page);
+    		@RequestParam(value = "page", defaultValue = "1") Integer page,
+    		@RequestParam(value = "pageSize", required = false, defaultValue = Constants.DEFAULT_PAGE_SIZE) Integer pageSize,
+			@RequestParam(value = "sortColumn", required = false, defaultValue = "createdAt") String sortColumn,
+			@RequestParam(value = "sortDirection", required = false, defaultValue = "DESC") Direction sortDirection) {
         
         Account account = util.getAuthenticatedUser();
         
-        Page<Collection> pagedCollection =  collectionService.getAllByPage(account, pageNumber);
+        Page<Collection> pagedCollection =  collectionService.getAllByPage(account, page, pageSize, sortColumn, sortDirection);
         Page<CollectionDetailsInfo> pagedCollectionDetailsInfo = pagedCollection.map(pc -> pc.toCollectionDetailsInfo());
         
         PageInfo<CollectionDetailsInfo> pageInfo = new PageInfo<>(pagedCollectionDetailsInfo);
