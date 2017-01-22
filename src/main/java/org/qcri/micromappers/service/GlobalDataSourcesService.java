@@ -4,8 +4,10 @@ import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.qcri.micromappers.entity.*;
+import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.GlobalDataSources;
+import org.qcri.micromappers.models.WordCloud;
 import org.qcri.micromappers.repository.GlideMasterRepository;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.Constants;
@@ -14,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +45,20 @@ public class GlobalDataSourcesService {
         dataSources = this.populateGlideMaster(glideMasterList, dataSources);
         dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
 
-        //dataSources.sort((GlobalDataSources o1, GlobalDataSources o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt()));
+        //sorting
+        Comparator<GlobalDataSources> globalDataSourcesComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        dataSources.sort(globalDataSourcesComparator.reversed());
+
+        return dataSources;
+    }
+
+    public List<GlobalDataSources> findBySearch(String searchWord)
+    {
+
+        List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByStateAndTags(Constants.SNOPES_STATE_ACTIVE, searchWord);
+
+        List<GlobalDataSources> dataSources = new ArrayList<GlobalDataSources>();
+        dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
 
         Comparator<GlobalDataSources> globalDataSourcesComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
         dataSources.sort(globalDataSourcesComparator.reversed());
@@ -58,15 +71,13 @@ public class GlobalDataSourcesService {
             try {
                 GlobalDataSources a = new GlobalDataSources();
                 a.setSource(GlobalDataSourceType.SNOPES.getValue());
-                a.setIsGdideMasterDataSet(false);
-                a.setIsSnopesDataSet(true);
                 a.setGlobalEventDefinition(temp);
 
                 List<CollectionDetailsInfo> collectionDetailsInfoList = this.getCollectionDetails(temp.getCollection());
                 a.setCollectionDetailsInfoList(collectionDetailsInfoList);
                 a.setSocialCollectionTotal(calculateSocialMediaDatasetCollectionTotal(collectionDetailsInfoList));
 
-                a.setKeywords(this.getKeyWords(collectionDetailsInfoList));
+                a.setKeywords(this.getKeyWords(collectionDetailsInfoList, temp));
                 a.setCreatedAt(temp.getCreatedAt());
                 dataSources.add(a);
 
@@ -78,14 +89,11 @@ public class GlobalDataSourcesService {
         return dataSources;
     }
 
-
     private List<GlobalDataSources> populateGlideMaster(List<GlideMaster> glideMasterList, List<GlobalDataSources> dataSources){
         glideMasterList.forEach((temp) -> {
             try {
                 GlobalDataSources a = new GlobalDataSources();
                 a.setSource(GlobalDataSourceType.GDELT.getValue());
-                a.setIsGdideMasterDataSet(true);
-                a.setIsSnopesDataSet(false);
                 a.setGlideMaster(temp);
                 a.setGdelt3WList(temp.getGdelt3WList());
                 a.setGdeltMMICList(temp.getGdeltMMICList());
@@ -99,7 +107,7 @@ public class GlobalDataSourcesService {
                 a.setGdelt3WImageTotal(temp.getTotalCount3WImage());
                 a.setGdeltMMICArticleTotal(temp.getTotalCountMMICArticle());
                 a.setGdeltMMICImageTotal(temp.getTotalCountMMICImage());
-                a.setKeywords(this.getKeyWords(collectionDetailsInfoList));
+                a.setKeywords(this.getKeyWords(collectionDetailsInfoList, null));
                 a.setCreatedAt(temp.getCreatedAt());
                 dataSources.add(a);
 
@@ -124,20 +132,89 @@ public class GlobalDataSourcesService {
         return totalCount;
     }
 
-    private ArrayList<String> getKeyWords(List<CollectionDetailsInfo> collectionDetailsInfo){
+    private List<WordCloud> getKeyWords(List<CollectionDetailsInfo> collectionDetailsInfo, GlobalEventDefinition globalEventDefinition){
 
-        ArrayList<String> keywords = new ArrayList<String>();
+        List<WordCloud> keywords = new ArrayList<WordCloud>();
 
         collectionDetailsInfo.forEach((temp) -> {
             try {
                 if(temp.getTrack() != null && !temp.getTrack().isEmpty()){
-                    keywords.add(temp.getTrack());
+                    String[] parts = temp.getTrack().split(",");
+                    keywords.addAll(this.createWordCloud(parts));
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+        if(keywords.isEmpty() && globalEventDefinition!=null){
+            if(globalEventDefinition.getArticleTag() != null){
+                String[] parts = globalEventDefinition.getArticleTag().split(",");
+                keywords.addAll(this.createWordCloud(parts));
+            }
+            else{
+                String[] parts = globalEventDefinition.getSearchKeyword().split(",");
+                keywords.addAll(this.createWordCloud(parts));
+            }
+        }
+
+        return keywords;
+
+    }
+
+    public List<WordCloud> sycronizeKeyWord(List<GlobalDataSources> globalDataSourcesList){
+
+        List<WordCloud> wordCloudList = new ArrayList<WordCloud>();
+
+        globalDataSourcesList.forEach((temp) -> {
+            wordCloudList.addAll(temp.getKeywords());
+        });
+
+        Map<String, Long> result =
+                wordCloudList.stream().collect(
+                        Collectors.groupingBy(
+                                WordCloud::getText, Collectors.counting()
+                        )
+                );
+
+        List<WordCloud> finalWordCloudList = new ArrayList<WordCloud>();
+
+        result.forEach((k,v)->{
+            System.out.println("Item : " + k + " Count : " + v);
+            finalWordCloudList.add(new WordCloud(k,v*10));
+        });
+
+        return finalWordCloudList;
+    }
+
+    public JSONArray KeywordToJsonArray(List<WordCloud> wordClouds){
+
+        JSONArray jsonArray = new JSONArray();
+
+        wordClouds.forEach((temp) -> {
+            jsonArray.add(temp.toJson());
+        });
+
+        return jsonArray;
+    }
+
+    private List<WordCloud> createWordCloud(String[] words){
+        List<WordCloud> keywords = new ArrayList<WordCloud>();
+
+        if(Constants.STOP_WORDS == null){
+            try {
+                Constants.populateStopWords();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i = 0; i < words.length; i++){
+            if(!Constants.STOP_WORDS.contains(words[i]) && !words[i].isEmpty())
+            {
+                keywords.add(new WordCloud(words[i], 0));
+            }
+        }
 
         return keywords;
 

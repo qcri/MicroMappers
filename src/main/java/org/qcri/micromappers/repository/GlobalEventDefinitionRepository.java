@@ -1,5 +1,6 @@
 package org.qcri.micromappers.repository;
 
+import org.qcri.micromappers.entity.GdeltMMIC;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,9 @@ public abstract interface GlobalEventDefinitionRepository extends PagingAndSorti
 	GlobalEventDefinition findById(Long id);
 
     List<GlobalEventDefinition> findByState(String state);
+
+    @Query("SELECT d FROM GlobalEventDefinition d WHERE d.state=:state and d.articleTag like :words or d.searchKeyword like :words")
+    List<GlobalEventDefinition> findByStateAndTag(@Param("state")String state, @Param("words")String words);
 }
 
 

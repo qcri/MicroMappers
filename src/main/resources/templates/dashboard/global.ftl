@@ -8,11 +8,12 @@
                 <div class="btn-group">
                     <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
                 </div>
+                <div id="vis"></div>
 				<table class="table table-striped table-bordered">
 					<thead>
 						<tr>
 							<th>Title</th>
-							<th>No. of Dataset</th>
+							<th>Dataset No.</th>
 							<th>Started</th>
                             <th>Source</th>
 						</tr>
@@ -35,7 +36,7 @@
 								</#if>
                             </td>
 							<td title="${info.createdAt}">
-								${info.createdAt}
+								${info.createdAt?date}
 							</td>
                             <td>
 								${info.source}
@@ -82,4 +83,38 @@
 			<#include  "cookies.js">
 		</script>
 	</body>
+    <script>
+        var b_keywords= ${wordClouds};
+        var color = d3.scale.linear()
+                .domain([0,1,2,3,4,5,6,10,15,20,100])
+                .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+
+        d3.layout.cloud().size([400, 300])
+                .words(b_keywords)
+                .rotate(0)
+                .fontSize(function(d) { return d.size; })
+                .on("end", draw)
+                .start();
+
+        function draw(words) {
+            d3.select("#vis").append("svg")
+                    .attr("width", 600)
+                    .attr("height", 315)
+                    .attr("class", "wordcloud")
+                    .append("g")
+                // without the transform, words words would get cutoff to the left and top, they would
+                // appear outside of the SVG area
+                //.attr("transform", "translate(320,200)")
+                    .attr("transform", "translate(" + 400 / 2 + "," + 300 / 2 + ")")
+                    .selectAll("text")
+                    .data(words)
+                    .enter().append("text")
+                    .style("font-size", function(d) { return d.size + "px"; })
+                    .style("fill", function(d, i) { return color(i); })
+                    .attr("transform", function(d) {
+                        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+                    })
+                    .text(function(d) { return d.text; });
+        }
+    </script>
 </html>

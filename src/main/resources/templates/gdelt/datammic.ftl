@@ -60,7 +60,7 @@
                                     <#else>
                                     <li>
                                     </#if>
-                                    <a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${glideCode}&page=${index?counter}">${index?counter}</a></li>
+                                    <a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${glideCode}&page=${index}">${index}</a></li>
                                 </#list>
                                     <!-- Last Page -->
                                 <#if page.isLastPage()>

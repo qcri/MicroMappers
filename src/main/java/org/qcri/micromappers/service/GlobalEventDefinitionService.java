@@ -2,6 +2,7 @@ package org.qcri.micromappers.service;
 
 import javax.inject.Inject;
 
+import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,5 +55,19 @@ public class GlobalEventDefinitionService {
 
     public List<GlobalEventDefinition> findAllByState(String state){
         return globalEventDefinitionRepository.findByState(state);
+    }
+
+    public List<GlobalEventDefinition> findAllByStateAndTags(String state, String tags){
+        if(!tags.contains(",")) {
+            return globalEventDefinitionRepository.findByStateAndTag(state, tags);
+        }
+
+        String[] tag = tags.split(",");
+        List<GlobalEventDefinition> globalEventDefinitionList = new ArrayList<GlobalEventDefinition>();
+        for(int i =0; i < tag.length; i++){
+            globalEventDefinitionList.addAll(globalEventDefinitionRepository.findByStateAndTag(state, tag[i]));
+        }
+
+        return globalEventDefinitionList;
     }
 }

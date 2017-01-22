@@ -14,11 +14,10 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class GlobalDataSources implements Serializable {
+
     private static final long serialVersionUID = 6329919374565981089L;
 
     private String source;
-    private boolean isGdideMasterDataSet;
-    private boolean isSnopesDataSet;
     private GlobalEventDefinition globalEventDefinition;
     private GlideMaster glideMaster;
     private long socialCollectionTotal;
@@ -32,7 +31,7 @@ public class GlobalDataSources implements Serializable {
     private List<CollectionDetailsInfo> collectionDetailsInfoList;
     private List<Gdelt3W> gdelt3WList;
     private List<GdeltMMIC> gdeltMMICList;
-    private ArrayList<String> keywords;
+    private List<WordCloud> keywords;
     private Timestamp createdAt;
 
     public GlobalDataSources() {
@@ -44,22 +43,6 @@ public class GlobalDataSources implements Serializable {
 
     public void setSource(String source) {
         this.source = source;
-    }
-
-    public boolean isGdideMasterDataSet() {
-        return isGdideMasterDataSet;
-    }
-
-    public void setIsGdideMasterDataSet(boolean isGdideMasterDataSet) {
-        this.isGdideMasterDataSet = isGdideMasterDataSet;
-    }
-
-    public boolean isSnopesDataSet() {
-        return isSnopesDataSet;
-    }
-
-    public void setIsSnopesDataSet(boolean isSnopesDataSet) {
-        this.isSnopesDataSet = isSnopesDataSet;
     }
 
     public GlobalEventDefinition getGlobalEventDefinition() {
@@ -166,11 +149,11 @@ public class GlobalDataSources implements Serializable {
         this.gdeltMMICList = gdeltMMICList;
     }
 
-    public ArrayList<String> getKeywords() {
+    public List<WordCloud> getKeywords() {
         return keywords;
     }
 
-    public void setKeywords(ArrayList<String> keywords) {
+    public void setKeywords(List<WordCloud> keywords) {
         this.keywords = keywords;
     }
 
