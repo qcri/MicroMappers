@@ -21,7 +21,7 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="/detail/${info.id}" title="${info.title}">
+								<a href="${info.eventUrl}" title="${info.title}">
 								${info.title}
 								</a>
 							</td>

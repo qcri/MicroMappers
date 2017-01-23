@@ -35,20 +35,24 @@ public class GlobalDataSourcesService {
     @Autowired
     CollectionLogService collectionLogService;
 
-    public List<GlobalDataSources> findAll()
+    public List<GlobalDataSources> findAll(String searchWord)
     {
+        List<GlobalDataSources> dataSources;
+        if(searchWord== null || searchWord.isEmpty()) {
+            List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
+            List<GlideMaster> glideMasterList = glideMasterService.findAll();
 
-        List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
-        List<GlideMaster> glideMasterList = glideMasterService.findAll();
+            dataSources = new ArrayList<GlobalDataSources>();
+            dataSources = this.populateGlideMaster(glideMasterList, dataSources);
+            dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
 
-        List<GlobalDataSources> dataSources = new ArrayList<GlobalDataSources>();
-        dataSources = this.populateGlideMaster(glideMasterList, dataSources);
-        dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
-
-        //sorting
-        Comparator<GlobalDataSources> globalDataSourcesComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
-        dataSources.sort(globalDataSourcesComparator.reversed());
-
+            //sorting
+            Comparator<GlobalDataSources> globalDataSourcesComparator = (o1, o2) -> o1.getCreatedAt().compareTo(o2.getCreatedAt());
+            dataSources.sort(globalDataSourcesComparator.reversed());
+        }
+        else{
+            dataSources = this.findBySearch(searchWord);
+        }
         return dataSources;
     }
 
@@ -56,14 +60,75 @@ public class GlobalDataSourcesService {
     {
 
         List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByStateAndTags(Constants.SNOPES_STATE_ACTIVE, searchWord);
+        List<GlideMaster> glideMasterList = glideMasterService.findAll();
 
         List<GlobalDataSources> dataSources = new ArrayList<GlobalDataSources>();
         dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
+        dataSources = this.populateGlideMasterBySearchWord(glideMasterList, dataSources, searchWord);
 
         Comparator<GlobalDataSources> globalDataSourcesComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
         dataSources.sort(globalDataSourcesComparator.reversed());
 
         return dataSources;
+    }
+
+    private List<GlobalDataSources> populateGlideMasterBySearchWord(List<GlideMaster> glideMasterList, List<GlobalDataSources> dataSources, String searchWord){
+
+        String[] tags = searchWord.split(",");
+
+        glideMasterList.forEach((temp) -> {
+
+            try {
+                List<Collection> filteredCollection = temp.getCollection().stream().filter(
+                        x -> this.isSearchWordContained(x.getTrack(), tags)
+                ).collect(Collectors.toList());
+                if(filteredCollection.size() > 0){
+                    GlobalDataSources a = new GlobalDataSources();
+                    a.setSource(GlobalDataSourceType.GDELT.getValue());
+                    a.setGlideMaster(temp);
+                    a.setGdelt3WList(temp.getGdelt3WList());
+                    a.setGdeltMMICList(temp.getGdeltMMICList());
+
+
+
+                    temp.setCollection(filteredCollection);
+
+                    List<CollectionDetailsInfo> collectionDetailsInfoList = this.getCollectionDetails(filteredCollection);
+                    a.setCollectionDetailsInfoList(collectionDetailsInfoList);
+                    a.setSocialCollectionTotal(calculateSocialMediaDatasetCollectionTotal(collectionDetailsInfoList));
+
+                    a.setGdeltCollectionTotal(temp.getGdelt3WList().size() + temp.getGdeltMMICList().size());
+                    a.setGdelt3WArticleTotal(temp.getTotalCount3WArticle());
+                    a.setGdelt3WImageTotal(temp.getTotalCount3WImage());
+                    a.setGdeltMMICArticleTotal(temp.getTotalCountMMICArticle());
+                    a.setGdeltMMICImageTotal(temp.getTotalCountMMICImage());
+                    a.setKeywords(this.getKeyWords(collectionDetailsInfoList, null));
+                    a.setCreatedAt(temp.getCreatedAt());
+                    dataSources.add(a);
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        return dataSources;
+    }
+
+    private boolean isSearchWordContained(String track, String[] searchWord){
+
+        boolean found = false;
+
+        for(int i=0; i < searchWord.length; i++){
+            if(track.contains(searchWord[i])){
+                found = true;
+                break;
+            }
+        }
+
+        return found;
     }
 
     private List<GlobalDataSources> populateSnopes(List<GlobalEventDefinition> globalEventDefinitionList, List<GlobalDataSources> dataSources){
@@ -241,7 +306,7 @@ public class GlobalDataSourcesService {
         int count = 0;
 
         List<Collection> result = collectionList.stream() 			//convert list to stream
-                .filter(line -> !CollectionType.FACEBOOK.getValue().equals(line))	//filters the line, equals to "mkyong"
+                .filter(line -> line.getProvider().equals(CollectionType.FACEBOOK.getValue()))	//filters the line, equals to "mkyong"
                 .collect(Collectors.toList());
 
 
@@ -252,7 +317,7 @@ public class GlobalDataSourcesService {
         int count = 0;
 
         List<Collection> result = collectionList.stream() 			//convert list to stream
-                .filter(line -> !CollectionType.FACEBOOK.getValue().equals(line))	//filters the line, equals to "mkyong"
+                .filter(line -> line.getProvider().equals(CollectionType.TWITTER.getValue()))	//filters the line, equals to "mkyong"
                 .collect(Collectors.toList());
 
 
@@ -263,7 +328,7 @@ public class GlobalDataSourcesService {
         int count = 0;
 
         List<Collection> result = collectionList.stream() 			//convert list to stream
-                .filter(line -> !CollectionType.ALL.getValue().equals(line))	//filters the line, equals to "mkyong"
+                .filter(line -> line.getProvider().equals(CollectionType.ALL.getValue()))	//filters the line, equals to "mkyong"
                 .collect(Collectors.toList());
 
 

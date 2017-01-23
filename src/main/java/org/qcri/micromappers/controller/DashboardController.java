@@ -38,11 +38,12 @@ public class DashboardController {
 
     @RequestMapping(value={"/global"})
     public String globalOverview(Model model, HttpServletRequest request,
-                         @RequestParam(value = "page", defaultValue = "1") String page) {
+                         @RequestParam(value = "page", defaultValue = "1") String page,
+                                 @RequestParam(value = "q", defaultValue = "") String searchWord) {
 
         int pageNumber = Integer.valueOf(page);
-
-        List<GlobalDataSources> globalDataSourcesList = globalDataSourcesService.findAll();
+       // searchWord = "trump";
+        List<GlobalDataSources> globalDataSourcesList = globalDataSourcesService.findAll(searchWord);
 
         PageRequest pageRequestreq =
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
@@ -85,7 +86,7 @@ public class DashboardController {
 
         int pageNumber = Integer.valueOf(page);
 
-        List<GlobalDataSources> globalDataSourcesList = globalDataSourcesService.findAll();
+        List<GlobalDataSources> globalDataSourcesList = globalDataSourcesService.findAll("");
 
         PageRequest pageRequestreq =
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
