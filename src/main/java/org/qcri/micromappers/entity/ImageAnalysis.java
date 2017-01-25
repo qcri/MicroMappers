@@ -23,6 +23,10 @@ public class ImageAnalysis extends ExtendedBaseEntity {
     @JoinColumn(name = "gdeltmmic_id", nullable=true)
     GdeltMMIC gdeltMMIC;
 
+    @OneToOne
+    @JoinColumn(name = "data_feed_id", nullable=true)
+    DataFeed dataFeed;
+
     @Column(name = "state", length = 1000)
     String state;
 
@@ -41,16 +45,21 @@ public class ImageAnalysis extends ExtendedBaseEntity {
     public ImageAnalysis() {
     }
 
-    public ImageAnalysis(String imageURL, GdeltMMIC gdeltMMIC,  ImageAdult imageAdult) {
-        this.imageURL = imageURL;
+    public ImageAnalysis(Gdelt3W gdelt3W) {
+        this.gdelt3W = gdelt3W;
+    }
+
+    public ImageAnalysis(GdeltMMIC gdeltMMIC) {
         this.gdeltMMIC = gdeltMMIC;
-        this.imageAdult = imageAdult;
-        this.state = "OK";
+    }
+
+    public ImageAnalysis(DataFeed dataFeed) {
+        this.dataFeed = dataFeed;
     }
 
     public ImageAnalysis(String imageURL, Gdelt3W gdelt3W, GdeltMMIC gdeltMMIC, String state,
                          ImageAdult imageAdult, Set<ImageDescription> imageDescription,
-                         Set<ImageClassify> imageClassify, Set<ImageTag> imageTag) {
+                         Set<ImageClassify> imageClassify, Set<ImageTag> imageTag, DataFeed dataFeed) {
         this.imageURL = imageURL;
         this.gdelt3W = gdelt3W;
         this.gdeltMMIC = gdeltMMIC;
@@ -59,6 +68,7 @@ public class ImageAnalysis extends ExtendedBaseEntity {
         this.imageDescription = imageDescription;
         this.imageClassify = imageClassify;
         this.imageTag = imageTag;
+        this.dataFeed = dataFeed;
     }
 
     public String getImageURL() {
@@ -123,5 +133,13 @@ public class ImageAnalysis extends ExtendedBaseEntity {
 
     public void setImageClassify(Set<ImageClassify> imageClassify) {
         this.imageClassify = imageClassify;
+    }
+
+    public DataFeed getDataFeed() {
+        return dataFeed;
+    }
+
+    public void setDataFeed(DataFeed dataFeed) {
+        this.dataFeed = dataFeed;
     }
 }
