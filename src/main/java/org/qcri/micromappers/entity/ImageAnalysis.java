@@ -33,7 +33,7 @@ public class ImageAnalysis extends ExtendedBaseEntity {
     Set<ImageDescription> imageDescription;
 
     @OneToMany(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
-    Set<ImageCategory> imageCategory;
+    Set<ImageClassify> imageClassify;
 
     @OneToMany(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
     Set<ImageTag> imageTag;
@@ -50,14 +50,14 @@ public class ImageAnalysis extends ExtendedBaseEntity {
 
     public ImageAnalysis(String imageURL, Gdelt3W gdelt3W, GdeltMMIC gdeltMMIC, String state,
                          ImageAdult imageAdult, Set<ImageDescription> imageDescription,
-                         Set<ImageCategory> imageCategory, Set<ImageTag> imageTag) {
+                         Set<ImageClassify> imageClassify, Set<ImageTag> imageTag) {
         this.imageURL = imageURL;
         this.gdelt3W = gdelt3W;
         this.gdeltMMIC = gdeltMMIC;
         this.state = state;
         this.imageAdult = imageAdult;
         this.imageDescription = imageDescription;
-        this.imageCategory = imageCategory;
+        this.imageClassify = imageClassify;
         this.imageTag = imageTag;
     }
 
@@ -109,19 +109,19 @@ public class ImageAnalysis extends ExtendedBaseEntity {
         this.imageDescription = imageDescription;
     }
 
-    public Set<ImageCategory> getImageCategory() {
-        return imageCategory;
-    }
-
-    public void setImageCategory(Set<ImageCategory> imageCategory) {
-        this.imageCategory = imageCategory;
-    }
-
     public Set<ImageTag> getImageTag() {
         return imageTag;
     }
 
     public void setImageTag(Set<ImageTag> imageTag) {
         this.imageTag = imageTag;
+    }
+
+    public Set<ImageClassify> getImageClassify() {
+        return imageClassify;
+    }
+
+    public void setImageClassify(Set<ImageClassify> imageClassify) {
+        this.imageClassify = imageClassify;
     }
 }
