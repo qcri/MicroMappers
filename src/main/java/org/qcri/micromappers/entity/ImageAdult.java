@@ -1,6 +1,7 @@
 package org.qcri.micromappers.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by jlucas on 1/24/17.
@@ -10,17 +11,17 @@ import javax.persistence.*;
 public class ImageAdult extends ExtendedBaseEntity {
     private static final long serialVersionUID = -881973526366597368L;
 
-    @Column(columnDefinition = "boolean default false", nullable = false)
+    @Column(name="is_adult_content",columnDefinition = "boolean default false")
     Boolean isAdultContent;
 
-    @Column(columnDefinition = "boolean default false", nullable = false)
+    @Column(name="is_racy_content",columnDefinition = "boolean default false")
     Boolean isRacyContent;
 
-    @Column(name="adult_score")
-    long adultScore;
+    @Column(name="adult_score",precision = 20, scale =20)
+    BigDecimal adultScore;
 
-    @Column(name="racy_score")
-    long racyScore;
+    @Column(name="racy_score", precision = 20, scale =20)
+    BigDecimal racyScore;
 
     @OneToOne
     @JoinColumn(name = "image_analysis_id", nullable=false)
@@ -29,11 +30,19 @@ public class ImageAdult extends ExtendedBaseEntity {
     public ImageAdult() {
     }
 
-    public ImageAdult(Boolean isAdultContent, Boolean isRacyContent, long adultScore, long racyScore, String source, String sourceId) {
+    public ImageAdult(Boolean isAdultContent, Boolean isRacyContent, BigDecimal adultScore, BigDecimal racyScore) {
         this.isAdultContent = isAdultContent;
         this.isRacyContent = isRacyContent;
         this.adultScore = adultScore;
         this.racyScore = racyScore;
+    }
+
+    public ImageAdult(Boolean isAdultContent, Boolean isRacyContent, BigDecimal adultScore, BigDecimal racyScore, ImageAnalysis imageAnalysis) {
+        this.isAdultContent = isAdultContent;
+        this.isRacyContent = isRacyContent;
+        this.adultScore = adultScore;
+        this.racyScore = racyScore;
+        this.imageAnalysis = imageAnalysis;
     }
 
     public Boolean getIsAdultContent() {
@@ -52,20 +61,27 @@ public class ImageAdult extends ExtendedBaseEntity {
         this.isRacyContent = isRacyContent;
     }
 
-    public long getAdultScore() {
+    public BigDecimal getAdultScore() {
         return adultScore;
     }
 
-    public void setAdultScore(long adultScore) {
+    public void setAdultScore(BigDecimal adultScore) {
         this.adultScore = adultScore;
     }
 
-    public long getRacyScore() {
+    public BigDecimal getRacyScore() {
         return racyScore;
     }
 
-    public void setRacyScore(long racyScore) {
+    public void setRacyScore(BigDecimal racyScore) {
         this.racyScore = racyScore;
     }
 
+    public ImageAnalysis getImageAnalysis() {
+        return imageAnalysis;
+    }
+
+    public void setImageAnalysis(ImageAnalysis imageAnalysis) {
+        this.imageAnalysis = imageAnalysis;
+    }
 }

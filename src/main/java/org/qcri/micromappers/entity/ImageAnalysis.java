@@ -23,27 +23,40 @@ public class ImageAnalysis extends ExtendedBaseEntity {
     @JoinColumn(name = "gdeltmmic_id", nullable=true)
     GdeltMMIC gdeltMMIC;
 
-    @OneToOne(mappedBy = "imageAnalysis")
-    ImageDescription imageDescription;
+    @Column(name = "state", length = 1000)
+    String state;
 
-    @OneToOne(mappedBy = "imageAnalysis")
+    @OneToOne(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
     ImageAdult imageAdult;
 
-    @OneToMany(mappedBy = "imageAnalysis")
+    @OneToMany(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
+    Set<ImageDescription> imageDescription;
+
+    @OneToMany(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
     Set<ImageCategory> imageCategory;
 
-    @OneToMany(mappedBy = "imageAnalysis")
+    @OneToMany(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})
     Set<ImageTag> imageTag;
 
     public ImageAnalysis() {
     }
 
-    public ImageAnalysis(String imageURL, Gdelt3W gdelt3W, GdeltMMIC gdeltMMIC, ImageDescription imageDescription, ImageAdult imageAdult, Set<ImageCategory> imageCategory, Set<ImageTag> imageTag) {
+    public ImageAnalysis(String imageURL, GdeltMMIC gdeltMMIC,  ImageAdult imageAdult) {
+        this.imageURL = imageURL;
+        this.gdeltMMIC = gdeltMMIC;
+        this.imageAdult = imageAdult;
+        this.state = "OK";
+    }
+
+    public ImageAnalysis(String imageURL, Gdelt3W gdelt3W, GdeltMMIC gdeltMMIC, String state,
+                         ImageAdult imageAdult, Set<ImageDescription> imageDescription,
+                         Set<ImageCategory> imageCategory, Set<ImageTag> imageTag) {
         this.imageURL = imageURL;
         this.gdelt3W = gdelt3W;
         this.gdeltMMIC = gdeltMMIC;
-        this.imageDescription = imageDescription;
+        this.state = state;
         this.imageAdult = imageAdult;
+        this.imageDescription = imageDescription;
         this.imageCategory = imageCategory;
         this.imageTag = imageTag;
     }
@@ -72,20 +85,28 @@ public class ImageAnalysis extends ExtendedBaseEntity {
         this.gdeltMMIC = gdeltMMIC;
     }
 
-    public ImageDescription getImageDescription() {
-        return imageDescription;
-    }
-
-    public void setImageDescription(ImageDescription imageDescription) {
-        this.imageDescription = imageDescription;
-    }
-
     public ImageAdult getImageAdult() {
         return imageAdult;
     }
 
     public void setImageAdult(ImageAdult imageAdult) {
         this.imageAdult = imageAdult;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Set<ImageDescription> getImageDescription() {
+        return imageDescription;
+    }
+
+    public void setImageDescription(Set<ImageDescription> imageDescription) {
+        this.imageDescription = imageDescription;
     }
 
     public Set<ImageCategory> getImageCategory() {

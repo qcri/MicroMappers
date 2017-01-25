@@ -1,6 +1,7 @@
 package org.qcri.micromappers.entity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 /**
  * Created by jlucas on 1/24/17.
@@ -13,8 +14,8 @@ public class ImageTag extends ExtendedBaseEntity {
     @Column(name = "name", length = 500)
     String name;
 
-    @Column(name = "confidence")
-    long confidence;
+    @Column(name = "confidence", precision = 20, scale =20)
+    BigDecimal confidence;
 
     @ManyToOne
     @JoinColumn(name="image_analysis_id", nullable = false)
@@ -23,7 +24,12 @@ public class ImageTag extends ExtendedBaseEntity {
     public ImageTag() {
     }
 
-    public ImageTag(String name, long confidence, ImageAnalysis imageAnalysis) {
+    public ImageTag(String name, BigDecimal confidence) {
+        this.name = name;
+        this.confidence = confidence;
+    }
+
+    public ImageTag(String name, BigDecimal confidence, ImageAnalysis imageAnalysis) {
         this.name = name;
         this.confidence = confidence;
         this.imageAnalysis = imageAnalysis;
@@ -37,11 +43,11 @@ public class ImageTag extends ExtendedBaseEntity {
         this.name = name;
     }
 
-    public long getConfidence() {
+    public BigDecimal getConfidence() {
         return confidence;
     }
 
-    public void setConfidence(long confidence) {
+    public void setConfidence(BigDecimal confidence) {
         this.confidence = confidence;
     }
 
@@ -52,4 +58,5 @@ public class ImageTag extends ExtendedBaseEntity {
     public void setImageAnalysis(ImageAnalysis imageAnalysis) {
         this.imageAnalysis = imageAnalysis;
     }
+
 }
