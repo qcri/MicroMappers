@@ -1,10 +1,11 @@
 package org.qcri.micromappers.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
 import org.apache.log4j.Logger;
-import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.GlobalEventDefinitionRepository;
@@ -13,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jlucas on 12/11/16.

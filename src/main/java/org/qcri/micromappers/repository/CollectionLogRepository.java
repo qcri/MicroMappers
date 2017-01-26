@@ -12,4 +12,7 @@ public abstract interface CollectionLogRepository extends CrudRepository<Collect
 
 	@Query("SELECT sum(cl.count) FROM CollectionLog cl WHERE cl.collection.id = :collectionId and cl.provider = :provider")
 	public Long getCollectionCountByCollectionIdAndProvider(@Param("collectionId") Long collectionId, @Param("provider") CollectionType provider);
+
+	@Query("SELECT sum(cl.count) FROM CollectionLog cl WHERE cl.collection.id = :collectionId")
+	public Long getCollectionCountByCollectionId(@Param("collectionId") Long collectionId);
 }

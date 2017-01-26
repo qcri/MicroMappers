@@ -60,7 +60,7 @@ public class CollectionViewController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public String getAllCollections(Model model, HttpServletRequest request, 
     		@RequestParam(value = "page", defaultValue = "1") Integer page,
-    		@RequestParam(value = "pageSize", required = false, defaultValue = Constants.DEFAULT_PAGE_SIZE) Integer pageSize,
+    		@RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "sortColumn", required = false, defaultValue = "createdAt") String sortColumn,
 			@RequestParam(value = "sortDirection", required = false, defaultValue = "DESC") Direction sortDirection) {
         

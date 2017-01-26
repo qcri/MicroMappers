@@ -127,4 +127,12 @@ public class CollectionLogService
 		}
 		return count;
 	}
+	
+	public Long getCountByCollectionId(Long collectionId){
+		Long count = collectionLogRepository.getCollectionCountByCollectionId(collectionId);
+		if(count == null){
+			count = 0L;
+		}
+		return count;
+	}
 }

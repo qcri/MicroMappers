@@ -1,23 +1,24 @@
 package org.qcri.micromappers.service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
-import org.qcri.micromappers.entity.*;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.GlobalDataSources;
 import org.qcri.micromappers.models.WordCloud;
-import org.qcri.micromappers.repository.GlideMasterRepository;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.GlobalDataSourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by jlucas on 1/16/17.
