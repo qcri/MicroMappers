@@ -11,12 +11,16 @@
 					<ul class="list-unstyled">
 						<li>
 							<h4 style="color:red">You have successfully connected to twitter. If you want to connect again, please click the button below.</h4>
-							<form action="${rc.getContextPath()}/connect/twitter" method="POST">
-								<input type="hidden" name="_csrf" value="${_csrf.token}" />
-								<button type="submit" class="btn btn-default btn-md social-btn" >
-								<img src="${rc.getContextPath()}/img/twitter.png" class="social-logo" /> Connect with Twitter
-								</button>
-							</form>
+							<div class="row">
+								<div class="col-md-3 col-md-offset-5">
+									<form action="${rc.getContextPath()}/connect/twitter" method="POST">
+										<input type="hidden" name="_csrf" value="${_csrf.token}" />
+										<button type="submit" class="btn btn-social btn-twitter" style="margin-left:-40%">
+											<i class="fa fa-twitter"></i> Connect with Twitter
+										</button>
+									</form>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>

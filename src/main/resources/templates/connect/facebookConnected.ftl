@@ -11,12 +11,16 @@
 					<ul class="list-unstyled">
 						<li>
 							<h4 style="color:red">You have successfully connected to facebook. If you want to connect again, please click the button below.</h4>
-							<form action="${rc.getContextPath()}/connect/facebook" method="POST">
-								<input type="hidden" name="_csrf" value="${_csrf.token}" />
-								<button type="submit" class="btn btn-default btn-md social-btn" >
-								<img src="${rc.getContextPath()}/img/facebook.png" class="social-logo" /> Connect with Facebook
-								</button>
-							</form>
+							<div class="row">
+								<div class="col-md-3 col-md-offset-5">
+									<form action="${rc.getContextPath()}/connect/facebook" method="POST">
+										<input type="hidden" name="_csrf" value="${_csrf.token}" />
+										<button type="submit" class="btn btn-social btn-facebook" style="margin-left:-30%">
+											<i class="fa fa-facebook"></i> Connect with Facebook
+										</button>
+									</form>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>

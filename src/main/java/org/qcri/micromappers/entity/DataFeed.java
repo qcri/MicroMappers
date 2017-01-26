@@ -7,11 +7,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.qcri.micromappers.utility.CollectionType;
 
 @Entity
-@Table(name="data_feed")
+@Table(name="data_feed", uniqueConstraints={@UniqueConstraint(columnNames = {"collection_id", "feed_id"})})
 public class DataFeed extends ExtendedBaseEntity
 {
 	/**
@@ -27,8 +28,8 @@ public class DataFeed extends ExtendedBaseEntity
 	@Enumerated(EnumType.STRING)
 	private CollectionType provider;
 	
-	@Column(name="feed_id")
-	private Long feedId;
+	@Column(length = 50, name="feed_id")
+	private String feedId;
 	
 	@ManyToOne
 	@JoinColumn(name="parent_feed_id")
@@ -65,14 +66,14 @@ public class DataFeed extends ExtendedBaseEntity
 	/**
 	 * @return the feedId
 	 */
-	public Long getFeedId() {
+	public String getFeedId() {
 		return feedId;
 	}
 
 	/**
 	 * @param feedId the feedId to set
 	 */
-	public void setFeedId(Long feedId) {
+	public void setFeedId(String feedId) {
 		this.feedId = feedId;
 	}
 

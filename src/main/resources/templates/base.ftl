@@ -8,7 +8,7 @@
 		<meta name="author" content="">
 		<!-- Le styles -->
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-		<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 		<link href="{{url_for('static', filename='${rc.getContextPath()}/css/styles.css')}}" rel="stylesheet">
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>

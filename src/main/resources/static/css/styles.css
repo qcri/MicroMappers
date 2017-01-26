@@ -19,10 +19,10 @@ margin-bottom: 65px;
 /* Custom styles
 -------------------------*/
 
-.social-logo {
-	height: 30px;
+.facebook-color{
+color: #3b5998;
 }
-.social-btn {
-	font-weight: bold;
-	color: #3272aa;
+
+.twitter-color{
+color: #1da1f2;
 }

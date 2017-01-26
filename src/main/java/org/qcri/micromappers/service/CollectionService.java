@@ -1,6 +1,7 @@
 package org.qcri.micromappers.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,22 +15,21 @@ import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollectionRepository;
 import org.qcri.micromappers.utility.CollectionStatus;
-import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CollectionService
-{
-	private static Logger logger = Logger.getLogger(CollectionService.class);
+{	
 	@Inject
 	private CollectionRepository collectionRepository;
-	
 	@Inject
 	private CollaboratorService collaboratorService;
+
+	private static Logger logger = Logger.getLogger(CollectionService.class);
+
 
 	public Collection saveOrUpdate(Collection collection)
 	{
@@ -61,30 +61,45 @@ public class CollectionService
 		}
 	}
 
-	public Boolean updateStatusByCode(String code, CollectionStatus collectionStatus){
+
+	public Boolean updateTwitterStatusById(Long id, CollectionStatus twitterStatus){
 		try{
-			int updateStatus = collectionRepository.updateStatusByCode(code, collectionStatus);
+			int updateStatus = collectionRepository.updateTwitterStatusById(id, twitterStatus);
 			if(updateStatus == 1){
 				return Boolean.TRUE; 
 			}else{
 				return Boolean.FALSE;
 			}
 		}catch (Exception e) {
-			logger.error("Error while updating collection status by code", e);
+			logger.error("Error while updating twitter status by id", e);
 			return Boolean.FALSE;
 		}
 	}
 
-	public Boolean updateStatusById(Long id, CollectionStatus collectionStatus){
+	public Boolean updateFacebookStatusById(Long id, CollectionStatus facebookStatus){
 		try{
-			int updateStatus = collectionRepository.updateStatusById(id, collectionStatus);
+			int updateStatus = collectionRepository.updateFacebookStatusById(id, facebookStatus);
 			if(updateStatus == 1){
 				return Boolean.TRUE; 
 			}else{
 				return Boolean.FALSE;
 			}
 		}catch (Exception e) {
-			logger.error("Error while updating collection status by id", e);
+			logger.error("Error while updating facebook status by id", e);
+			return Boolean.FALSE;
+		}
+	}
+	
+	public Boolean updateFacebookStatusAndLastExecutionTimeById(Long id, CollectionStatus facebookStatus, Date lastExecutiontime){
+		try{
+			int updateStatus = collectionRepository.updateFacebookStatusAndLastExecutionTimeById(id, facebookStatus, lastExecutiontime);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while updating facebook status by id", e);
 			return Boolean.FALSE;
 		}
 	}
@@ -95,13 +110,13 @@ public class CollectionService
 			statuses.add(CollectionStatus.RUNNING);
 			statuses.add(CollectionStatus.RUNNING_WARNING);
 			statuses.add(CollectionStatus.WARNING);
-			return collectionRepository.findByStatusIn(statuses);
+			return collectionRepository.findByTwitterStatusIn(statuses);
 		}catch (Exception e) {
 			logger.error("Error while getting running collections from db", e);
 			throw new MicromappersServiceException("Error while getting running collections from db", e);
 		}
 	}
-	
+
 	public Boolean isCollectionNameExists(String name){
 		try{
 			Long count = collectionRepository.countByNameIgnoreCase(name);
@@ -114,8 +129,8 @@ public class CollectionService
 			throw new MicromappersServiceException("Error while checking isCollectionNameExists", e);
 		}
 	}
-	
-	
+
+
 	/** Return all the collections in which the user is collaborator
 	 * @param account
 	 * @param pageNumber
@@ -125,23 +140,43 @@ public class CollectionService
 	 * @return all the collections in which the user is collaborator
 	 */
 	public Page<Collection> getAllByPage(Account account, Integer pageNumber, Integer pageSize, String sortColumn, Direction sortDirection) {
-		
-        PageRequest request =
-                new PageRequest(pageNumber - 1, pageSize, sortDirection, sortColumn);
-        Page<Collaborator> pagedCollaborators = collaboratorService.getAllByPageAndAccount(account, request);
 
-        Page<Collection> pagedCollections = pagedCollaborators.map(pc -> pc.getCollection());
-        return pagedCollections;
+		PageRequest request =
+				new PageRequest(pageNumber - 1, pageSize, sortDirection, sortColumn);
+		Page<Collaborator> pagedCollaborators = collaboratorService.getAllByPageAndAccount(account, request);
+
+		Page<Collection> pagedCollections = pagedCollaborators.map(pc -> pc.getCollection());
+		return pagedCollections;
 	}
 
-	public Boolean delete(Long id) {
-		return updateStatusById(id, CollectionStatus.TRASHED);
+	public Boolean trashCollectionById(Long id) {
+		try{
+			int updateStatus = collectionRepository.updatingTwitterStatusAndFacebookStatusAndTrashStatusById(id, CollectionStatus.TRASHED, CollectionStatus.TRASHED, Boolean.TRUE);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while deleting collection by id", e);
+			return Boolean.FALSE;
+		}
 	}
-	
-	public Boolean untrash(Long id) {
-		return updateStatusById(id, CollectionStatus.NOT_RUNNING);
+
+	public Boolean untrashCollectionById(Long id) {
+		try{
+			int updateStatus = collectionRepository.updatingTwitterStatusAndFacebookStatusAndTrashStatusById(id, CollectionStatus.NOT_RUNNING, CollectionStatus.NOT_RUNNING, Boolean.FALSE);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while restoring collection by id", e);
+			return Boolean.FALSE;
+		}
 	}
-	
+
 	public Collection getByAccountAndGlobalEventDefinition(Account account, GlobalEventDefinition globalEventDefinition)
 	{
 		try{
@@ -151,7 +186,7 @@ public class CollectionService
 			throw new MicromappersServiceException("Error while fetching collection by Account and GlobalEventDefinition", e);
 		}
 	}
-	
+
 	public Collection getByAccountAndGlideMaster(Account account, GlideMaster glideMaster)
 	{
 		try{

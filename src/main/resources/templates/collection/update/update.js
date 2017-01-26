@@ -12,6 +12,19 @@ $('#cancelButton').click(function() {
 });
 
 
+$('#provider').change(function() {
+    if(document.getElementsByName('provider')[0].value == 'TWITTER'){
+        $('#facebookConfigDiv').hide();
+        $('#keywordsDiv').show();
+    }else if(document.getElementsByName('provider')[0].value == 'FACEBOOK'){
+        $('#facebookConfigDiv').show();
+        $('#keywordsDiv').hide();
+    }else{
+        $('#facebookConfigDiv').show();
+        $('#keywordsDiv').show();
+    }
+});
+
 $(document).ready(function() {
     //Populating language dropdown
     var oldLangFiltersMap = {};
@@ -28,51 +41,89 @@ $(document).ready(function() {
         }
     }
     
-});
-
-
-$("#collectionUpdate").submit(function(e) {
-    if($('#collectionUpdate').valid()){
-        
-        //Getting th selected languages
-        var langFilters = [];
-        $("#lang :selected").each(function( index ) {
-            if($( this ).val().trim() != ""){
-                langFilters.push($( this ).val().trim());
-            }
-            
-        });
-
-        var collectionId = $('#collectionId').val();
-        var data = {
-                track: document.getElementsByName('track')[0].value.toLowerCase().trim(),
-                /*follow: document.getElementsByName('follow')[0].value.toLowerCase().trim(),
-                geo: document.getElementsByName('geo')[0].value.toLowerCase().trim(),
-                durationHours: document.getElementsByName('duration')[0].value,
-                geoR: document.getElementsByName('geoR')[0].value.toLowerCase().trim(),*/
-                langFilters: langFilters.join(","),
-                provider: document.getElementsByName('provider')[0].value,
-        };
-        
-        
-        var url = "${rc.getContextPath()}/"+data.provider.toLocaleLowerCase()+"/update?id="+collectionId;
-        
-        $.ajax({
-            type: "POST",
-            url: url,
-            dataType:"json",
-            data: JSON.stringify(data),
-            
-            success: function(data){
-                if(data.success){
-                    showInfoAlert(data.message);
-                    location.href = "${rc.getContextPath()}/collection/view/details?id="+data.data.id;
-                }else{
-                    showErrorAlert(data.message);
+    
+    var oldProvider = $('#oldProvider').val();
+    $("#provider option[value="+oldProvider+"]").attr('selected','selected');
+    
+    if(oldProvider == "ALL" || oldProvider == "TWITTER"){
+        $('#keywordsDiv').show();
+    }
+    
+    if(oldProvider == "ALL" || oldProvider == "FACEBOOK"){
+        $('#facebookConfigDiv').show();
+    }
+    
+    var oldFetchInterval = $('#oldFetchInterval').val();
+    $("#fetchInterval option[value="+oldFetchInterval+"]").attr('selected','selected');
+    
+    var oldfetchFrom = $('#oldfetchFrom').val();
+    $("#fetchFrom option[value="+oldfetchFrom+"]").attr('selected','selected');
+    
+    $('#collectionUpdate').bootstrapValidator({
+        // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        submitButtons: '#collectionUpdate button[type="submit"]',
+        fields: {
+            provider: {
+                validators: {
+                    remote: {
+                        url: '${rc.getContextPath()}/user/isProviderConnected',
+                        data: function(validator, $field, value) {
+                            return {
+                                provider: document.getElementsByName('provider')[0].value
+                            };
+                        },
+                        message: 'Please connect your social accounts before creating collection. <a href="${rc.getContextPath()}/connect">Click here</a> to connect.',
+                        type: 'GET'
+                    }
                 }
             }
-        });
-        
-        e.preventDefault(); // avoid to execute the actual submit of the form.
-    }
+        }        
+    }).on('success.form.bv', function (e) {
+        updateCollection();
+    });
 });
+
+
+function updateCollection() {
+        
+    //Getting the selected languages
+    var langFilters = [];
+    $("#lang :selected").each(function( index ) {
+        if($( this ).val().trim() != ""){
+            langFilters.push($( this ).val().trim());
+        }
+        
+    });
+
+    var collectionId = $('#collectionId').val();
+    var data = {
+            track: document.getElementsByName('track')[0].value.toLowerCase().trim(),
+            fetchInterval: document.getElementsByName('fetchInterval')[0].value,
+            fetchFrom: document.getElementsByName('fetchFrom')[0].value,
+            langFilters: langFilters.join(","),
+            provider: document.getElementsByName('provider')[0].value,
+    };
+    
+    var url = "${rc.getContextPath()}/collection/update?id="+collectionId;
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        dataType:"json",
+        data: JSON.stringify(data),
+        
+        success: function(data){
+            if(data.success){
+                showInfoAlert(data.message);
+                location.href = "${rc.getContextPath()}/collection/view/details?id="+data.data.id;
+            }else{
+                showErrorAlert(data.message);
+            }
+        }
+    });
+}

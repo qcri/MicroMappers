@@ -10,6 +10,9 @@
  				<#if collectionInfo.langFilters??>
  					<input type="hidden" id="collectionId" value="${collectionInfo.id}">
 					<input type="hidden" id="oldLangFilters" value="${collectionInfo.langFilters}">
+					<input type="hidden" id="oldProvider" value="${collectionInfo.provider}">
+					<input type="hidden" id="oldFetchInterval" value="${collectionInfo.fetchInterval}">
+					<input type="hidden" id="oldfetchFrom" value="${collectionInfo.fetchFrom}">
 				</#if>
 				<div class="btn-group">
 					<a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
@@ -47,21 +50,9 @@
 							<label class="control-label col-sm-3" for="provider">Collection Source :</label>
 							<div class="col-sm-6">
 								<select class="form-control" name="provider" id="provider">
-									<#if collectionInfo.provider == "TWITTER">
-										<option value="TWITTER" selected>Twitter</option>
-									<#else>
 										<option value="TWITTER">Twitter</option>
-									</#if>
-									<!-- <#if collectionInfo.provider == "FACEBOOK">
-										<option value="FACEBOOK" selected>Facebook</option>
-									<#else>
 										<option value="FACEBOOK">Facebook</option>
-									</#if>
-									<#if collectionInfo.provider == "BOTH">
-										<option value="BOTH" selected>Both</option>
-									<#else>
-										<option value="BOTH">Both</option>
-									</#if> -->
+										<option value="ALL">All</option>
 								</select>
 							</div>
 						</div>
@@ -75,10 +66,45 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" id="keywordsDiv" hidden=true>
 							<label class="control-label col-sm-3" for="track">Keywords :</label>
 							<div class="col-sm-6"> 
 								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${collectionInfo.track}</textarea>
+							</div>
+						</div>
+						
+						<div id="facebookConfigDiv" hidden=true>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="subscribedProfiles">Subscribed Profiles :</label>
+								<div class="col-sm-6"> 
+									<textarea class="form-control" rows="6" name="subscribedProfiles" placeholder="Search profiles and select">${collectionInfo.subscribedProfiles}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<div class="col-sm-6">
+									<select class="form-control" id="fetchInterval" name="fetchInterval">
+										<option value="2" selected>2 hours</option>
+										<option value="4">4 hours</option>
+										<option value="6">6 hours</option>
+										<option value="12">12 hours</option>
+										<option value="24">1 day</option>
+										<option value="72">3 days</option>
+										<option value="168">7 days</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<div class="col-sm-6">
+									<select class="form-control" id="fetchFrom" name="fetchFrom">
+										<option value="168" selected>7 days</option>
+										<option value="360">15 days</option>
+										<option value="720">1 month</option>
+										<option value="2160">3 months</option>
+										<option value="4320">6 months</option>
+									</select>
+								</div>
 							</div>
 						</div>
 					</div>

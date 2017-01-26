@@ -65,7 +65,8 @@ public class BaseCollectionService{
 			}
 		}
 		collection.setAccount(user);
-		collection.setStatus(CollectionStatus.NOT_RUNNING);
+		collection.setTwitterStatus(CollectionStatus.NOT_RUNNING);
+		collection.setFacebookStatus(CollectionStatus.NOT_RUNNING);
 		try {
 			collectionService.saveOrUpdate(collection);
 			collaboratorService.addCollaborator(collection, user);
@@ -76,21 +77,15 @@ public class BaseCollectionService{
 		return collection;
 	}
 
-	public ResponseWrapper prepareCollectionTask(Long id){
+	public ResponseWrapper prepareCollectionTask(Long id, CollectionType provider){
 		try {
 			Collection collection = collectionService.getById(id);
-			if (!collection.getStatus().equals(CollectionStatus.TRASHED)) {
-				//TODO Will update below code 
-				/*Long userId = collection.getAccount().getId();
-				Collection alreadyRunningCollection = collectionRepository.getRunningCollectionStatusByUser(userId);
-				if (alreadyRunningCollection != null) {
-					this.stop(alreadyRunningCollection.getId(), userId);
-				}*/
+			if (!collection.getTwitterStatus().equals(CollectionStatus.TRASHED) || !collection.getFacebookStatus().equals(CollectionStatus.TRASHED)) {
 				UserConnection userConnection = null;
 				try{
-					userConnection = userConnectionService.getByProviderIdAndUserId(collection.getProvider().getValue(), collection.getAccount().getUserName());
+					userConnection = userConnectionService.getByProviderIdAndUserId(provider.getValue(), collection.getAccount().getUserName());
 				}catch(Exception e){
-					logger.error("Exception while fetching userConnection for userId: "+collection.getProvider().getValue() + "-" + collection.getAccount().getUserName());
+					logger.error("Exception while fetching userConnection for userId: "+provider.getValue() + "-" + collection.getAccount().getUserName());
 					return new ResponseWrapper(null, false, ResponseCode.FAILED.toString(), "Error while getting the user.");
 				}
 
@@ -110,22 +105,22 @@ public class BaseCollectionService{
 		if(collectionInfo.getId() == null){
 			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection id not present.");
 		}
-		
+
 		Collection collection = collectionService.getById(collectionInfo.getId());
-		
+
 		if(collection != null){
 			collection.setProvider(CollectionType.valueOf(collectionInfo.getProvider()));
 			collection.setDurationHours(collectionInfo.getDurationHours());
-			collection.setFollow(collectionInfo.getFollow());
-			collection.setGeo(collectionInfo.getGeo());
-			collection.setGeoR(collectionInfo.getGeoR());
 			collection.setLangFilters(collectionInfo.getLangFilters());
 			collection.setFetchInterval(collectionInfo.getFetchInterval());
 			collection.setFetchFrom(collectionInfo.getFetchFrom());
 			if(StringUtils.isNotBlank(collectionInfo.getTrack())) {
 				collection.setTrack(collectionInfo.getTrack().toLowerCase().trim());
 			}
-			
+			if(StringUtils.isNotBlank(collectionInfo.getSubscribedProfiles())) {
+				collection.setSubscribedProfiles(collectionInfo.getSubscribedProfiles().toLowerCase().trim());
+			}
+
 			try {
 				Collection updatedCollection = collectionService.saveOrUpdate(collection);
 				return new ResponseWrapper(updatedCollection.toCollectionDetailsInfo(), Boolean.TRUE, ResponseCode.SUCCESS.toString(), null);
@@ -137,5 +132,5 @@ public class BaseCollectionService{
 			return new ResponseWrapper(null, Boolean.FALSE, ResponseCode.FAILED.toString(), "Collection not found with the given collection code : " + collectionInfo.getCode());
 		}
 	}
-	
+
 }

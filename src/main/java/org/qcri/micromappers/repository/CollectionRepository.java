@@ -1,5 +1,6 @@
 package org.qcri.micromappers.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -24,15 +25,25 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	
 	@Transactional
 	@Modifying
-    @Query("UPDATE Collection c SET c.status = :status WHERE c.code = :code")
-	public int updateStatusByCode(@Param("code") String code, @Param("status") CollectionStatus status);
+    @Query("UPDATE Collection c SET c.facebookStatus = :facebookStatus WHERE c.id = :id")
+	public int updateFacebookStatusById(@Param("id") Long id,  @Param("facebookStatus") CollectionStatus facebookStatus);
 	
 	@Transactional
 	@Modifying
-    @Query("UPDATE Collection c SET c.status = :status WHERE c.id = :id")
-	public int updateStatusById(@Param("id") Long id, @Param("status") CollectionStatus status);
+    @Query("UPDATE Collection c SET c.facebookStatus = :facebookStatus, c.lastExecutionTime = :lastExecutionTime WHERE c.id = :id")
+	public int updateFacebookStatusAndLastExecutionTimeById(@Param("id") Long id, @Param("facebookStatus") CollectionStatus facebookStatus, @Param("lastExecutionTime") Date lastExecutionTime);
 	
-	public List<Collection> findByStatusIn(List<CollectionStatus> statusList);
+	@Transactional
+	@Modifying
+    @Query("UPDATE Collection c SET c.twitterStatus = :twitterStatus WHERE c.id = :id")
+	public int updateTwitterStatusById(@Param("id") Long id, @Param("twitterStatus") CollectionStatus twitterStatus);
+	
+	@Transactional
+	@Modifying
+    @Query("UPDATE Collection c SET c.twitterStatus = :twitterStatus, c.facebookStatus = :facebookStatus, c.isTrashed = :isTrashed WHERE c.id = :id")
+	public int updatingTwitterStatusAndFacebookStatusAndTrashStatusById(@Param("id") Long id, @Param("twitterStatus") CollectionStatus twitterStatus, @Param("facebookStatus") CollectionStatus facebookStatus, @Param("isTrashed") Boolean isTrashed);
+	
+	public List<Collection> findByTwitterStatusIn(List<CollectionStatus> statusList);
 
 	public Long countByNameIgnoreCase(String name);
 

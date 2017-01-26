@@ -4,25 +4,28 @@
 	<body>
 		<#include "_navbar.ftl">
 		<div class="container" style="min-height:400px;">
+		<div class="col-md-12">
 			<p style="padding-top:5px;">
 				<span class="label label-warning"><i class="icon-bullhorn"></i>Note</span>
 				By click the <strong>Sign in button</strong> below you are agreeing to
 				the <a href="">terms of use</a> and
 				<a href="">data</a>.
 			</p>
-			<form action="auth/google" method="GET">
-				<input type="hidden" name="scope" value="email" />
-				<button type="submit" class="btn btn-default btn-md social-btn" >
-				<img src="${rc.getContextPath()}/img/google.png" class="social-logo" /> Login with Google
-				</button>
-			</form>
-			<hr>
+		</div>
+			
+			<div class="col-md-3">
+				<form action="auth/google" method="GET">
+					<input type="hidden" name="scope" value="email" />
+					<button type="submit" class="btn btn-social btn-google">
+						<i class="fa fa-google"></i> Sign in with Google
+					</button>
+				</form>
+			</div>
 		</div>
 		<!-- /container -->
 		<#include "_footer.html">
 		<script>
 			<#include "cookies.js">
-				
 		</script>
 	</body>
 </html>

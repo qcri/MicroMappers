@@ -11,45 +11,87 @@
 				<div class="table-responsive">
                     <table class="table" style="margin-bottom: 0px;">
                         <tr>
-                            <td class="col-md-9" style="word-wrap: break-word; max-width: 160px; white-space:normal; border-top: 0px;">
+                            <td class="col-md-8" style="word-wrap: break-word; max-width: 160px; white-space:normal; border-top: 0px;">
                                 <h3>${collectionInfo.name}
                                     <small style="font-size:60%">
-									<#if current_user != collectionInfo.owner>
-                                        by ${collectionInfo.owner}
-									</#if>
+                                    
+										<#if current_user != collectionInfo.owner>
+	                                        by ${collectionInfo.owner}
+										</#if>
+										
                                         <a href="${rc.getContextPath()}/collection/view/update?id=${collectionInfo.id}"><span class="glyphicon glyphicon-edit" title="Edit"></span></a>
-                                        <script>initializeCountScheduler=false</script>
-									<#if collectionInfo.status =="RUNNING">
-                                    <p class="text-success">
-                                        <script>initializeCountScheduler=true</script>
-
-									<#elseif collectionInfo.status =="NOT_RUNNING" >
-                                    <p class="text-muted">
-
-									<#elseif collectionInfo.status =="RUNNING_WARNING" || collectionInfo.status =="WARNING">
-                                    <p class="text-warning">
-                                        <script>initializeCountScheduler=true</script>
-
-									<#elseif collectionInfo.status =="TRASHED" >
-                                    <p class="text-info">
-									<#else>
-                                    <p class="text-danger">
-									</#if>
-                                        <b>${collectionInfo.status}</b>
-                                    </p></small></h3>
-
+                                        <script>
+                                        	initializeTwitterCountScheduler=false;
+                                        	initializeFacebookCountScheduler=false;
+                                        </script>
+                                        <br/>
+                                        
+									<!-- For twitter -->
+										<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER">
+											<#if collectionInfo.twitterStatus =="RUNNING">
+		                                    	<span class="text-success">
+		                                        	<script>initializeTwitterCountScheduler=true</script>
+											<#elseif collectionInfo.twitterStatus =="NOT_RUNNING" >
+		                                    	<span class="text-muted">
+											<#elseif collectionInfo.twitterStatus =="RUNNING_WARNING" || collectionInfo.twitterStatus =="WARNING">
+			                                    <span class="text-warning">
+			                                        <script>initializeTwitterCountScheduler=true</script>
+											<#elseif collectionInfo.twitterStatus =="TRASHED" >
+		                                    	<span class="text-info">
+											<#else>
+		                                    	<span class="text-danger">
+											</#if>
+											
+	                                        <i class="fa fa-twitter twitter-color"></i>&nbsp;<b>${collectionInfo.twitterStatus}</b></span>
+										</#if>
+	                                    
+                                   <!-- For facebook -->
+										<#if collectionInfo.provider == "ALL">
+											,&nbsp;
+										</#if>
+										<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">
+											<#if collectionInfo.facebookStatus =="RUNNING">
+		                                    	<span class="text-success">
+		                                        	<script>initializeFacebookCountScheduler=true</script>
+											<#elseif collectionInfo.facebookStatus =="NOT_RUNNING" >
+		                                    	<span class="text-muted">
+											<#elseif collectionInfo.facebookStatus =="RUNNING_WARNING" || collectionInfo.facebookStatus =="WARNING">
+			                                    <span class="text-warning">
+			                                        <script>initializeFacebookCountScheduler=true</script>
+											<#elseif collectionInfo.facebookStatus =="TRASHED" >
+		                                    	<span class="text-info">
+											<#else>
+		                                    	<span class="text-danger">
+											</#if>
+											
+	                                        <i class="fa fa-facebook facebook-color"></i>&nbsp;<b>${collectionInfo.facebookStatus}</b></span>
+										</#if>
+                                    </small>
+								</h3>
                             </td>
 
-                            <td class="col-md-3" style="vertical-align: bottom;border-top: 0px;">
-								<#if collectionInfo.status =="RUNNING" || collectionInfo.status =="RUNNING_WARNING" || collectionInfo.status =="WARNING">
-									<button class="btn btn-danger btn-lg btn-block pull-right" id="stopCollectionButton" data-title="Stop Collection" role="button" data-id="${collectionInfo.id}"> Stop</button>
-
-								<#elseif collectionInfo.status =="TRASHED" >
-									<button class="btn btn-danger btn-lg btn-block pull-right" id="restoreCollectionButton" data-title="Restore Collection" role="button" data-id="${collectionInfo.id}"> Restore</button>
+                            <td class="col-md-3" style="vertical-align: middle;border-top: 0px;">
+                            	<#if collectionInfo.isTrashed()>
+									<button class="btn btn-danger btn-lg pull-right" id="restoreCollectionButton" data-title="Restore Collection" role="button" data-id="${collectionInfo.id}" style="margin-left: 5%;">Restore</button>
 								<#else>
-									<button class="btn btn-success btn-lg btn-block pull-right" id="startCollectionButton" data-title="Start Collection" role="button" data-id="${collectionInfo.id}"> Start</button>
-								</#if>
-
+									<!-- For facebook -->
+									<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">							
+										<#if collectionInfo.facebookStatus =="RUNNING" || collectionInfo.facebookStatus =="RUNNING_WARNING" || collectionInfo.facebookStatus =="WARNING">
+											<button class="btn btn-danger btn-lg pull-right btn-social" id="stopFacebookButton" data-title="Stop Collection" role="button" data-id="${collectionInfo.id}" style="margin-left: 5%;"><i class="fa fa-facebook"></i>Stop</button>
+										<#elseif collectionInfo.facebookStatus !="TRASHED" >
+											<button class="btn btn-success btn-lg pull-right btn-social" id="startFacebookButton" data-title="Start Collection" role="button" data-id="${collectionInfo.id}" style="margin-left: 5%;"><i class="fa fa-facebook"></i>Start</button>
+										</#if>
+									</#if>
+									
+									<!-- For twitter -->
+									<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER">
+										<#if collectionInfo.twitterStatus =="RUNNING" || collectionInfo.twitterStatus =="RUNNING_WARNING" || collectionInfo.twitterStatus =="WARNING">
+											<button class="btn btn-danger btn-lg pull-right btn-social" id="stopTwitterButton" data-title="Stop Collection" role="button" data-id="${collectionInfo.id}"><i class="fa fa-twitter"></i>Stop</button>
+										<#elseif collectionInfo.twitterStatus !="TRASHED" >
+											<button class="btn btn-success btn-lg pull-right btn-social" id="startTwitterButton" data-title="Start Collection" role="button" data-id="${collectionInfo.id}"><i class="fa fa-twitter"></i>Start</button>
+										</#if>
+									</#if>
+								</#if>	
                             </td>
                         </tr>
                     </table>
@@ -64,12 +106,25 @@
 								</#if>
 
 							</tr>
+							
+						<!-- For twitter -->
+							<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER">
+								<tr>
+									<td>Twitter Collection:</td>
+									<td class="text-right" id="twitterCount" data-id="${collectionInfo.id}">${twitterCount}</td>
+								</tr>
+							</#if>
+							
+						<!-- For facebook -->
+							<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">
+								<tr>
+									<td>Facebook Collection:</td>
+									<td class="text-right" id="facebookCount" data-id="${collectionInfo.id}">${facebookCount}</td>
+								</tr>
+							</#if>
+							
 							<tr>
-								<td>Total Collection:</td>
-								<td class="text-right" id="collectionCount" data-id="${collectionInfo.id}">${collectionCount}</td>
-							</tr>
-							<tr>
-								<td>Created:</td>
+								<td>Created On:</td>
 								<td class="text-right" title="${collectionCreatedAt}">${collectionCreatedAt}</td>
 							</tr>
 							<tr>
@@ -80,10 +135,23 @@
 									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.langFilters}">${collectionInfo.langFilters}</td>
 								</#if>
 							</tr>
-							<tr>
-								<td>Keywords:</td>
-								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.track}">${collectionInfo.track}</td>
-							</tr>
+							
+							<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER">
+								<tr>
+									<td>Keywords:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.track}">${collectionInfo.track}</td>
+								</tr>
+							</#if>
+							<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">
+								<tr>
+									<td>Subscribed Profiles:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.subscribedProfiles}">${collectionInfo.subscribedProfiles}</td>
+								</tr>
+								<tr>
+									<td>Fetch Interval:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.fetchInterval}">${collectionInfo.fetchInterval}</td>
+								</tr>
+							</#if>
 							<tr>
 								<td>CreatedBy:</td>
 								<td class="text-right" title="${collectionInfo.owner}">${collectionInfo.owner}</td>

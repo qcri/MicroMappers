@@ -43,7 +43,10 @@ public class Collection extends ExtendedBaseEntity {
 	private GlideMaster glideMaster;
 
 	@Enumerated(EnumType.ORDINAL)
-	private CollectionStatus status;
+	private CollectionStatus twitterStatus;
+	
+	@Enumerated(EnumType.ORDINAL)
+	private CollectionStatus facebookStatus;
 
 	@Column(length = 10, nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -57,20 +60,14 @@ public class Collection extends ExtendedBaseEntity {
 
 	@Column(length = 5000, name = "track")
 	private String track;
-
-	@Column(length = 1000, name = "follow")
-	private String follow;
-
-	@Column(length = 1000, name = "geo")
-	private String geo;
-
-	@Column(name="geo_r")
-	private String geoR;
+	
+	@Column(length = 5000, name = "subscribedProfiles")
+	private String subscribedProfiles;
 
 	@Column(name="lang_filters")
 	private String langFilters;
 
-	@Column(name="fetch_interval", columnDefinition="int default 0")
+	@Column(name="fetch_interval", columnDefinition="int default 2")
 	private Integer fetchInterval;
 
 	//default value 7 days = 24 * 7 hours
@@ -79,7 +76,7 @@ public class Collection extends ExtendedBaseEntity {
 
 	@Column(name="last_execution_time")
 	private Date lastExecutionTime;
-
+	
 	/**
 	 * @return the code
 	 */
@@ -120,20 +117,6 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setAccount(Account account) {
 		this.account = account;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public CollectionStatus getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(CollectionStatus status) {
-		this.status = status;
 	}
 
 	/**
@@ -190,48 +173,6 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setTrack(String track) {
 		this.track = track;
-	}
-
-	/**
-	 * @return the follow
-	 */
-	public String getFollow() {
-		return follow;
-	}
-
-	/**
-	 * @param follow the follow to set
-	 */
-	public void setFollow(String follow) {
-		this.follow = follow;
-	}
-
-	/**
-	 * @return the geo
-	 */
-	public String getGeo() {
-		return geo;
-	}
-
-	/**
-	 * @param geo the geo to set
-	 */
-	public void setGeo(String geo) {
-		this.geo = geo;
-	}
-
-	/**
-	 * @return the geoR
-	 */
-	public String getGeoR() {
-		return geoR;
-	}
-
-	/**
-	 * @param geoR the geoR to set
-	 */
-	public void setGeoR(String geoR) {
-		this.geoR = geoR;
 	}
 
 	/**
@@ -318,6 +259,20 @@ public class Collection extends ExtendedBaseEntity {
 		this.glideMaster = glideMaster;
 	}
 	
+	/**
+	 * @return the subscribedProfiles
+	 */
+	public String getSubscribedProfiles() {
+		return subscribedProfiles;
+	}
+
+	/**
+	 * @param subscribedProfiles the subscribedProfiles to set
+	 */
+	public void setSubscribedProfiles(String subscribedProfiles) {
+		this.subscribedProfiles = subscribedProfiles;
+	}
+
 	public CollectionTask toCollectionTask(UserConnection userConnection) {
 		CollectionTask task = new CollectionTask();
 		if(userConnection !=null){
@@ -325,19 +280,19 @@ public class Collection extends ExtendedBaseEntity {
 			task.setAccessTokenSecret(userConnection.getSecret());
 		}
 
+		task.setId(this.getId());
 		task.setCollectionName(this.getName());
 		task.setCollectionCode(this.getCode());
-		task.setToFollow(this.getFollow());
+		task.setSubscribedProfiles(this.getSubscribedProfiles());
 		task.setToTrack(this.getTrack());
-		task.setGeoLocation(this.getGeo());
-		task.setGeoR(this.getGeoR());
 		task.setLanguageFilter(this.getLangFilters());
 		task.setFetchInterval(this.getFetchInterval());
 		task.setProvider(this.getProvider());
 		task.setFetchInterval(this.getFetchInterval());
 		task.setFetchFrom(this.getFetchFrom());
 		task.setLastExecutionTime(this.getLastExecutionTime());
-		task.setStatusCode(this.getStatus());
+		task.setTwitterStatus(this.twitterStatus);
+		task.setFacebookStatus(this.facebookStatus);
 		return task;
 	}
 	
@@ -347,25 +302,52 @@ public class Collection extends ExtendedBaseEntity {
 		collectionDetailsInfo.setCode(this.getCode());
 		collectionDetailsInfo.setDurationHours(this.getDurationHours());
 		collectionDetailsInfo.setFetchFrom(this.getFetchFrom());
-		collectionDetailsInfo.setFollow(this.getFollow());
-		collectionDetailsInfo.setGeo(this.getGeo());
-		collectionDetailsInfo.setGeoR(this.getGeoR());
+		collectionDetailsInfo.setFetchInterval(this.fetchInterval);
+		collectionDetailsInfo.setSubscribedProfiles(this.subscribedProfiles);
+		collectionDetailsInfo.setLangFilters(this.getLangFilters());
+		collectionDetailsInfo.setName(this.getName());
+		collectionDetailsInfo.setOwner(this.getAccount().getUserName());
+		collectionDetailsInfo.setProvider(this.getProvider().toString());
+		collectionDetailsInfo.setTwitterStatus(this.twitterStatus);
+		collectionDetailsInfo.setFacebookStatus(this.facebookStatus);
+		collectionDetailsInfo.setTrack(this.getTrack());
+		collectionDetailsInfo.setTrashed(this.isTrashed);
 		if(this.getGlobalEventDefinition() != null){
 			collectionDetailsInfo.setGlobalEventDefinition(this.getGlobalEventDefinition());
 		}
 		if(this.getGlideMaster() != null){
 			collectionDetailsInfo.setGlideMaster(this.getGlideMaster());
 		}
-		collectionDetailsInfo.setLangFilters(this.getLangFilters());
-		collectionDetailsInfo.setName(this.getName());
-		collectionDetailsInfo.setOwner(this.getAccount().getUserName());
-		collectionDetailsInfo.setProvider(this.getProvider().toString());
-		collectionDetailsInfo.setStatus(this.getStatus());
-		collectionDetailsInfo.setTrack(this.getTrack());
-		collectionDetailsInfo.setTrashed(this.isTrashed);
 		
 		return collectionDetailsInfo;
+	}
 
+	/**
+	 * @return the twitterStatus
+	 */
+	public CollectionStatus getTwitterStatus() {
+		return twitterStatus;
+	}
+
+	/**
+	 * @param twitterStatus the twitterStatus to set
+	 */
+	public void setTwitterStatus(CollectionStatus twitterStatus) {
+		this.twitterStatus = twitterStatus;
+	}
+
+	/**
+	 * @return the facebookStatus
+	 */
+	public CollectionStatus getFacebookStatus() {
+		return facebookStatus;
+	}
+
+	/**
+	 * @param facebookStatus the facebookStatus to set
+	 */
+	public void setFacebookStatus(CollectionStatus facebookStatus) {
+		this.facebookStatus = facebookStatus;
 	}
 
 }

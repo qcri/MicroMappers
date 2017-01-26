@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public abstract interface DataFeedRepository extends CrudRepository<DataFeed, Long>
 {
-	public DataFeed findByProviderAndFeedIdAndParentFeedIsNull(CollectionType provider, Long feedId);
+	public DataFeed findByProviderAndFeedIdAndParentFeedIsNull(CollectionType provider, String feedId);
 }

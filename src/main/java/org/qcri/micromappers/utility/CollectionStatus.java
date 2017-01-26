@@ -2,12 +2,13 @@ package org.qcri.micromappers.utility;
 
 public enum CollectionStatus {
 	RUNNING("RUNNING"),
-	FATAL_ERROR("FATAL_ERROR"),
-	RUNNING_WARNING("RUNNING_WARNING"),
-	NOT_RUNNING("NOT_RUNNING"),
-	TRASHED("TRASHED"),
 	WARNING("WARNING"),
-	EXCEPTION("EXCEPTION");
+	RUNNING_WARNING("RUNNING_WARNING"),
+	
+	NOT_RUNNING("NOT_RUNNING"),
+	FATAL_ERROR("FATAL_ERROR"),
+	EXCEPTION("EXCEPTION"),
+	TRASHED("TRASHED");
 
 	private CollectionStatus(String status) {
 		this.status = status;

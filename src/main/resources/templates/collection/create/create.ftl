@@ -47,10 +47,10 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="provider">Collection Source :</label>
 							<div class="col-sm-6">
-								<select class="form-control" name="provider">
+								<select class="form-control" name="provider" id="provider">
 									<option value="TWITTER" selected>Twitter</option>
-									<!-- <option value="FACEBOOK">Facebook</option>
-									<option value="ALL">All</option> -->
+									<option value="FACEBOOK">Facebook</option>
+									<option value="ALL">All</option>
 								</select>
 							</div>
 						</div>
@@ -64,12 +64,48 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group" id="keywordsDiv">
 							<label class="control-label col-sm-3" for="track">Keywords :</label>
 							<div class="col-sm-6"> 
 								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
 							</div>
 						</div>
+						
+						<div id="facebookConfigDiv" hidden=true>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="subscribedProfiles">Subscribed Profiles :</label>
+								<div class="col-sm-6"> 
+									<textarea class="form-control" rows="6" name="subscribedProfiles" placeholder="Search profiles and select"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<div class="col-sm-6">
+									<select class="form-control" name="fetchInterval">
+										<option value="2" selected>2 hours</option>
+										<option value="4">4 hours</option>
+										<option value="6">6 hours</option>
+										<option value="12">12 hours</option>
+										<option value="24">1 day</option>
+										<option value="72">3 days</option>
+										<option value="168">7 days</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<div class="col-sm-6">
+									<select class="form-control" name="fetchFrom">
+										<option value="168" selected>7 days</option>
+										<option value="360">15 days</option>
+										<option value="720">1 month</option>
+										<option value="2160">3 months</option>
+										<option value="4320">6 months</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
 						<div class="form-group">
 							<label class="control-label col-sm-offset-3 checkbox-inline" style="padding-left: 35px; padding-top: 0px">
 								<input type="checkbox" value="true" id="runAfterCreate">Run after create.
@@ -77,63 +113,6 @@
 						</div>
 						
 					</div>
-					
-					
-					<!-- Advanced Tab -->
-					<!-- <div id="advanced" class="tab-pane fade">
-						<div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="geo">Geo Boundaries :</label>
-								<div class="col-sm-6">
-									<textarea class="form-control" rows="6" name="geo" placeholder="Enter comma seperated geo location."></textarea>
-									<span id="geoHelpBlock" class="form-text text-muted">
-										<span style="color:red;">*</span> Click here to get coordinates: <a href="http://boundingbox.klokantech.com" target="_blank">boundingbox.klokantech.com</a>("Copy/paste CSV format of a boundingbox")
-									</span>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="geoR">Geo Boundaries Strictness :</label>
-								<div class="col-sm-6">
-									<div class="radio">
-										<label><input type="radio" name="geoR" value='null'>Does not apply (no geographical boundary)</label>
-									</div>
-									<div class="radio">
-										<label><input type="radio" name="geoR" value='approximate'>Approximate: a tweet may be collected if it comes from a country that overlaps with the geographical boundaries.</label>
-									</div>
-									<div class="radio">
-										<label><input type="radio" name="geoR" value='strict'>Strict: a tweet can only be collected if it has geographical coordinates strictly inside the geographical boundaries.</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="follow">Follow :</label>
-								<div class="col-sm-6"> 
-									<input type="text" class="form-control" name="follow" placeholder="Enter comma seperated twitter user id's to follow.">
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="control-label col-sm-3" for="duration">Collect data for duration :</label>
-								<div class="col-sm-6">
-									<select class="form-control" name="duration">
-										<option value="12">12 hours</option>
-										<option value="24">1 day</option>
-										<option value="36">1 day 12 hours</option>
-										<option value="48">2 days</option>
-										<option value="60">2 day 12 hours</option>
-										<option value="72">3 days</option>
-										<option value="96">4 days</option>
-										<option value="120">5 days</option>
-										<option value="144">6 days</option>
-										<option value="168">7 days</option>
-										<option value="336">14 days</option>
-									</select>
-									<span id="durationHelpBlock" class="form-text text-muted">
-										<span style="color:red;">*</span> A normal setting for most crises is 2 to 5 days. If you need more than 7 days contact the AIDR team.
-									</span>
-								</div>
-							</div>
-						</div>
-					</div> -->
 				</div>
 				
 				

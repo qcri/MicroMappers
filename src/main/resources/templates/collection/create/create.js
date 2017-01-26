@@ -61,6 +61,18 @@ $(document).ready(function() {
     }
 });
 
+$('#provider').change(function() {
+    if(document.getElementsByName('provider')[0].value == 'TWITTER'){
+        $('#facebookConfigDiv').hide();
+        $('#keywordsDiv').show();
+    }else if(document.getElementsByName('provider')[0].value == 'FACEBOOK'){
+        $('#facebookConfigDiv').show();
+        $('#keywordsDiv').hide();
+    }else{
+        $('#facebookConfigDiv').show();
+        $('#keywordsDiv').show();
+    }
+});
 
 function createCollection() {
         
@@ -79,12 +91,9 @@ function createCollection() {
     var data = {
             name: document.getElementsByName('name')[0].value.toLowerCase().trim(),
             code: document.getElementsByName('name')[0].value.toLowerCase().trim().replace(" ", "_") + "_" + (new Date()).getTime(),
-            
             track: document.getElementsByName('track')[0].value.toLowerCase().trim(),
-            /*follow: document.getElementsByName('follow')[0].value.toLowerCase().trim(),
-            geo: document.getElementsByName('geo')[0].value.toLowerCase().trim(),
-            durationHours: document.getElementsByName('duration')[0].value,
-            geoR: document.getElementsByName('geoR')[0].value.toLowerCase().trim(),*/
+            fetchInterval: document.getElementsByName('fetchInterval')[0].value,
+            fetchFrom: document.getElementsByName('fetchFrom')[0].value,
             langFilters: langFilters.join(","),
             provider: document.getElementsByName('provider')[0].value,
     };
@@ -102,7 +111,7 @@ function createCollection() {
         runAfterCreate = true;
     }
     
-    var url = "${rc.getContextPath()}/"+data.provider.toLocaleLowerCase()+"/create?runAfterCreate="+runAfterCreate;
+    var url = "${rc.getContextPath()}/collection/create?runAfterCreate="+runAfterCreate;
     
     $.ajax({
         type: "POST",

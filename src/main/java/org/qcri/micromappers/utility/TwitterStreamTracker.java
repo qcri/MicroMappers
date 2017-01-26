@@ -2,7 +2,6 @@ package org.qcri.micromappers.utility;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,38 +23,29 @@ import twitter4j.conf.ConfigurationBuilder;
 public class TwitterStreamTracker implements Closeable {
 
 	private static Logger logger = Logger.getLogger(TwitterStreamTracker.class.getName());
-	
+
 	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
-	
+
 	private TwitterStream twitterStream;
 	private FilterQuery query;
 
-	public TwitterStreamTracker(CollectionTask task) throws ParseException{
+	public TwitterStreamTracker(CollectionTask task) {
 		this.query = task2query(task);
 		Configuration config = task2configuration(task);
 		TwitterStatusListener listener = new TwitterStatusListener(task);
-		if ("strict".equals(task.getGeoR())) {
-			listener.addFilter(new StrictLocationFilter(task));
-			logger.info("Added StrictLocationFilter for collection = " + task.getCollectionCode() + ", BBox: " + task.getGeoLocation());
-		}
-		
-		if (task.isToFollowAvailable()) {
-			listener.addFilter(new FollowFilter(task));
-			logger.info("Added FollowFilter for collection = " + task.getCollectionCode() + ", toFollow: " + task.getToFollow());
-		}
-		
-		if (task.isToTrackAvailable() && (task.isGeoLocationAvailable() || task.isToFollowAvailable())) {
+
+		/*if (task.isToTrackAvailable()) {
 			// New default behavior: filter tweets received from geolocation and/or followed users using tracked keywords
 			// Note: this override the default and old behavior of ORing the filter conditions by Twitter
 			listener.addFilter(new TrackFilter(task));
 			logger.info("Added TrackFilter for collection = " + task.getCollectionCode() + ", toTrack: " + task.getToTrack());
-		}
+		}*/
 
 		twitterStream = new TwitterStreamFactory(config).getInstance();
 		twitterStream.addListener(listener);
 		twitterStream.addConnectionLifeCycleListener(listener);
 	}
-	
+
 	/**
 	 * This method internally creates a thread which manipulates TwitterStream
 	 * and calls these adequate listener methods continuously
@@ -67,47 +57,27 @@ public class TwitterStreamTracker implements Closeable {
 	public void close() throws IOException {
 		twitterStream.cleanUp();
 		twitterStream.shutdown();
-		logger.info("AIDR-Fetcher: Collection stopped which was tracking " + query);
+		logger.info("Collection stopped which was tracking " + query);
 	}
-	
+
 	private static Configuration task2configuration(CollectionTask task) {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 		configurationBuilder.setDebugEnabled(false)
-		        .setJSONStoreEnabled(true)
-		        .setOAuthConsumerKey(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_KEY))
-		        .setOAuthConsumerSecret(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_SECRET))
-		        .setOAuthAccessToken(task.getAccessToken())
-		        .setOAuthAccessTokenSecret(task.getAccessTokenSecret());
+		.setJSONStoreEnabled(true)
+		.setOAuthConsumerKey(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_KEY))
+		.setOAuthConsumerSecret(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_SECRET))
+		.setOAuthAccessToken(task.getAccessToken())
+		.setOAuthAccessTokenSecret(task.getAccessTokenSecret());
 		Configuration configuration = configurationBuilder.build();
 		return configuration;
 	}
-	
+
 	static FilterQuery task2query(CollectionTask collectionTask) throws NumberFormatException {
 		FilterQuery query = new FilterQuery();
-		
+
 		String toTrack = collectionTask.getToTrack();
 		if (StringUtils.isNotBlank(toTrack)){
 			query.track(toTrack.split(","));
-		}
-			
-		String toFollow = collectionTask.getToFollow();
-		if (StringUtils.isNotBlank(toFollow)) {
-			query.follow(Arrays.stream(toFollow.split(",")).mapToLong(Long::parseLong).toArray());
-		}
-
-		String locations = collectionTask.getGeoLocation();
-		if (StringUtils.isNotBlank(locations)) {
-			double[] flat = Arrays.stream(locations.split(",")).mapToDouble(Double::parseDouble).toArray();
-
-			assert flat.length % 4 == 0;
-			double[][] square = new double[flat.length / 2][2];
-			for (int i = 0; i < flat.length; i = i + 2) {
-				// Read 2 elements at a time, into each 2-element sub-array
-				// of 'locations'
-				square[i / 2][0] = flat[i];
-				square[i / 2][1] = flat[i + 1];
-			}
-			query.locations(square);
 		}
 
 		String language = collectionTask.getLanguageFilter();

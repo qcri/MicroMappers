@@ -12,19 +12,20 @@ import org.qcri.micromappers.utility.CollectionType;
  */
 public class CollectionTask {
 
+	private Long id;
 	protected String collectionCode;
 	protected String collectionName;
 	protected String toTrack;
-	protected CollectionStatus statusCode;
+	private String subscribedProfiles;
+	private CollectionStatus twitterStatus;
+	private CollectionStatus facebookStatus;
 	protected String statusMessage;
 	protected String accessToken;
 	protected String accessTokenSecret;
-	protected Long collectionCount;
-	protected CollectionType provider;
-	protected String toFollow;
-	protected String geoLocation;
-	protected String geoR;
+	private Long tweetCount;
+	private Long fbPostCount;
 	protected String languageFilter;
+	protected CollectionType provider;
 	protected Date lastExecutionTime;
 	protected Integer fetchInterval;
 	protected Integer fetchFrom;
@@ -108,36 +109,6 @@ public class CollectionTask {
 	}
 
 	/**
-	 * @return the collectionCount
-	 */
-	public Long getCollectionCount() {
-		return collectionCount;
-	}
-
-	/**
-	 * @param collectionCount
-	 *            the collectionCount to set
-	 */
-	public void setCollectionCount(Long collectionCount) {
-		this.collectionCount = collectionCount;
-	}
-
-	/**
-	 * @return the status
-	 */
-	public CollectionStatus getStatusCode() {
-		return statusCode;
-	}
-
-	/**
-	 * @param status
-	 *            the status to set
-	 */
-	public void setStatusCode(CollectionStatus status) {
-		this.statusCode = status;
-	}
-
-	/**
 	 * @return the statusMessage
 	 */
 	public String getStatusMessage() {
@@ -150,51 +121,6 @@ public class CollectionTask {
 	 */
 	public void setStatusMessage(String statusMessage) {
 		this.statusMessage = statusMessage;
-	}
-
-	/**
-	 * @return the toFollow
-	 */
-	public String getToFollow() {
-		return toFollow;
-	}
-
-	/**
-	 * @param toFollow
-	 *            the toFollow to set
-	 */
-	public void setToFollow(String toFollow) {
-		this.toFollow = toFollow;
-	}
-
-	/**
-	 * @return the geoLocation
-	 */
-	public String getGeoLocation() {
-		return geoLocation;
-	}
-
-	/**
-	 * @param geoLocation
-	 *            the geoLocation to set
-	 */
-	public void setGeoLocation(String geoLocation) {
-		this.geoLocation = geoLocation;
-	}
-
-	/**
-	 * @return the geoR
-	 */
-	public String getGeoR() {
-		return geoR;
-	}
-
-	/**
-	 * @param geoR
-	 *            the geoR to set
-	 */
-	public void setGeoR(String geoR) {
-		this.geoR = geoR;
 	}
 
 	/**
@@ -276,17 +202,18 @@ public class CollectionTask {
 	public CollectionTask clone() {
 
 		CollectionTask newTask = new CollectionTask();
+		newTask.setId(id);
 		newTask.setAccessToken(accessToken);
 		newTask.setAccessTokenSecret(accessTokenSecret);
 		newTask.setCollectionCode(collectionCode);
 		newTask.setCollectionName(collectionName);
-		newTask.setStatusCode(statusCode);
+		newTask.setTwitterStatus(twitterStatus);
+		newTask.setFacebookStatus(facebookStatus);
 		newTask.setStatusMessage(statusMessage);
 		newTask.setToTrack(toTrack);
-		newTask.setToFollow(toFollow);
-		newTask.setCollectionCount(collectionCount);
-		newTask.setGeoLocation(geoLocation);
-		newTask.setGeoR(geoR);
+		newTask.setSubscribedProfiles(subscribedProfiles);
+		newTask.setTweetCount(tweetCount);
+		newTask.setFbPostCount(fbPostCount);
 		newTask.setLanguageFilter(languageFilter);
 		newTask.setLastExecutionTime(lastExecutionTime);
 		newTask.setFetchInterval(fetchInterval);
@@ -327,6 +254,14 @@ public class CollectionTask {
 			return false;
 		}
 	}
+	
+	public boolean isSubscribedProfilesAvailable() {
+		if (StringUtils.isNotBlank(subscribedProfiles)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public boolean checkSocialConfigInfo() {
 
@@ -340,20 +275,87 @@ public class CollectionTask {
 
 	}
 
-	public boolean isToFollowAvailable() {
-		if (StringUtils.isNotBlank(toFollow)) {
-			return true;
-		} else {
-			return false;
-		}
-
+	/**
+	 * @return the subscribedProfiles
+	 */
+	public String getSubscribedProfiles() {
+		return subscribedProfiles;
 	}
 
-	public boolean isGeoLocationAvailable() {
-		if (StringUtils.isNotBlank(geoLocation)) {
-			return true;
-		} else {
-			return false;
-		}
+	/**
+	 * @param subscribedProfiles the subscribedProfiles to set
+	 */
+	public void setSubscribedProfiles(String subscribedProfiles) {
+		this.subscribedProfiles = subscribedProfiles;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the twitterStatus
+	 */
+	public CollectionStatus getTwitterStatus() {
+		return twitterStatus;
+	}
+
+	/**
+	 * @param twitterStatus the twitterStatus to set
+	 */
+	public void setTwitterStatus(CollectionStatus twitterStatus) {
+		this.twitterStatus = twitterStatus;
+	}
+
+	/**
+	 * @return the facebookStatus
+	 */
+	public CollectionStatus getFacebookStatus() {
+		return facebookStatus;
+	}
+
+	/**
+	 * @param facebookStatus the facebookStatus to set
+	 */
+	public void setFacebookStatus(CollectionStatus facebookStatus) {
+		this.facebookStatus = facebookStatus;
+	}
+
+	/**
+	 * @return the tweetCount
+	 */
+	public Long getTweetCount() {
+		return tweetCount;
+	}
+
+	/**
+	 * @param tweetCount the tweetCount to set
+	 */
+	public void setTweetCount(Long tweetCount) {
+		this.tweetCount = tweetCount;
+	}
+
+	/**
+	 * @return the fbPostCount
+	 */
+	public Long getFbPostCount() {
+		return fbPostCount;
+	}
+
+	/**
+	 * @param fbPostCount the fbPostCount to set
+	 */
+	public void setFbPostCount(Long fbPostCount) {
+		this.fbPostCount = fbPostCount;
 	}
 }

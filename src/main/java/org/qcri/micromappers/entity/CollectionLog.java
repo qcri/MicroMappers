@@ -4,9 +4,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.qcri.micromappers.utility.CollectionType;
 
 @Entity
 @Table(name = "collection_log")
@@ -20,17 +24,18 @@ public class CollectionLog extends ExtendedBaseEntity {
 	@JoinColumn(name="collection_id", nullable = false)
 	private Collection collection;
 
+	@Column(length = 10, nullable = false)
+	@Enumerated(EnumType.STRING)
+	private CollectionType provider;
+	
 	@Column(name = "count", columnDefinition = "bigint default 0")
 	private Long count;
 
 	@Column(length = 5000, name = "track")
 	private String track;
 
-	@Column(length=1000, name="follow")
-	private String follow;
-
-	@Column(length=1000, name="geo")
-	private String geo;
+	@Column(length=5000, name="subscribedProfiles")
+	private String subscribedProfiles;
 
 	@Column(name="lang_filters")
 	private String langFilters;
@@ -52,10 +57,9 @@ public class CollectionLog extends ExtendedBaseEntity {
 	public CollectionLog(Collection collection) {
 		super();
 		this.collection = collection;
-		this.geo = collection.getGeo();
 		this.track = collection.getTrack();
 		this.langFilters = collection.getLangFilters();
-		this.follow = collection.getFollow();
+		this.subscribedProfiles = collection.getSubscribedProfiles();
 	}
 	
 	public String getTrack() {
@@ -64,22 +68,6 @@ public class CollectionLog extends ExtendedBaseEntity {
 
 	public void setTrack(String track) {
 		this.track = track;
-	}
-
-	public String getFollow() {
-		return follow;
-	}
-
-	public void setFollow(String follow) {
-		this.follow = follow;
-	}
-
-	public String getGeo() {
-		return geo;
-	}
-
-	public void setGeo(String geo) {
-		this.geo = geo;
 	}
 
 	public Date getStartDate() {
@@ -125,6 +113,33 @@ public class CollectionLog extends ExtendedBaseEntity {
 	public void setCollection(Collection collection) {
 		this.collection = collection;
 	}
+	/**
+	 * @return the updatedBy
+	 */
+	public Account getUpdatedBy() {
+		return updatedBy;
+	}
+
+	/**
+	 * @param updatedBy the updatedBy to set
+	 */
+	public void setUpdatedBy(Account updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	/**
+	 * @return the subscribedProfiles
+	 */
+	public String getSubscribedProfiles() {
+		return subscribedProfiles;
+	}
+
+	/**
+	 * @param subscribedProfiles the subscribedProfiles to set
+	 */
+	public void setSubscribedProfiles(String subscribedProfiles) {
+		this.subscribedProfiles = subscribedProfiles;
+	}
 
 	/**
 	 * @return the count
@@ -141,16 +156,16 @@ public class CollectionLog extends ExtendedBaseEntity {
 	}
 
 	/**
-	 * @return the updatedBy
+	 * @return the provider
 	 */
-	public Account getUpdatedBy() {
-		return updatedBy;
+	public CollectionType getProvider() {
+		return provider;
 	}
 
 	/**
-	 * @param updatedBy the updatedBy to set
+	 * @param provider the provider to set
 	 */
-	public void setUpdatedBy(Account updatedBy) {
-		this.updatedBy = updatedBy;
+	public void setProvider(CollectionType provider) {
+		this.provider = provider;
 	}
 }

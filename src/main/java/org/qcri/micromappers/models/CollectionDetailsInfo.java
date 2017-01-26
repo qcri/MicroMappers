@@ -33,12 +33,11 @@ public class CollectionDetailsInfo implements Serializable{
 	private GlideMaster glideMaster;
 	private Long count;
 	private String owner;
-	private CollectionStatus status;
+	private CollectionStatus twitterStatus;
+	private CollectionStatus facebookStatus;
 	private boolean isTrashed;
     private String track;
-    private String follow;
-    private String geo;
-    private String geoR;
+    private String subscribedProfiles;
     private String langFilters;
     private Integer durationHours;
     private int fetchInterval;
@@ -49,24 +48,6 @@ public class CollectionDetailsInfo implements Serializable{
 	}
 	public void setTrack(String track) {
 		this.track = track;
-	}
-	public String getFollow() {
-		return follow;
-	}
-	public void setFollow(String follow) {
-		this.follow = follow;
-	}
-	public String getGeo() {
-		return geo;
-	}
-	public void setGeo(String geo) {
-		this.geo = geo;
-	}
-	public String getGeoR() {
-		return geoR;
-	}
-	public void setGeoR(String geoR) {
-		this.geoR = geoR;
 	}
 	public String getLangFilters() {
 		return langFilters;
@@ -97,12 +78,6 @@ public class CollectionDetailsInfo implements Serializable{
 	}
 	public void setProvider(String provider) {
 		this.provider = provider;
-	}
-	public CollectionStatus getStatus() {
-		return status;
-	}
-	public void setStatus(CollectionStatus status) {
-		this.status = status;
 	}
 	public boolean isTrashed() {
 		return isTrashed;
@@ -165,18 +140,19 @@ public class CollectionDetailsInfo implements Serializable{
 			collection.setGlideMaster(this.getGlideMaster());
 		}
 		//collection.setAccount(user);
-		collection.setStatus(this.getStatus());
+		collection.setTwitterStatus(this.getTwitterStatus());
+		collection.setFacebookStatus(this.getFacebookStatus());
 		collection.setProvider(CollectionType.valueOf(this.getProvider()));
 		collection.setDurationHours(this.getDurationHours());
-		collection.setFollow(this.getFollow());
-		collection.setGeo(this.getGeo());
-		collection.setGeoR(this.getGeoR());
 		collection.setLangFilters(this.getLangFilters());
 		collection.setFetchInterval(this.getFetchInterval());
 		collection.setFetchFrom(this.getFetchFrom());
 		
 		if(StringUtils.isNotBlank(this.getTrack())) {
 			collection.setTrack(this.getTrack().toLowerCase().trim());
+		}
+		if(StringUtils.isNotBlank(this.getSubscribedProfiles())) {
+			collection.setSubscribedProfiles(this.getSubscribedProfiles().toLowerCase().trim());
 		}
 		return collection;
 	}
@@ -203,6 +179,42 @@ public class CollectionDetailsInfo implements Serializable{
 	 */
 	public void setGlideMaster(GlideMaster glideMaster) {
 		this.glideMaster = glideMaster;
+	}
+	/**
+	 * @return the subscribedProfiles
+	 */
+	public String getSubscribedProfiles() {
+		return subscribedProfiles;
+	}
+	/**
+	 * @param subscribedProfiles the subscribedProfiles to set
+	 */
+	public void setSubscribedProfiles(String subscribedProfiles) {
+		this.subscribedProfiles = subscribedProfiles;
+	}
+	/**
+	 * @return the twitterStatus
+	 */
+	public CollectionStatus getTwitterStatus() {
+		return twitterStatus;
+	}
+	/**
+	 * @param twitterStatus the twitterStatus to set
+	 */
+	public void setTwitterStatus(CollectionStatus twitterStatus) {
+		this.twitterStatus = twitterStatus;
+	}
+	/**
+	 * @return the facebookStatus
+	 */
+	public CollectionStatus getFacebookStatus() {
+		return facebookStatus;
+	}
+	/**
+	 * @param facebookStatus the facebookStatus to set
+	 */
+	public void setFacebookStatus(CollectionStatus facebookStatus) {
+		this.facebookStatus = facebookStatus;
 	}
 	
 }

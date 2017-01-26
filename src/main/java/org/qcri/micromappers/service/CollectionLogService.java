@@ -10,6 +10,7 @@ import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.entity.CollectionLog;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollectionLogRepository;
+import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,12 @@ public class CollectionLogService
 	private static Logger logger = Logger.getLogger(CollectionLogService.class);
 
 	@Inject
-	private CollectionService collectionService;
-
-	@Inject
 	private CollectionLogRepository collectionLogRepository;
-
+	@Inject
+	private AccountService accountService;
 	@Inject
 	private Util util;
 
-	@Inject
-	private AccountService accountService;
 
 	public CollectionLog saveOrUpdate(CollectionLog collectionLog)
 	{
@@ -40,29 +37,31 @@ public class CollectionLogService
 		}
 	} 
 
-	public CollectionLog getLatestByCollectionId(Long collectionId)
+	public CollectionLog getLatestByCollectionIdAndProvider(Long collectionId, CollectionType provider)
 	{
 		try{
-			return collectionLogRepository.findFirstByCollectionIdOrderByStartDateDesc(collectionId);
+			return collectionLogRepository.findFirstByCollectionIdAndProviderOrderByStartDateDesc(collectionId, provider);
 		}catch (Exception e) {
 			logger.error("Error while finding latest log for collectionId : "+ collectionId, e);
 			throw new MicromappersServiceException("Exception while finding latest log for collectionId : "+ collectionId, e);
 		}
 	} 
 
-	public Boolean createByCollectionCode(String collectionCode)
+	public Boolean createByCollectionId(Long collectionId, CollectionType provider)
 	{
 		try{
-			Collection collection = collectionService.getByCode(collectionCode);
+			Collection collection = new Collection();
+			collection.setId(collectionId);
 			CollectionLog collectionLog = new CollectionLog(collection);
 			collectionLog.setStartDate(new Date());
 			collectionLog.setCount(0L);
+			collectionLog.setProvider(provider);
 			Account authenticatedAccount = getAuthenticatedAccount();
 			collectionLog.setUpdatedBy(authenticatedAccount);
 			saveOrUpdate(collectionLog);
 			return Boolean.TRUE;
 		}catch (Exception e) {
-			logger.error("Error while creating a new log for collectionCode: "+ collectionCode, e);
+			logger.error("Error while creating a new log for collectionId: "+ collectionId, e);
 			return Boolean.FALSE;
 		}
 	} 
@@ -73,10 +72,10 @@ public class CollectionLogService
 	 * @param count
 	 * @return
 	 */
-	public Boolean stop(Long collectionId, Long count)
+	public Boolean stop(Long collectionId, Long count, CollectionType provider)
 	{
 		try{
-			CollectionLog latestByCollectionLog = getLatestByCollectionId(collectionId);
+			CollectionLog latestByCollectionLog = getLatestByCollectionIdAndProvider(collectionId, provider);
 			if(latestByCollectionLog != null && latestByCollectionLog.getEndDate() == null){
 				latestByCollectionLog.setEndDate(new Date());
 				latestByCollectionLog.setCount(count);
@@ -106,10 +105,10 @@ public class CollectionLogService
 		}
 	} 
 
-	public Boolean updateCount(Long collectionId, Long count)
+	public Boolean updateCount(Long collectionId, Long count, CollectionType provider)
 	{
 		try{
-			CollectionLog latestByCollectionLog = getLatestByCollectionId(collectionId);
+			CollectionLog latestByCollectionLog = getLatestByCollectionIdAndProvider(collectionId, provider);
 			if(latestByCollectionLog != null){
 				latestByCollectionLog.setCount(count);
 				saveOrUpdate(latestByCollectionLog);
@@ -120,9 +119,9 @@ public class CollectionLogService
 			return Boolean.FALSE;
 		}
 	}
-	
-	public Long getCountByCollectionId(Long collectionId){
-		Long count = collectionLogRepository.getCollectionCountByCollectionId(collectionId);
+
+	public Long getCountByCollectionIdAndProvider(Long collectionId, CollectionType provider){
+		Long count = collectionLogRepository.getCollectionCountByCollectionIdAndProvider(collectionId, provider);
 		if(count == null){
 			count = 0L;
 		}
