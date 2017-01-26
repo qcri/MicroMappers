@@ -3,6 +3,7 @@ package org.qcri.micromappers.models;
 import java.io.Serializable;
 import java.util.List;
 
+import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
 
 /**
@@ -15,7 +16,7 @@ public class PageInfo<T> implements Serializable {
 
     private int total = 0;
 
-    private int pageSize = 10;
+    private int pageSize = Constants.DEFAULT_PAGE_SIZE;
 
     @SuppressWarnings("unused")
     private int pageStart = 0;
@@ -32,7 +33,7 @@ public class PageInfo<T> implements Serializable {
 
     private boolean hasNextPage = false;
 
-    private int navigatePages = 10;
+    private int navigatePages = Constants.DEFAULT_NAVIGATION_PAGE_SIZE;
 
     private int[] navigatePageNumbers;
 
@@ -44,8 +45,8 @@ public class PageInfo<T> implements Serializable {
 
         this.total = (int)pages.getTotalElements();
 
-       // this.pages = (this.total - 1) / this.pageSize + 1;
-        this.pages = pages.getTotalPages();
+        this.pages = (this.total - 1) / this.pageSize + 1;
+       // this.pages = pages.getTotalPages();
         this.pageNumber = pages.getNumber() + 1;
 
         this.isFirstPage = pages.isFirst();
@@ -67,6 +68,9 @@ public class PageInfo<T> implements Serializable {
             navigatePageNumbers = new int[navigatePages];
             int startNum = pageNumber - navigatePages / 2;
             int endNum = pageNumber + navigatePages / 2;
+
+           // int startNum = pageNumber;
+           // int endNum = pageNumber + navigatePages/2;
 
             if (startNum < 1) {
                 startNum = 1;

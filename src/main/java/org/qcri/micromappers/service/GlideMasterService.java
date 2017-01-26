@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by jlucas on 12/11/16.
  */
@@ -26,7 +28,7 @@ public class GlideMasterService {
 
     public Page<GlideMaster> listAllByPage(Integer pageNumber) {
         PageRequest request =
-                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "updated");
+                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "updated");
 
         return glideMasterRepository.findAll(request);
     }
@@ -40,4 +42,8 @@ public class GlideMasterService {
 			throw new MicromappersServiceException("Error while fetching glide master by id", e);
 		}
 	}
+
+    public List<GlideMaster> findAll(){
+        return (List<GlideMaster>) glideMasterRepository.findAll();
+    }
 }

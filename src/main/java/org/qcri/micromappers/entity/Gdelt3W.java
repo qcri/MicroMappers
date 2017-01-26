@@ -43,6 +43,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
     @Column(name = "who", length = 1000)
     private String who;
 
+    @Transient
     private JSONArray jsWheres;
 
     public Gdelt3W() {

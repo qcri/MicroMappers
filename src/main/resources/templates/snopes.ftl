@@ -21,7 +21,7 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="/detail/${info.id}" title="${info.title}">
+								<a href="${info.eventUrl}" title="${info.title}">
 								${info.title}
 								</a>
 							</td>
@@ -58,7 +58,7 @@
 											<#else>
 												<li>
 											</#if>
-												<a href="${rc.getContextPath()}/global/events/snopes?page=${index?counter}">${index?counter}</a></li>
+												<a href="${rc.getContextPath()}/global/events/snopes?page=${index}">${index}</a></li>
 										</#list>
 										<!-- Last Page -->
 										<#if page.isLastPage()>

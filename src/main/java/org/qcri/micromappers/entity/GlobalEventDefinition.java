@@ -1,8 +1,7 @@
 package org.qcri.micromappers.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by jlucas on 12/9/16.
@@ -41,6 +40,11 @@ public class GlobalEventDefinition extends ExtendedBaseEntity {
 
     @Column(name="state", length = 50)
     private String state;
+
+    @OneToMany
+    @JoinColumn(name = "global_event_definition_id")
+    private List<Collection> collection;
+
 
     public GlobalEventDefinition(String title, String description, String claimReviewed, String clainReviewRating, String articleTag, String searchKeyword, String eventUrl, String author, String datePublished) {
         this.title = title;
@@ -135,5 +139,13 @@ public class GlobalEventDefinition extends ExtendedBaseEntity {
 
     public void setDatePublished(String datePublished) {
         this.datePublished = datePublished;
+    }
+
+    public List<Collection> getCollection() {
+        return collection;
+    }
+
+    public void setCollection(List<Collection> collection) {
+        this.collection = collection;
     }
 }

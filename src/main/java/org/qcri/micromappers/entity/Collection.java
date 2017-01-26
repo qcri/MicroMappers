@@ -35,11 +35,11 @@ public class Collection extends ExtendedBaseEntity {
 	private Account account;
 
 	@ManyToOne
-	@JoinColumn(name = "global_event_definition_id")
+	@JoinColumn(name = "global_event_definition_id", nullable=true)
 	private GlobalEventDefinition globalEventDefinition;
 	
 	@ManyToOne
-	@JoinColumn(name = "glide_master_id")
+	@JoinColumn(name = "glide_master_id", nullable=true)
 	private GlideMaster glideMaster;
 
 	@Enumerated(EnumType.ORDINAL)
@@ -318,6 +318,7 @@ public class Collection extends ExtendedBaseEntity {
 		if(this.getGlideMaster() != null){
 			collectionDetailsInfo.setGlideMaster(this.getGlideMaster());
 		}
+
 		
 		return collectionDetailsInfo;
 	}

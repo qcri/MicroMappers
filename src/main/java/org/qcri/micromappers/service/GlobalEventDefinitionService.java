@@ -2,6 +2,7 @@ package org.qcri.micromappers.service;
 
 import javax.inject.Inject;
 
+import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jlucas on 12/11/16.
@@ -34,7 +38,7 @@ public class GlobalEventDefinitionService {
 
     public Page<GlobalEventDefinition> listAllByPage(Integer pageNumber) {
         PageRequest request =
-                new PageRequest(pageNumber - 1, Integer.parseInt(Constants.DEFAULT_PAGE_SIZE), Sort.Direction.DESC, "createdAt");
+                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
 
         return globalEventDefinitionRepository.findAll(request);
     }
@@ -48,4 +52,22 @@ public class GlobalEventDefinitionService {
 			throw new MicromappersServiceException("Error while fetching global event definition by id", e);
 		}
 	}
+
+    public List<GlobalEventDefinition> findAllByState(String state){
+        return globalEventDefinitionRepository.findByState(state);
+    }
+
+    public List<GlobalEventDefinition> findAllByStateAndTags(String state, String tags){
+        if(!tags.contains(",")) {
+            return globalEventDefinitionRepository.findByStateAndTag(state, tags);
+        }
+
+        String[] tag = tags.split(",");
+        List<GlobalEventDefinition> globalEventDefinitionList = new ArrayList<GlobalEventDefinition>();
+        for(int i =0; i < tag.length; i++){
+            globalEventDefinitionList.addAll(globalEventDefinitionRepository.findByStateAndTag(state, tag[i]));
+        }
+
+        return globalEventDefinitionList;
+    }
 }

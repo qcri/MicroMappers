@@ -27,7 +27,9 @@
             <tr>
                 <td>${info.glideCode}</td>
                 <td title="${info.articleURL}"><a href="${info.articleURL}" target="_blank">Read</a></td>
-                <td title="${info.imgURL}"><a href="${info.imgURL}" target="_blank">View</a></td>
+                <td title="${info.imgURL}"><a href="${info.imgURL}" target="_blank"><img src="${info.imgURL}"
+                                                                                         alt="${rc.getContextPath()}/img/tb_blue_404.png" height="42" width="42"
+                         onError="this.onerror=null;this.src='${rc.getContextPath()}/img/tb_blue_404.png';"></a></td>
 				<td title="${info.who}">${info.who}</td>
                 <td>
                     <#if info.wheres?has_content>
@@ -64,7 +66,7 @@
                                     <#else>
                                     <li>
                                     </#if>
-                                    <a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${index?counter}">${index?counter}</a></li>
+                                    <a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${index}">${index}</a></li>
                                 </#list>
                                     <!-- Last Page -->
                                 <#if page.isLastPage()>
