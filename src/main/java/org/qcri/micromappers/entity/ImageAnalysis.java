@@ -27,7 +27,7 @@ public class ImageAnalysis extends ExtendedBaseEntity {
     @JoinColumn(name = "data_feed_id", nullable=true)
     DataFeed dataFeed;
 
-    @Column(name = "state", length = 1000)
+    @Column(name = "state")
     String state;
 
     @OneToOne(mappedBy = "imageAnalysis", cascade={CascadeType.ALL})

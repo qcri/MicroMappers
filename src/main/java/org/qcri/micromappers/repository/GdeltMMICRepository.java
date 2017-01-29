@@ -22,4 +22,6 @@ public abstract interface GdeltMMICRepository extends PagingAndSortingRepository
     @Query("SELECT d FROM GdeltMMIC d WHERE d.state=:state")
     List<GdeltMMIC> findAllbyState(@Param("state")String state);
 
+    public GdeltMMIC findById(Long id);
+
 }

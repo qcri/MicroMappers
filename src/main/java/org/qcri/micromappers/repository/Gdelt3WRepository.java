@@ -21,4 +21,6 @@ public abstract interface Gdelt3WRepository extends PagingAndSortingRepository<G
 
     @Query("SELECT d FROM Gdelt3W d WHERE d.state=:state")
     List<Gdelt3W> findAllbyState(@Param("state")String state);
+
+    public Gdelt3W findById(Long id);
 }

@@ -39,4 +39,8 @@ public class GdeltMMICService {
     public List<GdeltMMIC> findAllByStatus(){
         return gdeltMMICRepository.findAllbyState("processed");
     }
+
+    public GdeltMMIC getById(Long id){
+        return gdeltMMICRepository.findById(id);
+    }
 }
