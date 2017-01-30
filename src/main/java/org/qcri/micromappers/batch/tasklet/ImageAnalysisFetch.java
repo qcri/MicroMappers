@@ -49,6 +49,7 @@ public class ImageAnalysisFetch implements Tasklet {
 
            if(item.getDataFeed() != null && !processed){
                // process twitter & facebook
+               imageAnalyserTaskService.runImageAnalyserTask(item.getDataFeed(), item);
                processed = true;
            }
        });

@@ -38,6 +38,14 @@
 	<job id="myJob" xmlns="http://www.springframework.org/schema/batch" restartable="true" job-repository="jobRepository">
 		<split id="split1">
 			<flow>
+				<step id="imagecvstep1" allow-start-if-complete="true" next="imagecvstep2">
+					<tasklet ref="ImageAnalyserTaskFetchTasklet"></tasklet>
+				</step>
+				<step id="imagecvstep2" allow-start-if-complete="true">
+					<tasklet ref="ImageAnalysisFetchTasklet"></tasklet>
+				</step>
+			</flow>
+			<flow>
 				<step id="snopstep1" allow-start-if-complete="true" next="snopstep2">
 					<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
 				</step>
@@ -45,7 +53,7 @@
 					<tasklet ref="SnopesFactFetchTasklet"></tasklet>
 				</step>
 			</flow>
-			<flow>
+			<!--<flow>
 				<step id="step1" allow-start-if-complete="true" next="step2">
 					<tasklet ref="gdeltFetchTasklet"></tasklet>
 				</step>
@@ -88,7 +96,8 @@
 							   commit-interval="100"/>
 					</tasklet>
 				</step>
-			</flow>
+			</flow>-->
+
 		</split>
 	</job>
 
@@ -96,6 +105,8 @@
 	<bean id="gdeltFetchTasklet" class="org.qcri.micromappers.batch.tasklet.FetchGdeltMaster"></bean>
 	<bean id="SnopesFactFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesFactFetch"></bean>
 	<bean id="SnopesNewsFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesNewsFetch"></bean>
+	<bean id="ImageAnalysisFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalysisFetch"></bean>
+	<bean id="ImageAnalyserTaskFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalyserTaskFetch"></bean>
 
 
 	<!-- Multi-ItemReader -->
@@ -174,7 +185,7 @@
 	<!-- this is where we are scheduling the job to run using our scheduler every 15 min, note how the method of the
 	     scheduler and the cron expression to be used are being specified -->
 	<task:scheduled-tasks>
-		<task:scheduled ref="myScheduler" method="run" cron="0 0/59 * * * ?"/>
+		<task:scheduled ref="myScheduler" method="run" cron="0 0/01 * * * ?"/>
 	</task:scheduled-tasks>
 
 </beans>			

@@ -1,10 +1,16 @@
 package org.qcri.micromappers.utility;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -13,6 +19,7 @@ import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.exception.MicromappersException;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.service.AccountService;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -87,6 +94,29 @@ public class Util
 		}else{
 			return true;
 		}
+	}
+
+	public static String getFileContent(Path filePath){
+		StringBuffer buffer = new StringBuffer();
+		try{
+			List<String> list= new ArrayList<>();
+
+			try (BufferedReader br = Files.newBufferedReader(filePath, Charset.forName("UTF-8")))
+			{
+				list = br.lines().collect(Collectors.toList());
+
+				for(String a : list){
+					buffer.append(a);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		catch (Exception e){
+			logger.error(e);
+		}
+
+		return buffer.toString();
 	}
 	
 }

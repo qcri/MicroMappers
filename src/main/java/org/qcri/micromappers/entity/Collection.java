@@ -76,6 +76,9 @@ public class Collection extends ExtendedBaseEntity {
 
 	@Column(name="last_execution_time")
 	private Date lastExecutionTime;
+
+	@Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
+	private Boolean computerVisionEnabled;
 	
 	/**
 	 * @return the code
@@ -229,6 +232,14 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setFetchFrom(Integer fetchFrom) {
 		this.fetchFrom = fetchFrom;
+	}
+
+	public Boolean getComputerVisionEnabled() {
+		return computerVisionEnabled;
+	}
+
+	public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
+		this.computerVisionEnabled = computerVisionEnabled;
 	}
 
 	/**

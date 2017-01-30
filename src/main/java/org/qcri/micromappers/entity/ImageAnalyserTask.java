@@ -38,6 +38,12 @@ public class ImageAnalyserTask extends ExtendedBaseEntity {
         this.collection = collection;
     }
 
+    public ImageAnalyserTask(String state, Collection collection, DataFeed dataFeed) {
+        this.state = state;
+        this.collection = collection;
+        this.dataFeed = dataFeed;
+    }
+
     public String getState() {
         return state;
     }
