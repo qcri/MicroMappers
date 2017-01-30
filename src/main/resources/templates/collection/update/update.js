@@ -103,6 +103,7 @@ function updateCollection() {
     var collectionId = $('#collectionId').val();
     var data = {
             track: document.getElementsByName('track')[0].value.toLowerCase().trim(),
+            subscribedProfiles: document.getElementsByName('subscribedProfiles')[0].value,
             fetchInterval: document.getElementsByName('fetchInterval')[0].value,
             fetchFrom: document.getElementsByName('fetchFrom')[0].value,
             langFilters: langFilters.join(","),

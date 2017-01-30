@@ -95,6 +95,7 @@ function createCollection() {
             fetchInterval: document.getElementsByName('fetchInterval')[0].value,
             fetchFrom: document.getElementsByName('fetchFrom')[0].value,
             langFilters: langFilters.join(","),
+            subscribedProfiles: document.getElementsByName('subscribedProfiles')[0].value,
             provider: document.getElementsByName('provider')[0].value,
     };
     

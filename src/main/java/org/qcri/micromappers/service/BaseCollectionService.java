@@ -118,7 +118,7 @@ public class BaseCollectionService{
 				collection.setTrack(collectionInfo.getTrack().toLowerCase().trim());
 			}
 			if(StringUtils.isNotBlank(collectionInfo.getSubscribedProfiles())) {
-				collection.setSubscribedProfiles(collectionInfo.getSubscribedProfiles().toLowerCase().trim());
+				collection.setSubscribedProfiles(collectionInfo.getSubscribedProfiles());
 			}
 
 			try {
