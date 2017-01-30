@@ -152,7 +152,7 @@ public class CollectionDetailsInfo implements Serializable{
 			collection.setTrack(this.getTrack().toLowerCase().trim());
 		}
 		if(StringUtils.isNotBlank(this.getSubscribedProfiles())) {
-			collection.setSubscribedProfiles(this.getSubscribedProfiles().toLowerCase().trim());
+			collection.setSubscribedProfiles(this.getSubscribedProfiles());
 		}
 		return collection;
 	}

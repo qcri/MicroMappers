@@ -19,7 +19,6 @@ import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.GlideMasterService;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionType;
-import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
