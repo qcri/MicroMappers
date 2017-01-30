@@ -53,7 +53,7 @@
 					<tasklet ref="SnopesFactFetchTasklet"></tasklet>
 				</step>
 			</flow>
-			<!--<flow>
+			<flow>
 				<step id="step1" allow-start-if-complete="true" next="step2">
 					<tasklet ref="gdeltFetchTasklet"></tasklet>
 				</step>
@@ -96,7 +96,7 @@
 							   commit-interval="100"/>
 					</tasklet>
 				</step>
-			</flow>-->
+			</flow>
 
 		</split>
 	</job>
@@ -185,7 +185,7 @@
 	<!-- this is where we are scheduling the job to run using our scheduler every 15 min, note how the method of the
 	     scheduler and the cron expression to be used are being specified -->
 	<task:scheduled-tasks>
-		<task:scheduled ref="myScheduler" method="run" cron="0 0/01 * * * ?"/>
+		<task:scheduled ref="myScheduler" method="run" cron="0 0/15 * * * ?"/>
 	</task:scheduled-tasks>
 
 </beans>			
