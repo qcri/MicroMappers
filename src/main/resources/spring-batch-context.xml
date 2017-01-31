@@ -59,7 +59,7 @@
 				</step>
 				<step id="step2" allow-start-if-complete="true" next="step3">
 					<tasklet transaction-manager="transactionManager">
-						<chunk skip-limit="1000" reader="multiResourceItemReader" processor="mmicItemProcessor" writer="databaseItemWriter" commit-interval="100">
+						<chunk skip-limit="1000" reader="multiResourceItemReader" processor="mmicItemProcessor" writer="gdeltMMICItemWriter" commit-interval="100">
 							<skippable-exception-classes>
 								<include class="org.hibernate.exception.DataException"/>
 								<include class="org.postgresql.util.PSQLException"/>
@@ -70,9 +70,9 @@
 						</listeners>
 					</tasklet>
 				</step>
-				<step id="step3" allow-start-if-complete="true" next="step4">
+				<step id="step3" allow-start-if-complete="true">
 					<tasklet transaction-manager="transactionManager">
-						<chunk skip-limit="1000" reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="databaseItemWriter"
+						<chunk skip-limit="1000" reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="gdelt3WItemWriter"
 							   commit-interval="100">
 							<skippable-exception-classes>
 								<include class="org.springframework.batch.item.file.FlatFileParseException"/>
@@ -85,12 +85,14 @@
 						</listeners>
 					</tasklet>
 				</step>
-				<step id="step4" allow-start-if-complete="true" next="step5">
+			</flow>
+			<flow>
+				<step id="media1" allow-start-if-complete="true" next="media2">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="100" />
 					</tasklet>
 				</step>
-				<step id="step5" allow-start-if-complete="true">
+				<step id="media2" allow-start-if-complete="true">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
 							   commit-interval="100"/>
@@ -107,7 +109,6 @@
 	<bean id="SnopesNewsFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesNewsFetch"></bean>
 	<bean id="ImageAnalysisFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalysisFetch"></bean>
 	<bean id="ImageAnalyserTaskFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalyserTaskFetch"></bean>
-
 
 	<!-- Multi-ItemReader -->
 	<bean id="multiResourceItemReader" class="org.springframework.batch.item.file.MultiResourceItemReader">
@@ -163,6 +164,8 @@
   	<bean id="databaseItemWriter" class="org.springframework.batch.item.database.JpaItemWriter">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
+	<bean id="gdeltMMICItemWriter" class="org.qcri.micromappers.batch.itemWriter.DatabaseGdeltMMICItemWriter"></bean>
+	<bean id="gdelt3WItemWriter" class="org.qcri.micromappers.batch.itemWriter.DatabaseGdelt3WItemWriter"></bean>
 
 
 	<!-- Optional ItemProcessor to perform business logic/filtering on the input records -->
@@ -185,7 +188,7 @@
 	<!-- this is where we are scheduling the job to run using our scheduler every 15 min, note how the method of the
 	     scheduler and the cron expression to be used are being specified -->
 	<task:scheduled-tasks>
-		<task:scheduled ref="myScheduler" method="run" cron="0 0/15 * * * ?"/>
+		<task:scheduled ref="myScheduler" method="run" cron="0 0/01 * * * ?"/>
 	</task:scheduled-tasks>
 
 </beans>			
