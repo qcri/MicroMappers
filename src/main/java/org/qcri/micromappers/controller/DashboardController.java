@@ -80,54 +80,6 @@ public class DashboardController {
         return "/dashboard/global";
     }
 
-    @RequestMapping(value={"/globalTest"})
-    public String globalOverviewTest(Model model, HttpServletRequest request,
-                         @RequestParam(value = "page", defaultValue = "1") String page) {
-
-        int pageNumber = Integer.valueOf(page);
-
-        List<GlobalDataSources> globalDataSourcesList = globalDataSourcesService.findAll("");
-
-        PageRequest pageRequestreq =
-                new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
-
-        int max = (Constants.DEFAULT_PAGE_SIZE*(pageNumber+1)>globalDataSourcesList.size())?
-                globalDataSourcesList.size(): Constants.DEFAULT_PAGE_SIZE*(pageNumber+1);
-
-
-        int i = (pageNumber -1) * Constants.DEFAULT_PAGE_SIZE;
-        int j = i + (Constants.DEFAULT_PAGE_SIZE-1);
-        if(j >= globalDataSourcesList.size()){
-            j = globalDataSourcesList.size() - 1;
-        }
-
-        List<GlobalDataSources> pageDataSet = new ArrayList<GlobalDataSources>();
-        for(int k= 0; k < globalDataSourcesList.size(); k++){
-            if(k>=i && k <= j){
-                pageDataSet.add(globalDataSourcesList.get(k));
-            }
-        }
-
-        Page<GlobalDataSources> pages =
-                new PageImpl<GlobalDataSources>(pageDataSet, pageRequestreq, globalDataSourcesList.size());
-
-        PageInfo<GlobalDataSources> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
-
-
-        model.addAttribute("globaldataset", globalDataSourcesList);
-
-        model.addAttribute("page", pageInfo);
-        List<WordCloud> wordClouds = globalDataSourcesService.sycronizeKeyWord(globalDataSourcesList);
-
-        JSONArray jsonArray = globalDataSourcesService.KeywordToJsonArray(wordClouds);
-
-        model.addAttribute("keywords", wordClouds);
-        model.addAttribute("wordClouds", jsonArray.toJSONString());
-
-        return "/dashboard/globalTest";
-    }
-
 
     private String getWordCloudModelData(List<GlobalDataSources> globalDataSourcesList){
 

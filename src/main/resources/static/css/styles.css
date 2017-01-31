@@ -26,3 +26,12 @@ color: #3b5998;
 .twitter-color{
 color: #1da1f2;
 }
+
+.hoverMe {
+  vertical-align: top;
+}
+.iframetooltip {
+  border: 2px solid steelblue;
+  width: 470px;
+  height: 100px;
+}
