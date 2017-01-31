@@ -1,13 +1,6 @@
 package org.qcri.micromappers.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import org.qcri.micromappers.utility.CollectionType;
 
@@ -34,6 +27,12 @@ public class DataFeed extends ExtendedBaseEntity
 	@ManyToOne
 	@JoinColumn(name="parent_feed_id")
 	private DataFeed parentFeed;
+
+	@Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
+	private Boolean computerVisionEnabled;
+
+	@OneToOne(mappedBy = "dataFeed")
+	ImageAnalyserTask imageAnalyserTask;
 
 	/**
 	 * @return the provider
@@ -89,5 +88,21 @@ public class DataFeed extends ExtendedBaseEntity
 	 */
 	public void setCollection(Collection collection) {
 		this.collection = collection;
+	}
+
+	public Boolean getComputerVisionEnabled() {
+		return computerVisionEnabled;
+	}
+
+	public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
+		this.computerVisionEnabled = computerVisionEnabled;
+	}
+
+	public ImageAnalyserTask getImageAnalyserTask() {
+		return imageAnalyserTask;
+	}
+
+	public void setImageAnalyserTask(ImageAnalyserTask imageAnalyserTask) {
+		this.imageAnalyserTask = imageAnalyserTask;
 	}
 }

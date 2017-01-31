@@ -27,7 +27,7 @@ public class MSCognitiveProcessor {
 
     private static Logger logger = Logger.getLogger(MSCognitiveProcessor.class);
 
-    public static ImageAnalysis processClassifiedInfo(String classfiedInfo, Object dataObject){
+    public static ImageAnalysis processClassifiedInfo(String classfiedInfo, Object dataObject, String imageURL){
         ImageAnalysis analysis = null;
         if(ComputerVisionStatus.EXCEPTION_NOT_CORRECT_IMAGE_FORMAT.getStatus().equalsIgnoreCase(classfiedInfo)){
             return analysis;
@@ -48,7 +48,7 @@ public class MSCognitiveProcessor {
             Set<ImageTag> tags = generateTag((JSONArray)jsonObject.get("tags"));
             Set<ImageDescription> descriptionSet = generateDescription((JSONObject) jsonObject.get("description"));
 
-            analysis = createImageAnalysisInstance(dataObject, adult,classifies,tags,descriptionSet);
+            analysis = createImageAnalysisInstance(dataObject, adult,classifies,tags,descriptionSet, imageURL);
 
             adult.setImageAnalysis(analysis);
             classifies = setImageAnalysisForCategory(classifies, analysis);
@@ -64,7 +64,7 @@ public class MSCognitiveProcessor {
     }
 
     private static ImageAnalysis createImageAnalysisInstance(Object dataObject,ImageAdult adult,Set<ImageClassify> classifies,
-                                                      Set<ImageTag> tags, Set<ImageDescription> descriptionSet){
+                                                      Set<ImageTag> tags, Set<ImageDescription> descriptionSet, String imageURL){
         ImageAnalysis analysis = null;
         if(dataObject instanceof GdeltMMIC) {
             GdeltMMIC gdeltMMIC = (GdeltMMIC)dataObject;
@@ -83,6 +83,11 @@ public class MSCognitiveProcessor {
         }
         if(dataObject instanceof DataFeed){
             // let's see how we will handle when we get dataset here.
+            DataFeed dataFeed = (DataFeed)dataObject;
+            analysis = new ImageAnalysis(imageURL, null, null,
+                    ComputerVisionStatus.OK.getStatus(), adult, descriptionSet, classifies,
+                    tags,dataFeed);
+
         }
 
         return analysis;

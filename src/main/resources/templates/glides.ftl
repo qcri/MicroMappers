@@ -20,7 +20,8 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-                                <a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank">${info.glideCode}</a>
+                                <a id="${info.glideCode}" href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank" class="hoverMe">${info.glideCode}</a>
+                                &nbsp;&nbsp;<iframe src="http://reliefweb.int/disaster/${info.glideCode}" class="iframetooltip"></iframe>
 							</td>
 							<td title="${info.updated}">
 								${info.updated}

@@ -2,6 +2,7 @@ package org.qcri.micromappers.service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,8 @@ public class DataFeedService
 
 	private DataFeed create(DataFeed dataFeed)
 	{
+		dataFeed.setComputerVisionEnabled(dataFeed.getCollection().getComputerVisionEnabled());
+
 		try{
 			return dataFeedRepository.save(dataFeed);
 		}catch(DataIntegrityViolationException de){
@@ -56,6 +59,10 @@ public class DataFeedService
 			logger.error("Error while fetching dataFeed by provider & feedId", e);
 			throw new MicromappersServiceException("Error while fetching dataFeed by provider & feedId", e);
 		}
+	}
+
+	public List<DataFeed> findByComputerVisionEnabled(boolean computerVisionEnabled){
+		return dataFeedRepository.findByComputerVisionEnabled(computerVisionEnabled);
 	}
 
 	public DataFeed persistToDbAndFile(DataFeed dataFeed, String feed)
