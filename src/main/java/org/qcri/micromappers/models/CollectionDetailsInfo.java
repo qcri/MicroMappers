@@ -42,6 +42,7 @@ public class CollectionDetailsInfo implements Serializable{
     private Integer durationHours;
     private int fetchInterval;
     private int fetchFrom;
+    private boolean isComputerVisionEnabled;
     
 	public String getTrack() {
 		return track;
@@ -147,6 +148,7 @@ public class CollectionDetailsInfo implements Serializable{
 		collection.setLangFilters(this.getLangFilters());
 		collection.setFetchInterval(this.getFetchInterval());
 		collection.setFetchFrom(this.getFetchFrom());
+		collection.setComputerVisionEnabled(this.isComputerVisionEnabled());
 		
 		if(StringUtils.isNotBlank(this.getTrack())) {
 			collection.setTrack(this.getTrack().toLowerCase().trim());
@@ -215,6 +217,18 @@ public class CollectionDetailsInfo implements Serializable{
 	 */
 	public void setFacebookStatus(CollectionStatus facebookStatus) {
 		this.facebookStatus = facebookStatus;
+	}
+	/**
+	 * @return the isComputerVisionEnabled
+	 */
+	public boolean isComputerVisionEnabled() {
+		return isComputerVisionEnabled;
+	}
+	/**
+	 * @param isComputerVisionEnabled the isComputerVisionEnabled to set
+	 */
+	public void setComputerVisionEnabled(boolean isComputerVisionEnabled) {
+		this.isComputerVisionEnabled = isComputerVisionEnabled;
 	}
 	
 }

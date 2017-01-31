@@ -323,6 +323,7 @@ public class Collection extends ExtendedBaseEntity {
 		collectionDetailsInfo.setFacebookStatus(this.facebookStatus);
 		collectionDetailsInfo.setTrack(this.getTrack());
 		collectionDetailsInfo.setTrashed(this.isTrashed);
+		collectionDetailsInfo.setComputerVisionEnabled(this.getComputerVisionEnabled());
 		if(this.getGlobalEventDefinition() != null){
 			collectionDetailsInfo.setGlobalEventDefinition(this.getGlobalEventDefinition());
 		}
