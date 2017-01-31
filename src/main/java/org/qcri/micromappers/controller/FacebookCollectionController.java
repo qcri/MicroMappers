@@ -213,9 +213,11 @@ public class FacebookCollectionController extends BaseCollectionController{
 	}
 
 
-	@RequestMapping(value = "/searchProfiles", method={RequestMethod.POST})
+	@RequestMapping(value = "/searchProfiles", method={RequestMethod.GET})
 	@ResponseBody
-	public Object searchProfiles(@RequestParam String keyword, @RequestParam Integer limit, @RequestParam Integer offset) {
+	public Object searchProfiles(@RequestParam String keyword,
+			@RequestParam(value = "limit", required = false, defaultValue = "30") Integer limit,
+			@RequestParam(value = "offset", required = false, defaultValue = "0") Integer offset) {
 		Account authenticatedUser = util.getAuthenticatedUser();
 		if(authenticatedUser != null){
 			UserConnection userConnection = userConnectionService.getByProviderIdAndUserId(CollectionType.FACEBOOK.getValue(), authenticatedUser.getUserName());

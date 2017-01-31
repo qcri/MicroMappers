@@ -46,6 +46,15 @@
 	  <span aria-hidden="true">&times;</span>
 	</button>
 </div>
+
+<!-- ellipsis function -->
+<#function applyEllipsis word max>
+	<#if word?length gt max+3 >
+		<#return word[0..*max] + "...">
+	</#if>
+  	<#return word>
+</#function>
+		
 <script>
 	$('#alertCloseButton').on('click', function(e) {
 	    e.preventDefault();

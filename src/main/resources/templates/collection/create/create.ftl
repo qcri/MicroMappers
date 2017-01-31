@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<#include "_header.html">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 	<body>
 		<#include "_navbar.ftl">
 		<#if eventType?? && eventTypeId?? >
@@ -72,10 +74,17 @@
 						</div>
 						
 						<div id="facebookConfigDiv" hidden=true>
+						
+						
 							<div class="form-group">
 								<label class="control-label col-sm-3" for="subscribedProfiles">Subscribed Profiles :</label>
 								<div class="col-sm-6"> 
-									<textarea class="form-control" rows="6" name="subscribedProfiles" placeholder="Search profiles and select"></textarea>
+									<!-- multiple dropdown -->
+							  		<select class="subscribedProfileSelect js-states form-control" id="id_label_multiple" multiple="multiple">
+									
+									<!-- Options added by remote search text -->
+							  		
+							  		</select>
 								</div>
 							</div>
 							<div class="form-group">

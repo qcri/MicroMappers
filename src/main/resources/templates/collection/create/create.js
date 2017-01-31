@@ -59,6 +59,38 @@ $(document).ready(function() {
     for(i = 1; i < LANGS.length; i++) { 
         langSelect.add(new Option(LANGS[i][0], LANGS[i][1]));
     }
+    
+    //Searching the subscribed profiles
+    $('.subscribedProfileSelect').select2({
+        width:"100%",
+        placeholder: "Search facebook Pages/Groups/Events to subscribe.",
+        closeOnSelect: false,
+        
+        ajax: {
+            url: "${rc.getContextPath()}/facebook/searchProfiles",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                keyword: params.term, // search term
+                limit: 30,
+                offset: 0
+              };
+            },
+            processResults: function (data, params) {
+              return {
+                results: data
+              };
+            },
+            cache: true
+          },
+          escapeMarkup: function (markup) { return markup; },
+          minimumInputLength: 1,
+          templateResult: formatRepo,
+          templateSelection: formatRepoSelection
+          
+          
+     });
 });
 
 $('#provider').change(function() {
@@ -95,7 +127,7 @@ function createCollection() {
             fetchInterval: document.getElementsByName('fetchInterval')[0].value,
             fetchFrom: document.getElementsByName('fetchFrom')[0].value,
             langFilters: langFilters.join(","),
-            subscribedProfiles: document.getElementsByName('subscribedProfiles')[0].value,
+            subscribedProfiles: getSubscribedProfiles(),
             provider: document.getElementsByName('provider')[0].value,
     };
     
@@ -129,4 +161,44 @@ function createCollection() {
             }
         }
     });
+}
+
+function getSubscribedProfiles(){
+    var selectedProfilesObject = $(".subscribedProfileSelect").select2('data');
+    var newSelectedProfilesObject = [];
+    
+    selectedProfilesObject.forEach(function(selectedProfile) {
+        var profile = {};
+        profile.id = selectedProfile.id;
+        profile.link = selectedProfile.link;
+        profile.fans = selectedProfile.fans;
+        profile.name = selectedProfile.name;
+        profile.imageUrl = selectedProfile.imageUrl;
+        profile.type = selectedProfile.type;
+        
+        newSelectedProfilesObject.push(profile);
+    })
+        
+    return JSON.stringify(newSelectedProfilesObject);
+}
+
+function formatRepo (repo) {
+    if (repo.loading) return repo.text;
+    
+    var markup = "<div class='select2-result-repository clearfix'>" +
+      "<div class='select2-result-repository__avatar'><img src='" + repo.imageUrl + "' /></div>" +
+      "<div class='select2-result-repository__meta'>" +
+        "<div class='select2-result-repository__title'>" + repo.name + "</div>"; 
+    
+    if(repo.type == "PAGE"){
+        markup += "<span class='select2-result-repository__likes'>"+ repo.fans + " Likes</span>";
+    }else{
+        markup += "<span class='select2-result-repository__likes'>"+ repo.type + "</span>";
+    }
+    
+    return markup;
+}
+
+function formatRepoSelection (repo) {
+    return repo.name || repo.text;
 }

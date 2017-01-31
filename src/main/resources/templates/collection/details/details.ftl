@@ -98,11 +98,11 @@
 					<table class="table table-striped">
 						<tbody>
 							<tr>
-								<td>Event:</td>
+								<td class="col-md-2">Event:</td>
 								<#if collectionInfo.globalEventDefinition??>
-									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Snopes: ${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">Snopes: ${collectionInfo.globalEventDefinition.title}</a></td>
+									<td class="text-right col-md-10" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Snopes: ${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">Snopes: ${collectionInfo.globalEventDefinition.title}</a></td>
 								<#elseif collectionInfo.glideMaster??>
-									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Gdelt: ${collectionInfo.glideMaster.glideCode}"><a href="http://reliefweb.int/disaster/${collectionInfo.glideMaster.glideCode}" target="_blank">Gdelt: ${collectionInfo.glideMaster.glideCode}</a></td>
+									<td class="text-right col-md-10" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Gdelt: ${collectionInfo.glideMaster.glideCode}"><a href="http://reliefweb.int/disaster/${collectionInfo.glideMaster.glideCode}" target="_blank">Gdelt: ${collectionInfo.glideMaster.glideCode}</a></td>
 								</#if>
 
 							</tr>
@@ -145,7 +145,26 @@
 							<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">
 								<tr>
 									<td>Subscribed Profiles:</td>
-									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.subscribedProfiles}">${collectionInfo.subscribedProfiles}</td>
+									<td>
+										<div class="row">
+											<#list collectionInfo.subscribedProfiles?eval as profile>
+												<div class="profile-div" title="${profile.name}">
+													<div style="float: left">
+														<img src=${profile.imageUrl}>
+	    											</div>
+	    											<div style="float: left; padding: 8px">
+	    												<b>${applyEllipsis(profile.name,14)}</b><br>
+	    												<#if profile.type == "PAGE">
+	    													${profile.fans} Likes
+	    												<#else>
+	    													${profile.type}
+	    												</#if>
+	    											</div>
+	    											<div style="float: right;padding: -5px;margin: -5px;color: #3c7ac6"><a href=${profile.link} target="_blank" title="${profile.link}"><i class="fa fa-external-link link"></i></a></div>
+												</div>
+											</#list>
+										</div>
+									</td>
 								</tr>
 								<tr>
 									<td>Fetch Interval:</td>
