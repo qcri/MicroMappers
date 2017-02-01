@@ -22,9 +22,8 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user"></span>&nbsp;&nbsp;${current_user}<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href=""><span class="icon icon-user"></span>&nbsp;&nbsp;My Profile</a></li>
-						<li><a href=""><span class="icon icon-th-large"></span>&nbsp;&nbsp;My Collections</a></li>
-						<li><a href=""><span class="icon icon-cog"></span>&nbsp;&nbsp;My Settings</a></li>
+						<li><a href="${rc.getContextPath()}/collection/view/list"><span class="icon icon-th-large"></span>&nbsp;&nbsp;My Collections</a></li>
+						<li><a href="${rc.getContextPath()}/connect"><span class="icon icon-cog"></span>&nbsp;&nbsp;My Settings</a></li>
 						<li class="divider"></li>
 						<li><a href="#" onclick="document.getElementById('signOut').submit();"><i class="icon icon-off"></i>&nbsp;&nbsp;Sign out</a></li>
 					</ul>

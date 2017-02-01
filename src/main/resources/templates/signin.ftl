@@ -8,8 +8,8 @@
 			<p style="padding-top:5px;">
 				<span class="label label-warning"><i class="icon-bullhorn"></i>Note</span>
 				By click the <strong>Sign in button</strong> below you are agreeing to
-				the <a href="">terms of use</a> and
-				<a href="">data</a>.
+				the <a href="http://aidr.qcri.org/QSS-Usr-Agr-Print-Version.docx.pdf" target="_blank">terms of use</a> and
+				<a href="http://aidr.qcri.org/QSS-Usr-Agr-Print-Version.docx.pdf" target="_blank">data</a>.
 			</p>
 		</div>
 			

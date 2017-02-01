@@ -21,7 +21,7 @@
 						<a href="${rc.getContextPath()}/collection/view/list" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
-                        <a href="${rc.getContextPath()}/collection/view/dashboard" class="btn btn-primary">
+                        <a href="${rc.getContextPath()}/collection/view/dashboard" class="btn btn-primary disabled">
                             Dashboard <i class="icon-chevron-right"></i>
                         </a>
 					</div>

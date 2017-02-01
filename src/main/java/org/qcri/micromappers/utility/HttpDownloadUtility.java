@@ -1,5 +1,7 @@
 package org.qcri.micromappers.utility;
 
+import facebook4j.internal.logging.Logger;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.net.URL;
  */
 public class HttpDownloadUtility {
     private static final int BUFFER_SIZE = 4096;
+    private static Logger logger = Logger.getLogger(HttpDownloadUtility.class);
 
     public static boolean downloadFile(String fileURL, String saveDir, String fileName){
         boolean downloadFileCompleted = false;
@@ -29,11 +32,6 @@ public class HttpDownloadUtility {
                 int contentLength = httpConn.getContentLength();
 
                 fileName = getFileName(fileURL, disposition, fileName);
-
-                System.out.println("Content-Type = " + contentType);
-                System.out.println("Content-Disposition = " + disposition);
-                System.out.println("Content-Length = " + contentLength);
-                System.out.println("fileName = " + fileName);
 
                 // opens input stream from the HTTP connection
                 InputStream inputStream = httpConn.getInputStream();
@@ -55,18 +53,19 @@ public class HttpDownloadUtility {
                 }
 
                 downloadFileCompleted = true;
-                System.out.println("File downloaded");
+
             } else {
-                System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+                //System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+                logger.error("No file to download. Server replied HTTP code: " + responseCode);
             }
 
 
         }
         catch(IOException e1){
-            System.out.println("IOException : " + e1);
+            logger.error("IOException : " + e1);
         }
         catch(Exception e2){
-            System.out.println("Exception : " + e2);
+            logger.error("Exception : " + e2);
         }
         finally{
             httpConn.disconnect();
@@ -107,11 +106,6 @@ public class HttpDownloadUtility {
 
                 //fileName = getFileName(fileURL, disposition, fileName);
 
-                System.out.println("Content-Type = " + contentType);
-                System.out.println("Content-Disposition = " + disposition);
-                System.out.println("Content-Length = " + contentLength);
-                System.out.println("fileName = " + fileName);
-
                 // opens input stream from the HTTP connection
                 InputStream inputStream = httpConn.getInputStream();
                 String saveFilePath = saveDir + File.separator + fileName;
@@ -132,18 +126,18 @@ public class HttpDownloadUtility {
                 }
 
                 downloadFileCompleted = true;
-                System.out.println("File downloaded");
+
             } else {
-                System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+                logger.error("No file to download. Server replied HTTP code: " + responseCode);
             }
 
 
         }
         catch(IOException e1){
-            System.out.println("IOException : " + e1);
+            logger.error("IOException : " + e1);
         }
         catch(Exception e2){
-            System.out.println("Exception : " + e2);
+            logger.error("Exception : " + e2);
         }
         finally{
             if(httpConn!=null) httpConn.disconnect();
