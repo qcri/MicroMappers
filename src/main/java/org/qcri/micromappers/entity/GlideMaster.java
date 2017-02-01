@@ -23,12 +23,10 @@ public class GlideMaster extends ExtendedBaseEntity {
     @JoinColumn(name = "glide_master_id")
     private List<Collection> collection;
 
-    @Transient
     @OneToMany
     @JoinColumn(name = "glide_code", referencedColumnName = "glide_code")
     private List<Gdelt3W> Gdelt3WList;
 
-    @Transient
     @OneToMany
     @JoinColumn(name = "glide_code", referencedColumnName = "glide_code")
     private List<GdeltMMIC> GdeltMMICList;

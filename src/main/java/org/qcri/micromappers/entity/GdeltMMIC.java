@@ -33,7 +33,7 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
     @Column(name = "img_url", nullable = false, length = 1000)
     private String imgURL;
 
-    @Column(name = "glide_code", nullable = false, length = 500)
+    @Column(name = "glide_code", nullable = false, length = 100)
     private String glideCode;
 
     @Column(name = "local_img_url", nullable = true, length = 1000)
