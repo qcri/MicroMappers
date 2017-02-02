@@ -21,7 +21,11 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.name}">
+								<#if info.globalEventDefinition?? >
+									<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.globalEventDefinition.title}">
+								<#elseif info.glideMaster?? >
+									<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.glideMaster.glideCode}">
+								</#if>
 								${info.name}</a>
 								<#if current_user != info.owner>
 									by ${info.owner}
@@ -41,7 +45,7 @@
 							<td>
 								<#if info.globalEventDefinition?? >
 									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}">
-										${info.globalEventDefinition.title}
+										${info.globalEventDefinition.title?substring(0,25)}.....
 									</a>
 								<#elseif info.glideMaster?? >
 									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" target="_blank" >${info.glideMaster.glideCode}</a>
@@ -68,6 +72,11 @@
 									<i class="confirm-edit btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
 										<span class="glyphicon glyphicon-edit"></span>
 									</i>
+								</span>
+								<span data-placement="top" data-toggle="tooltip" title="download">
+									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}" data-page="${page.pageNumber}">
+                                        <span class="glyphicon glyphicon-download"></span>
+                                    </i>
 								</span>
 							</td>
 						</tr>
