@@ -1,12 +1,12 @@
 package org.qcri.micromappers.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
-
-import javax.persistence.*;
-
-import static org.apache.commons.lang3.StringEscapeUtils.*;
 
 /**
  * Created by jlucas on 12/4/16.

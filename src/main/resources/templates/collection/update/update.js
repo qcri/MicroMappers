@@ -86,6 +86,47 @@ $(document).ready(function() {
     }).on('success.form.bv', function (e) {
         updateCollection();
     });
+
+    
+    //Searching the subscribed profiles
+    var selectedProfiles = [];
+    var oldSubscribedProfiles = JSON.parse('${collectionInfo.subscribedProfiles}');
+    oldSubscribedProfiles.forEach(function(profile){
+        selectedProfiles.push(profile.id);
+    })
+    
+ $('.subscribedProfileSelect').select2({
+        width:"100%",
+        placeholder: "Search facebook Pages/Groups/Events to subscribe.",
+        closeOnSelect: false,
+        data: oldSubscribedProfiles,
+        
+        ajax: {
+            url: "${rc.getContextPath()}/facebook/searchProfiles",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+              return {
+                keyword: params.term, // search term
+                limit: 30,
+                offset: 0
+              };
+            },
+            processResults: function (data, params) {
+              return {
+                results: data
+              };
+            },
+            cache: true
+          },
+          
+          escapeMarkup: function (markup) { return markup; },
+          minimumInputLength: 1,
+          templateResult: formatFacebookProfile,
+          templateSelection: formatFacebookProfileSelection
+     });
+ 
+     $('.subscribedProfileSelect').val(selectedProfiles).trigger('change');
 });
 
 
@@ -103,7 +144,7 @@ function updateCollection() {
     var collectionId = $('#collectionId').val();
     var data = {
             track: document.getElementsByName('track')[0].value.toLowerCase().trim(),
-            subscribedProfiles: document.getElementsByName('subscribedProfiles')[0].value,
+            subscribedProfiles: getSubscribedProfiles(),
             fetchInterval: document.getElementsByName('fetchInterval')[0].value,
             fetchFrom: document.getElementsByName('fetchFrom')[0].value,
             langFilters: langFilters.join(","),
@@ -127,4 +168,47 @@ function updateCollection() {
             }
         }
     });
+    
+}
+
+
+function getSubscribedProfiles(){
+    var selectedProfilesObject = $(".subscribedProfileSelect").select2('data');
+    var newSelectedProfilesObject = [];
+    
+    selectedProfilesObject.forEach(function(selectedProfile) {
+        var profile = {};
+        profile.id = selectedProfile.id;
+        profile.link = selectedProfile.link;
+        profile.fans = selectedProfile.fans;
+        profile.name = selectedProfile.name;
+        profile.imageUrl = selectedProfile.imageUrl;
+        profile.type = selectedProfile.type;
+        
+        newSelectedProfilesObject.push(profile);
+    })
+        
+    return JSON.stringify(newSelectedProfilesObject);
+}
+
+
+function formatFacebookProfile (profile) {
+    if (profile.loading) return profile.text;
+    
+    var markup = "<div class='select2-result-repository clearfix'>" +
+      "<div class='select2-result-repository__avatar'><img src='" + profile.imageUrl + "' /></div>" +
+      "<div class='select2-result-repository__meta'>" +
+        "<div class='select2-result-repository__title'>" + profile.name + "</div>"; 
+    
+    if(profile.type == "PAGE"){
+        markup += "<span class='select2-result-repository__likes'>"+ profile.fans + " Likes</span>";
+    }else{
+        markup += "<span class='select2-result-repository__likes'>"+ profile.type + "</span>";
+    }
+    
+    return markup;
+}
+
+function formatFacebookProfileSelection (profile) {
+    return profile.name || profile.text;
 }
