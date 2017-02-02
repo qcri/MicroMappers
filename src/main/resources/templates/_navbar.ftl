@@ -48,7 +48,7 @@
 
 <!-- ellipsis function -->
 <#function applyEllipsis word max>
-	<#if word?length gt max+3 >
+	<#if word?length gt max-3 >
 		<#return word[0..*max] + "...">
 	</#if>
   	<#return word>

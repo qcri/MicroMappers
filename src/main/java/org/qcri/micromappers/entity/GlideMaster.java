@@ -1,9 +1,16 @@
 package org.qcri.micromappers.entity;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * Created by jlucas on 1/8/17.
@@ -19,6 +26,7 @@ public class GlideMaster extends ExtendedBaseEntity {
     @Column(nullable=false, name="updated")
     private Timestamp updated;
 
+    @JsonBackReference
     @OneToMany
     @JoinColumn(name = "glide_master_id")
     private List<Collection> collection;

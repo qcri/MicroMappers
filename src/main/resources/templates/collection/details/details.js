@@ -7,8 +7,7 @@ $.ajaxSetup({
 });
 
 $('#stopTwitterButton').click(function() {
-    // handle deletion here
-    var id = $('#stopTwitterButton').data('id');
+    var id = '${collectionInfo.id}';
     
     $.ajax({
         type: "GET",
@@ -26,8 +25,7 @@ $('#stopTwitterButton').click(function() {
 });
 
 $('#stopFacebookButton').click(function() {
-    // handle deletion here
-    var id = $('#stopFacebookButton').data('id');
+    var id = '${collectionInfo.id}';
     
     $.ajax({
         type: "GET",
@@ -46,7 +44,7 @@ $('#stopFacebookButton').click(function() {
 
 $('#startTwitterButton').click(function() {
     // handle deletion here
-    var id = $('#startTwitterButton').data('id');
+    var id = '${collectionInfo.id}';
     
     $.ajax({
         type: "GET",
@@ -64,8 +62,7 @@ $('#startTwitterButton').click(function() {
 });
 
 $('#startFacebookButton').click(function() {
-    // handle deletion here
-    var id = $('#startFacebookButton').data('id');
+    var id = '${collectionInfo.id}';
     
     $.ajax({
         type: "GET",
@@ -84,7 +81,7 @@ $('#startFacebookButton').click(function() {
 
 $('#restoreCollectionButton').click(function() {
     // handle deletion here
-    var id = $('#restoreCollectionButton').data('id');
+    var id = '${collectionInfo.id}';
     
     $.ajax({
         type: "POST",
@@ -103,20 +100,18 @@ $('#restoreCollectionButton').click(function() {
 
 function autoRefreshCollectionCount()
 {    
-     var id = $('#twitterCount').data('id');
-     if(!id){
-         id = $('#facebookCount').data('id');
-     }
+     var id = '${collectionInfo.id}';
+     
      $.get( "${rc.getContextPath()}/collection/status?id="+id );
      
-     if(initializeTwitterCountScheduler){
+     if(toStartTwitterCountScheduler()){
          $.get( "${rc.getContextPath()}/twitter/count?id="+id )
              .done(function( data ) {
                  $('#twitterCount').html(data.data);
          });
      }
      
-     if(initializeFacebookCountScheduler){
+     if(toStartFacebookCountScheduler()){
          $.get( "${rc.getContextPath()}/facebook/count?id="+id )
              .done(function( data ) {
                  $('#facebookCount').html(data.data);
@@ -124,10 +119,24 @@ function autoRefreshCollectionCount()
      }
 }
 
-function countScheduler() {
-    setInterval('autoRefreshCollectionCount()', 5000); // refresh collection count after every 5 secs
-};
-
-if(initializeTwitterCountScheduler || initializeFacebookCountScheduler){
+if(toStartTwitterCountScheduler() || toStartFacebookCountScheduler()){
     setInterval('autoRefreshCollectionCount()', 5000);
+}
+
+function toStartTwitterCountScheduler(){
+    status = '${collectionInfo.twitterStatus}';
+    if(status =="RUNNING" || status == "RUNNING_WARNING" || status == "WARNING"){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function toStartFacebookCountScheduler(){
+    status = '${collectionInfo.facebookStatus}';
+    if(status =="RUNNING" || status == "RUNNING_WARNING" || status == "WARNING"){
+        return true;
+    }else{
+        return false;
+    }
 }

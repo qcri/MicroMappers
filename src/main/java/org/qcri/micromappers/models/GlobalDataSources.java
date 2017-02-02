@@ -1,13 +1,14 @@
 package org.qcri.micromappers.models;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.qcri.micromappers.entity.*;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.qcri.micromappers.entity.Gdelt3W;
+import org.qcri.micromappers.entity.GdeltMMIC;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 
 /**
  * Created by jlucas on 1/16/17.

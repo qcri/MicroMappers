@@ -20,22 +20,16 @@
 										</#if>
 										
                                         <a href="${rc.getContextPath()}/collection/view/update?id=${collectionInfo.id}"><span class="glyphicon glyphicon-edit" title="Edit"></span></a>
-                                        <script>
-                                        	initializeTwitterCountScheduler=false;
-                                        	initializeFacebookCountScheduler=false;
-                                        </script>
                                         <br/>
                                         
 									<!-- For twitter -->
 										<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER">
 											<#if collectionInfo.twitterStatus =="RUNNING">
 		                                    	<span class="text-success">
-		                                        	<script>initializeTwitterCountScheduler=true</script>
 											<#elseif collectionInfo.twitterStatus =="NOT_RUNNING" >
 		                                    	<span class="text-muted">
 											<#elseif collectionInfo.twitterStatus =="RUNNING_WARNING" || collectionInfo.twitterStatus =="WARNING">
 			                                    <span class="text-warning">
-			                                        <script>initializeTwitterCountScheduler=true</script>
 											<#elseif collectionInfo.twitterStatus =="TRASHED" >
 		                                    	<span class="text-info">
 											<#else>
@@ -52,12 +46,10 @@
 										<#if collectionInfo.provider == "ALL" || collectionInfo.provider == "FACEBOOK">
 											<#if collectionInfo.facebookStatus =="RUNNING">
 		                                    	<span class="text-success">
-		                                        	<script>initializeFacebookCountScheduler=true</script>
 											<#elseif collectionInfo.facebookStatus =="NOT_RUNNING" >
 		                                    	<span class="text-muted">
 											<#elseif collectionInfo.facebookStatus =="RUNNING_WARNING" || collectionInfo.facebookStatus =="WARNING">
 			                                    <span class="text-warning">
-			                                        <script>initializeFacebookCountScheduler=true</script>
 											<#elseif collectionInfo.facebookStatus =="TRASHED" >
 		                                    	<span class="text-info">
 											<#else>
@@ -152,8 +144,8 @@
 													<div style="float: left">
 														<img src=${profile.imageUrl}>
 	    											</div>
-	    											<div style="float: left; padding: 8px">
-	    												<b>${applyEllipsis(profile.name,14)}</b><br>
+	    											<div style="float: left; padding: 8px; line-height: 1.1;">
+	    												<b>${applyEllipsis(profile.name,12)}</b><br>
 	    												<#if profile.type == "PAGE">
 	    													${profile.fans} Likes
 	    												<#else>
