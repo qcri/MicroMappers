@@ -1,16 +1,18 @@
 package org.qcri.micromappers.controller;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.qcri.micromappers.entity.Account;
-import org.qcri.micromappers.entity.Collection;
-import org.qcri.micromappers.entity.GlideMaster;
-import org.qcri.micromappers.entity.GlobalEventDefinition;
+import org.qcri.micromappers.entity.*;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
@@ -20,6 +22,9 @@ import org.qcri.micromappers.service.GlideMasterService;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.Util;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
+import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
+import org.qcri.micromappers.utility.persister.ZipDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,7 +41,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/collection/view")
 public class CollectionViewController {
 	protected static Logger logger = Logger.getLogger(CollectionViewController.class);
-	
+	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
+
+
 	@Autowired
 	private CollectionService collectionService;
 	@Autowired
@@ -57,13 +64,20 @@ public class CollectionViewController {
      * @return view of table collection/list/list.ftl
      */
     @RequestMapping(value="/list", method = RequestMethod.GET)
-    public String getAllCollections(Model model, HttpServletRequest request, 
+    public String getAllCollections(Model model, HttpServletRequest request, HttpServletResponse response,
     		@RequestParam(value = "page", defaultValue = "1") Integer page,
+			@RequestParam(value = "id", defaultValue = "") String id,
     		@RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
 			@RequestParam(value = "sortColumn", required = false, defaultValue = "createdAt") String sortColumn,
 			@RequestParam(value = "sortDirection", required = false, defaultValue = "DESC") Direction sortDirection) {
-        
-        Account account = util.getAuthenticatedUser();
+
+		if(id != null){
+			if(!id.isEmpty())
+			{
+				this.downloadZipFile(response, Long.valueOf(id));
+			}
+		}
+		Account account = util.getAuthenticatedUser();
         
         Page<Collection> pagedCollection =  collectionService.getAllByPage(account, page, pageSize, sortColumn, sortDirection);
         Page<CollectionDetailsInfo> pagedCollectionDetailsInfo = pagedCollection.map(pc -> pc.toCollectionDetailsInfo());
@@ -74,9 +88,8 @@ public class CollectionViewController {
         model.addAttribute("page", pageInfo);
         return "collection/list/list";
     }
-    
-    
-    /**
+
+	/**
      * This method is used to display the form to create a new collection.
      * @param model
      * @param request
@@ -166,4 +179,22 @@ public class CollectionViewController {
 		return "collection/update/update";
 	}
 
+	private void downloadZipFile(HttpServletResponse response, long id){
+		Collection collection = collectionService.getById(id);
+
+		response.setContentType("application/zip");
+		String reportName = collection.getCode() + "_" + new Date().getTime() +".zip";
+		response.setHeader("Content-disposition", "attachment;filename="+reportName);
+
+		try {
+			Path parentPath = Paths.get(configProperties.getProperty(MicromappersConfigurationProperty.Feed_PATH),
+					collection.getCode());
+
+			String source = collection.getCode();
+			ZipDirectory zipDirectory = new ZipDirectory(reportName, parentPath.toString());
+			zipDirectory.generateZipFile(response);
+		} catch(Exception e){
+			logger.error(e.getMessage());
+		}
+	}
 }
