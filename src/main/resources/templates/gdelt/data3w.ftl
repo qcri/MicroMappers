@@ -49,8 +49,13 @@
                 <td colspan="7" class="text-center">
                     <table style="width: 100%">
                         <tr>
-                            <td><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber}&dw=y">Download</a>
-                            &nbsp;&nbsp;&nbsp;</td>
+                            <td><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${glideCode}&page=${page.pageNumber}&dw=y">
+                                <span data-placement="top" data-toggle="tooltip" title="download">
+									<i class="confirm-download btn btn-primary btn-large" data-title="Download">
+                                        <span class="glyphicon glyphicon-download"></span>
+                                    </i>
+								</span><b>Download</b></a>
+                            </td>
                             <td><div style="margin:0px;">
                                 <ul class="pagination pull-right">
                                     <!-- First Page -->
