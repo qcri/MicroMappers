@@ -90,10 +90,14 @@ $(document).ready(function() {
     
     //Searching the subscribed profiles
     var selectedProfiles = [];
-    var oldSubscribedProfiles = JSON.parse('${collectionInfo.subscribedProfiles}');
-    oldSubscribedProfiles.forEach(function(profile){
-        selectedProfiles.push(profile.id);
-    })
+    var oldSubscribedProfiles;
+    if('${collectionInfo.subscribedProfiles}' != ''){
+        oldSubscribedProfiles = JSON.parse('${collectionInfo.subscribedProfiles}');
+        oldSubscribedProfiles.forEach(function(profile){
+            selectedProfiles.push(profile.id);
+        })
+    }
+    
     
  $('.subscribedProfileSelect').select2({
         width:"100%",
