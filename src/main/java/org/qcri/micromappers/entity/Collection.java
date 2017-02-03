@@ -15,8 +15,6 @@ import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "collection")
 public class Collection extends ExtendedBaseEntity {
@@ -36,12 +34,10 @@ public class Collection extends ExtendedBaseEntity {
 	@JoinColumn(name = "account_id", nullable=false)
 	private Account account;
 
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "global_event_definition_id", nullable=true)
 	private GlobalEventDefinition globalEventDefinition;
 	
-	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "glide_master_id", nullable=true)
 	private GlideMaster glideMaster;

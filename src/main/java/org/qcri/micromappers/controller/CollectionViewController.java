@@ -1,6 +1,5 @@
 package org.qcri.micromappers.controller;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -12,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.qcri.micromappers.entity.*;
+import org.qcri.micromappers.entity.Account;
+import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
@@ -190,7 +192,6 @@ public class CollectionViewController {
 			Path parentPath = Paths.get(configProperties.getProperty(MicromappersConfigurationProperty.Feed_PATH),
 					collection.getCode());
 
-			String source = collection.getCode();
 			ZipDirectory zipDirectory = new ZipDirectory(reportName, parentPath.toString());
 			zipDirectory.generateZipFile(response);
 		} catch(Exception e){

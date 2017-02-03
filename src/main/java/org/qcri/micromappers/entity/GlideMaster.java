@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Created by jlucas on 1/8/17.
@@ -26,7 +26,7 @@ public class GlideMaster extends ExtendedBaseEntity {
     @Column(nullable=false, name="updated")
     private Timestamp updated;
 
-    @JsonBackReference
+    @JsonIgnore
     @OneToMany
     @JoinColumn(name = "glide_master_id")
     private List<Collection> collection;

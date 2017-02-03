@@ -46,37 +46,4 @@
 	</button>
 </div>
 
-<!-- ellipsis function -->
-<#function applyEllipsis word max>
-	<#if word?length gt max-3 >
-		<#return word[0..*max] + "...">
-	</#if>
-  	<#return word>
-</#function>
-		
-<script>
-	$('#alertCloseButton').on('click', function(e) {
-	    e.preventDefault();
-	    $('#showAlert').hide();
-	});
-	
-	function showInfoAlert(msg){
-	    $('#showAlert').removeClass('alert-danger');
-	    $('#showAlert').addClass('alert-success');
-	    $('#alertText').html(msg);
-	    $('#showAlert').show();
-	    $('#showAlert').fadeIn('slow');
-	    
-	    setTimeout(function(){$('#showAlert').hide();}, 5000);
-	}
-
-	function showErrorAlert(msg){
-	    $('#showAlert').removeClass('alert-success');
-	    $('#showAlert').addClass('alert-danger');
-	    $('#alertText').html(msg);
-	    $('#showAlert').show();
-	    $('#showAlert').fadeIn('slow');
-	    
-	    setTimeout(function(){$('#showAlert').hide();}, 5000);
-	}
-</script>
+<#include "_common.ftl">

@@ -309,8 +309,8 @@ public class CollectionController {
 	@ResponseBody
 	public Object existName(@RequestParam String name) throws Exception {
 		boolean collectionNameExists = collectionService.isCollectionNameExists(name.trim().toLowerCase());
-		JSONObject response = new JSONObject();
-		response.put("valid", !collectionNameExists);
-		return response;
+		JSONObject jsonResponse = new JSONObject();
+		jsonResponse.put("valid", !collectionNameExists);
+		return jsonResponse;
 	}
 }
