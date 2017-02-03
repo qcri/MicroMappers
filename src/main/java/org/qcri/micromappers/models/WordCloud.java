@@ -2,6 +2,8 @@ package org.qcri.micromappers.models;
 
 import org.json.simple.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by jlucas on 1/19/17.
  */
@@ -26,6 +28,7 @@ public class WordCloud {
     }
 
 
+    @JsonIgnore
     public JSONObject toJson(){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("text", this.text);

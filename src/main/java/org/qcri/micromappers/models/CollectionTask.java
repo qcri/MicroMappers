@@ -6,9 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
- * @author Kushal A JAVA POJO class used to define a collection base class for
- *         Twitter/Facebook collection.
+ * A JAVA POJO class used to define a collection base class for Twitter/Facebook collection.
+ * @author Kushal 
  */
 public class CollectionTask {
 
@@ -198,6 +200,7 @@ public class CollectionTask {
 		this.provider = provider;
 	}
 
+	@JsonIgnore
 	@Override
 	public CollectionTask clone() {
 
@@ -247,6 +250,7 @@ public class CollectionTask {
 		return true;
 	}
 
+	@JsonIgnore
 	public boolean isToTrackAvailable() {
 		if (StringUtils.isNotBlank(toTrack)) {
 			return true;
@@ -255,6 +259,7 @@ public class CollectionTask {
 		}
 	}
 	
+	@JsonIgnore
 	public boolean isSubscribedProfilesAvailable() {
 		if (StringUtils.isNotBlank(subscribedProfiles)) {
 			return true;
@@ -263,6 +268,7 @@ public class CollectionTask {
 		}
 	}
 
+	@JsonIgnore
 	public boolean checkSocialConfigInfo() {
 
 		boolean isConfigured = StringUtils.isNotBlank(getAccessToken());

@@ -6,6 +6,8 @@ import java.util.List;
 import org.qcri.micromappers.utility.Constants;
 import org.springframework.data.domain.Page;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by jlucas on 12/21/16.
  */
@@ -41,6 +43,7 @@ public class PageInfo<T> implements Serializable {
         init(pages);
     }
 
+    @JsonIgnore
     private void init(Page<T> pages) {
 
         this.total = (int)pages.getTotalElements();
@@ -58,6 +61,7 @@ public class PageInfo<T> implements Serializable {
 
     }
 
+    @JsonIgnore
     private void calcNavigatePageNumbers() {
         if (this.pages <= navigatePages) {
             navigatePageNumbers = new int[this.pages];

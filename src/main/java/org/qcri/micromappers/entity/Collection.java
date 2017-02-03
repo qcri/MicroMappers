@@ -15,6 +15,8 @@ import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "collection")
 public class Collection extends ExtendedBaseEntity {
@@ -284,6 +286,7 @@ public class Collection extends ExtendedBaseEntity {
 		this.subscribedProfiles = subscribedProfiles;
 	}
 
+	@JsonIgnore
 	public CollectionTask toCollectionTask(UserConnection userConnection) {
 		CollectionTask task = new CollectionTask();
 		if(userConnection !=null){
@@ -307,6 +310,7 @@ public class Collection extends ExtendedBaseEntity {
 		return task;
 	}
 	
+	@JsonIgnore
 	public CollectionDetailsInfo toCollectionDetailsInfo() {
 		CollectionDetailsInfo collectionDetailsInfo = new CollectionDetailsInfo();
 		collectionDetailsInfo.setId(this.getId());

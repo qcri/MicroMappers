@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import org.qcri.micromappers.models.AccountDTO;
 import org.qcri.micromappers.utility.RoleType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="account")
 public class Account extends ExtendedBaseEntity
@@ -88,6 +90,7 @@ public class Account extends ExtendedBaseEntity
 		this.mailEnabled = mailEnabled;
 	}
 
+	@JsonIgnore
 	public AccountDTO toDTO(){
 		AccountDTO accountDTO = new AccountDTO();
 		accountDTO.setId(this.getId());

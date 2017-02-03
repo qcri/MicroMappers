@@ -82,6 +82,7 @@ public class GlideMaster extends ExtendedBaseEntity {
         GdeltMMICList = gdeltMMICList;
     }
 
+    @JsonIgnore
     public long getTotalCount3WImage() {
         long totalCount3WImage = 0;
 
@@ -93,6 +94,7 @@ public class GlideMaster extends ExtendedBaseEntity {
         return totalCount3WImage;
     }
 
+    @JsonIgnore
     public long getTotalCountMMICImage() {
         long totalCountMMICImage = 0;
 
@@ -104,6 +106,7 @@ public class GlideMaster extends ExtendedBaseEntity {
         return totalCountMMICImage;
     }
 
+    @JsonIgnore
     public long getTotalCount3WArticle() {
         long totalCount3WArticle = 0;
         if(Gdelt3WList.size() > 0) {
@@ -113,6 +116,7 @@ public class GlideMaster extends ExtendedBaseEntity {
         return totalCount3WArticle;
     }
 
+    @JsonIgnore
     public long getTotalCountMMICArticle() {
         long totalCountMMICArticle = 0;
 

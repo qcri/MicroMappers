@@ -13,6 +13,8 @@ import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Kushal
  *
@@ -129,6 +131,7 @@ public class CollectionDetailsInfo implements Serializable{
 		this.owner = owner;
 	}
 	
+	@JsonIgnore
 	public Collection toCollection() {
 		Collection collection = new Collection();
 		collection.setId(this.getId());
