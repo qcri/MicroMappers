@@ -183,7 +183,7 @@ public class FacebookFeedTracker implements Closeable {
 					postsOffset = feed.size() == DEFAULT_LIMIT ? postsOffset + DEFAULT_LIMIT : -1;
 					Long count = 0L;
 					for (Post post : feed) {
-						System.out.println("PostId: " +post.getId());
+//						System.out.println("PostId: " +post.getId());
 						DataFeed dataFeed = new DataFeed();
 						dataFeed.setCollection(collection);
 						dataFeed.setFeedId(post.getId());
@@ -199,28 +199,6 @@ public class FacebookFeedTracker implements Closeable {
 						}catch(MicromappersServiceException | JsonProcessingException e){
 							logger.error("Exception while persisting tweet to db & fileSystem", e);
 						}
-						
-						/*try {
-							JSONObject aidrJson = new JSONObject();
-							aidrJson.put("doctype", "facebook");
-							aidrJson.put("crisis_code", task.getCollectionCode());
-							aidrJson.put("crisis_name", task.getCollectionName());
-							aidrJson.put("parent_type", fbProfile.getType().name().toLowerCase());
-
-							JSONObject docJson = new JSONObject(gson.toJson(post));
-							docJson.put("aidr", aidrJson);
-
-							int likeCount = post.getLikes().getSummary() != null ? post.getLikes().getSummary()
-									.getTotalCount() : 0;
-							docJson.put("likesCount", likeCount);
-							int commentCount = post.getComments().getSummary() != null ? post.getComments()
-									.getSummary().getTotalCount() : 0;
-							docJson.put("commentsCount", commentCount);
-
-							//publisher.publish(channelName, docJson.toString());
-						} catch (JSONException e) {
-							logger.warn("Post error for parent id : " + fbProfile.getId() + " and type : " + fbProfile.getType().name());
-						}*/
 					}
 
 					GenericCache.getInstance().incrFbCounter(task.getCollectionCode(), count);

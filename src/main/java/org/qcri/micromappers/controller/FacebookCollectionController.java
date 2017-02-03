@@ -73,6 +73,12 @@ public class FacebookCollectionController extends BaseCollectionController{
 		logger.info("Checking OAuth parameters for " + collectionCode);
 
 		if (cache.isConfigExists(task)) {
+			
+			CollectionTask tempTask = cache.getFacebookConfig(collectionCode);
+			if(tempTask != null){
+				return new ResponseWrapper(tempTask, true, tempTask.getFacebookStatus().toString(), 
+						tempTask.getFacebookStatus().toString());
+			}
 			String msg = "Provided OAuth configurations already in use. Please stop this collection and then start again.";
 			logger.info(collectionCode + ": " + msg);
 

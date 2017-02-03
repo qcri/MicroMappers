@@ -103,7 +103,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 			}
 		}*/
 
-		System.out.println("TweetId: " +originalDoc.getString("id_str"));
+//		System.out.println("TweetId: " +originalDoc.getString("id_str"));
 		DataFeed dataFeed = new DataFeed();
 		dataFeed.setCollection(collection);
 		dataFeed.setFeedId(originalDoc.getString("id_str"));

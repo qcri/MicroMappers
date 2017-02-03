@@ -66,6 +66,12 @@ public class TwitterCollectionController extends BaseCollectionController {
 		//check if a task is already running with same configurations
 		logger.info("Checking OAuth parameters for " + collectionCode);
 		if (cache.isConfigExists(task)) {
+			CollectionTask tempTask = cache.getTwitterConfig(collectionCode);
+			if(tempTask != null){
+				return new ResponseWrapper(tempTask, true, tempTask.getTwitterStatus().toString(), 
+						tempTask.getTwitterStatus().toString());
+			}
+			
 			String msg = "Provided OAuth configurations already in use. Please stop this collection and then start again.";
 			logger.info(collectionCode + ": " + msg);
 
