@@ -15,7 +15,7 @@
                         <td colspan="4" class="text-center">
                             <table width="100%">
                                 <tr>
-                                    <td>
+                                    <td style="width: 50%">
                                         <form id="filterWords" action="${rc.getContextPath()}/dashboard/global?page=${index}" class="form-main">
                                             <div class="col-md-10 col-sm-10 col-xs-12">
                                                 <label class="sr-only" for="search">Search</label>
@@ -30,7 +30,7 @@
                                                 </button>
                                             </div>
                                     </td>
-                                    <td>
+                                    <td style="width: 50%">
                                         <div style="margin:0px;">
                                             <ul class="pagination pull-right">
                                                 <!-- First Page -->

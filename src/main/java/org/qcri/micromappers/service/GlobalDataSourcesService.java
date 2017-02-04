@@ -41,8 +41,9 @@ public class GlobalDataSourcesService {
         List<GlobalDataSources> dataSources;
         if(searchWord== null || searchWord.isEmpty()) {
             List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
+            logger.info("findAll - globalEventDefinitionList : " + globalEventDefinitionList.size());
             List<GlideMaster> glideMasterList = glideMasterService.findAll();
-
+            logger.info("findAll - glideMasterList : " + glideMasterList.size());
             dataSources = new ArrayList<GlobalDataSources>();
             dataSources = this.populateGlideMaster(glideMasterList, dataSources);
             dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
@@ -110,7 +111,8 @@ public class GlobalDataSourcesService {
 
 
             } catch (Exception e) {
-                e.printStackTrace();
+               // e.printStackTrace();
+                logger.error("populateGlideMasterBySearchWord : " + e);
             }
 
         });
@@ -148,7 +150,8 @@ public class GlobalDataSourcesService {
                 dataSources.add(a);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
+                logger.error("populateSnopes : " + e);
             }
         });
 
@@ -179,6 +182,7 @@ public class GlobalDataSourcesService {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error("populateGlideMaster : " + e);
             }
         });
 
@@ -209,7 +213,7 @@ public class GlobalDataSourcesService {
                     keywords.addAll(this.createWordCloud(parts));
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("getKeyWords: " + e);
             }
         });
 
@@ -245,8 +249,8 @@ public class GlobalDataSourcesService {
 
         List<WordCloud> finalWordCloudList = new ArrayList<WordCloud>();
 
-        result.forEach((k,v)->{
-            System.out.println("Item : " + k + " Count : " + v);
+        result.forEach((k,v)-> {
+            logger.info("Item : " + k + " Count : " + v);
             finalWordCloudList.add(new WordCloud(k,v*10));
         });
 
@@ -289,6 +293,8 @@ public class GlobalDataSourcesService {
     private List<CollectionDetailsInfo> getCollectionDetails(List<Collection> collectionList){
         List<CollectionDetailsInfo> collectionDetailsInfoList = new ArrayList<CollectionDetailsInfo>();
 
+        if(collectionList == null || collectionList.isEmpty()) return collectionDetailsInfoList;
+
         collectionList.forEach((temp) -> {
             try {
                 long collectionCount = collectionLogService.getCountByCollectionId(temp.getId());
@@ -296,7 +302,7 @@ public class GlobalDataSourcesService {
                 collectionDetailsInfo.setCount(collectionCount);
                 collectionDetailsInfoList.add(collectionDetailsInfo);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("getCollectionDetails : " + e);
             }
         });
 
