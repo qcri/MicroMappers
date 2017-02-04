@@ -104,16 +104,18 @@
 	</body>
     <script>
         var b_keywords= ${wordClouds};
-        var color = d3.scale.linear()
-                .domain([0,1,2,3,4,5,6,10,15,20,100])
-                .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
+        if(b_keywords.length > 0){
+            var color = d3.scale.linear()
+                    .domain([0,1,2,3,4,5,6,10,15,20,100])
+                    .range(["#ddd", "#ccc", "#bbb", "#aaa", "#999", "#888", "#777", "#666", "#555", "#444", "#333", "#222"]);
 
-        d3.layout.cloud().size([1000, 200])
-                .words(b_keywords)
-                .rotate(0)
-                .fontSize(function(d) { return d.size; })
-                .on("end", draw)
-                .start();
+            d3.layout.cloud().size([1000, 200])
+                    .words(b_keywords)
+                    .rotate(0)
+                    .fontSize(function(d) { return d.size; })
+                    .on("end", draw)
+                    .start();
+        }
 
         function draw(words) {
             d3.select("#vis").append("svg")
