@@ -23,6 +23,10 @@ public class Gdelt3WFieldSetMapper implements LineMapper<Gdelt3W> {
         Gdelt3W gdelt3W = null;
 
         if(gdelt3wAsMap.keySet().contains("imagelink")){
+            String imageLink = gdelt3wAsMap.get("imagelink").toString();
+            if(imageLink.lastIndexOf("http://") > 0 || imageLink.lastIndexOf("https://") > 0){
+                imageLink = imageLink.substring(imageLink.lastIndexOf("http")) ;
+            }
             gdelt3W = new Gdelt3W(gdelt3wAsMap.get("langcode").toString(),
                     gdelt3wAsMap.get("link").toString(),
                     gdelt3wAsMap.get("imagelink").toString(),

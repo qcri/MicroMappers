@@ -45,6 +45,12 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
     @Column(name = "state", nullable = false, length = 50)
     private String state;
 
+    @Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
+    private Boolean computerVisionEnabled;
+
+    @OneToOne(mappedBy = "gdeltMMIC")
+    ImageAnalyserTask imageAnalyserTask;
+
     public GdeltMMIC() {
     }
 
@@ -58,6 +64,7 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
         this.imgURL = imgURL;
         this.glideCode = glideCode;
         this.state = "insert";
+        this.computerVisionEnabled = false;
     }
 
     public GdeltMMIC(String languageCode, String articleURL, String timestamp, String location, String lat, String lon, String imgURL, String glideCode, String localImgUrl, String localArticleUrl, String state) {
@@ -72,6 +79,7 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
         this.localImgUrl = localImgUrl;
         this.localArticleUrl = localArticleUrl;
         this.state = state;
+        this.computerVisionEnabled = false;
     }
 
     public String getLocalImgUrl() {
@@ -160,6 +168,22 @@ public class GdeltMMIC  extends ExtendedBaseEntity {
 
     public void setGlideCode(String glideCode) {
         this.glideCode = glideCode;
+    }
+
+    public Boolean getComputerVisionEnabled() {
+        return computerVisionEnabled;
+    }
+
+    public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
+        this.computerVisionEnabled = computerVisionEnabled;
+    }
+
+    public ImageAnalyserTask getImageAnalyserTask() {
+        return imageAnalyserTask;
+    }
+
+    public void setImageAnalyserTask(ImageAnalyserTask imageAnalyserTask) {
+        this.imageAnalyserTask = imageAnalyserTask;
     }
 
     @Override

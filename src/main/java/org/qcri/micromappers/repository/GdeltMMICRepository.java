@@ -24,4 +24,6 @@ public abstract interface GdeltMMICRepository extends PagingAndSortingRepository
 
     public GdeltMMIC findById(Long id);
 
+    public List<GdeltMMIC> findByComputerVisionEnabled(boolean computerVisionEnabled);
+
 }

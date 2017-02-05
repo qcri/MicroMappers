@@ -35,20 +35,25 @@ public class FetchGdeltMaster implements Tasklet {
 	
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-        URL url = new URL(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_LAST_UPDATE_URL));
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(url.openStream()));
+        try{
+            URL url = new URL(configProperties.getProperty(MicromappersConfigurationProperty.GDELT_LAST_UPDATE_URL));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(url.openStream()));
 
-        String inputLine;
+            String inputLine;
 
-        while ((inputLine = in.readLine()) != null){
-            GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
-            HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH), null);
+            while ((inputLine = in.readLine()) != null){
+                GdeltMaster gdeltMaster = new GdeltMaster(inputLine);
+                HttpDownloadUtility.downloadFile(gdeltMaster.getMmURL(), configProperties.getProperty(MicromappersConfigurationProperty.GDELT_DOWNLOADED_LAST_UPDATE_PATH), null);
+            }
+            in.close();
+
+            this.reformat3WJason();
         }
-
-        in.close();
-
-        this.reformat3WJason();
+        catch(Exception e){
+            logger.error("execute : " + e);
+            return RepeatStatus.FINISHED;
+        }
 
         return RepeatStatus.FINISHED;
     }
@@ -77,9 +82,9 @@ public class FetchGdeltMaster implements Tasklet {
                 file.delete();
 
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("reformat3WJason IO : " + e);
             } catch (Exception e2){
-                e2.printStackTrace();
+                logger.error("reformat3WJason : " + e2);
             }
 
 

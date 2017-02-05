@@ -181,7 +181,7 @@ public class GlobalDataSourcesService {
                 dataSources.add(a);
 
             } catch (Exception e) {
-                e.printStackTrace();
+               // e.printStackTrace();
                 logger.error("populateGlideMaster : " + e);
             }
         });

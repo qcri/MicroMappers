@@ -82,15 +82,7 @@ public class HttpDownloadUtility {
             URL url = new URL(fileURL);
 
             httpConn = (HttpURLConnection) url.openConnection();
-            //String cookie = httpConn.getHeaderField( "Set-Cookie").split(";")[0];
-            //  List<String> cookies = httpConn.getHeaderFields().get("Set-Cookie");
 
-            //for (String cookie : cookies) {
-            //  httpConn.addRequestProperty("Cookie", cookie.split(";", 2)[0]);
-            // }
-
-            //httpConn.setDoInput(true);
-            //httpConn.setRequestMethod("GET");
             httpConn.setRequestProperty("Accept-Charset",  "UTF-8");
             httpConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
             //httpConn.setRequestProperty("Cookie", cookie );

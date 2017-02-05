@@ -53,4 +53,8 @@ public class GdeltMMICService {
             throw new MicromappersServiceException("Exception while creating a gdeltMMIC", e);
         }
     }
+
+    public List<GdeltMMIC> findByComputerVisionEnabled(boolean computerVisionEnabled){
+        return gdeltMMICRepository.findByComputerVisionEnabled(computerVisionEnabled);
+    }
 }

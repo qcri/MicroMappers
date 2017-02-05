@@ -23,4 +23,6 @@ public abstract interface Gdelt3WRepository extends PagingAndSortingRepository<G
     List<Gdelt3W> findAllbyState(@Param("state")String state);
 
     public Gdelt3W findById(Long id);
+
+    public List<Gdelt3W> findByComputerVisionEnabled(boolean computerVisionEnabled);
 }

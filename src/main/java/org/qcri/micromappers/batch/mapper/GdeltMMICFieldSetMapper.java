@@ -17,7 +17,7 @@ public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
     @Override
     public GdeltMMIC mapFieldSet(FieldSet fieldSet) throws BindException {
        //languageCode,articleURL,timestamp,location,lat,lon,imgURL,glidecode
-        System.out.println("fieldSet : " + fieldSet.getFieldCount());
+        //System.out.println("fieldSet : " + fieldSet.getFieldCount());
         GdeltMMIC gdeltMaster = new GdeltMMIC();
         if(fieldSet.getFieldCount() > 8){
             logger.info("GdeltMMIC Field size is greater 8 : actual size - " + fieldSet.getFieldCount());
@@ -30,7 +30,19 @@ public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
             gdeltMaster.setLocation(fieldSet.readRawString(3));
             gdeltMaster.setLat(fieldSet.readRawString(4));
             gdeltMaster.setLon(fieldSet.readRawString(5));
-            gdeltMaster.setImgURL(fieldSet.readRawString(6));
+            //System.out.println(fieldSet.readRawString(6));
+            //System.out.println(fieldSet.readRawString(6).lastIndexOf("http://"));
+            int httpIndex = fieldSet.readRawString(6).lastIndexOf("http://");
+            int httpsIndex = fieldSet.readRawString(6).lastIndexOf("https://");
+
+            if(httpIndex > 0 || httpsIndex>0){
+                gdeltMaster.setImgURL(fieldSet.readRawString(6).substring(fieldSet.readRawString(6).lastIndexOf("http")));
+            }
+            else{
+                gdeltMaster.setImgURL(fieldSet.readRawString(6));
+            }
+
+            //gdeltMaster.setImgURL(fieldSet.readRawString(6).substring(fieldSet.readRawString(6).lastIndexOf("http:")));
             gdeltMaster.setGlideCode(fieldSet.readRawString(7));
         }
         return gdeltMaster;

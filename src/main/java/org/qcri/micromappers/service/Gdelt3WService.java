@@ -47,4 +47,9 @@ public class Gdelt3WService {
             throw new MicromappersServiceException("Exception while creating a gdelt3W", e);
         }
     }
+
+    public List<Gdelt3W> findByComputerVisionEnabled(boolean computerVisionEnabled){
+        return gdelt3WRepository.findByComputerVisionEnabled(computerVisionEnabled);
+    }
+
 }

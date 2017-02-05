@@ -1,9 +1,6 @@
 package org.qcri.micromappers.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.simple.JSONArray;
@@ -46,6 +43,13 @@ public class Gdelt3W  extends ExtendedBaseEntity {
     @Transient
     private JSONArray jsWheres;
 
+    @Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
+    private Boolean computerVisionEnabled;
+
+    @OneToOne(mappedBy = "gdelt3W")
+    ImageAnalyserTask imageAnalyserTask;
+
+
     public Gdelt3W() {
     }
 
@@ -54,6 +58,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
         this.articleURL = articleURL;
         this.glideCode = glideCode;
         this.state = state;
+        this.computerVisionEnabled = false;
     }
 
 
@@ -63,6 +68,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
         this.imgURL = imgURL;
         this.glideCode = glideCode;
         this.state = state;
+        this.computerVisionEnabled = false;
     }
 
     public Gdelt3W(String languageCode, String articleURL, String imgURL, String glideCode, String localImgUrl, String localArticleUrl, String state) {
@@ -73,6 +79,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
         this.localImgUrl = localImgUrl;
         this.localArticleUrl = localArticleUrl;
         this.state = state;
+        this.computerVisionEnabled = false;
     }
 
 
@@ -154,6 +161,22 @@ public class Gdelt3W  extends ExtendedBaseEntity {
 
     public void setJsWheres(JSONArray jsWheres) {
         this.jsWheres = jsWheres;
+    }
+
+    public Boolean getComputerVisionEnabled() {
+        return computerVisionEnabled;
+    }
+
+    public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
+        this.computerVisionEnabled = computerVisionEnabled;
+    }
+
+    public ImageAnalyserTask getImageAnalyserTask() {
+        return imageAnalyserTask;
+    }
+
+    public void setImageAnalyserTask(ImageAnalyserTask imageAnalyserTask) {
+        this.imageAnalyserTask = imageAnalyserTask;
     }
 
     @Override

@@ -44,6 +44,16 @@ public class ImageAnalyserTask extends ExtendedBaseEntity {
         this.dataFeed = dataFeed;
     }
 
+    public ImageAnalyserTask(String state, Gdelt3W gdelt3W) {
+        this.state = state;
+        this.gdelt3W = gdelt3W;
+    }
+
+    public ImageAnalyserTask(String state, GdeltMMIC gdeltMMIC) {
+        this.state = state;
+        this.gdeltMMIC = gdeltMMIC;
+    }
+
     public String getState() {
         return state;
     }

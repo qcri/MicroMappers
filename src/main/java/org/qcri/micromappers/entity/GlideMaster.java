@@ -23,6 +23,9 @@ public class GlideMaster extends ExtendedBaseEntity {
     @Column(name = "glide_code", nullable = false)
     private String glideCode;
 
+    @Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
+    private Boolean computerVisionEnabled;
+
     @Column(nullable=false, name="updated")
     private Timestamp updated;
 
@@ -128,4 +131,11 @@ public class GlideMaster extends ExtendedBaseEntity {
         return totalCountMMICArticle;
     }
 
+    public Boolean getComputerVisionEnabled() {
+        return computerVisionEnabled;
+    }
+
+    public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
+        this.computerVisionEnabled = computerVisionEnabled;
+    }
 }
