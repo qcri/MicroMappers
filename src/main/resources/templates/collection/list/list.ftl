@@ -45,7 +45,7 @@
 							<td>
 								<#if info.globalEventDefinition?? >
 									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}">
-										${info.globalEventDefinition.title?substring(0,25)}.....
+										${info.globalEventDefinition.title}
 									</a>
 								<#elseif info.glideMaster?? >
 									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" target="_blank" >${info.glideMaster.glideCode}</a>
@@ -99,7 +99,7 @@
 											<#else>
 										<li>
 											</#if>
-											<a href="${rc.getContextPath()}/collection/view/list?page=${index?counter}">${index?counter}</a>
+											<a href="${rc.getContextPath()}/collection/view/list?page=${index}">${index}</a>
 										</li>
 										</#list>
 										<!-- Last Page -->
