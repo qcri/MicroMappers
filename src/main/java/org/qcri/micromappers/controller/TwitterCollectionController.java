@@ -69,6 +69,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 			logger.info("This twitter user is already having a collection running");
 			CollectionTask tempTask = cache.getTwitterConfig(collectionCode);
 			if(tempTask != null){
+				collectionService.updateTwitterStatusById(id, CollectionStatus.RUNNING);
 				return new ResponseWrapper(tempTask, true, tempTask.getTwitterStatus().toString(), 
 						tempTask.getTwitterStatus().toString());
 			}
@@ -121,7 +122,11 @@ public class TwitterCollectionController extends BaseCollectionController {
 			collectionLogService.stop(id, ((CollectionTask) stopTaskResponse.getData()).getTweetCount(), CollectionType.TWITTER);
 		}
 		collectionService.updateTwitterStatusById(id, CollectionStatus.NOT_RUNNING);
-		((CollectionTask) stopTaskResponse.getData()).setTwitterStatus(CollectionStatus.NOT_RUNNING);
+		
+		if(stopTaskResponse.getData() != null){
+			((CollectionTask) stopTaskResponse.getData()).setTwitterStatus(CollectionStatus.NOT_RUNNING);
+		}
+		
 		return stopTaskResponse;
 	}
 

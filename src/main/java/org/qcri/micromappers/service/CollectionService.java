@@ -99,7 +99,21 @@ public class CollectionService
 				return Boolean.FALSE;
 			}
 		}catch (Exception e) {
-			logger.error("Error while updating facebook status by id", e);
+			logger.error("Error while updating facebook status and last execution time by id", e);
+			return Boolean.FALSE;
+		}
+	}
+	
+	public Boolean updateFacebookLastExecutionTimeById(Long id, Date lastExecutiontime){
+		try{
+			int updateStatus = collectionRepository.updateFacebookLastExecutionTimeById(id, lastExecutiontime);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while updating facebook last execution time by id", e);
 			return Boolean.FALSE;
 		}
 	}

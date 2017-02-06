@@ -76,6 +76,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 			logger.info("This facebook user is already having a collection running");
 			CollectionTask tempTask = cache.getFacebookConfig(collectionCode);
 			if(tempTask != null){
+				collectionService.updateFacebookStatusAndLastExecutionTimeById(id, CollectionStatus.RUNNING, task.getLastExecutionTime());
 				return new ResponseWrapper(tempTask, true, tempTask.getFacebookStatus().toString(), 
 						tempTask.getFacebookStatus().toString());
 			}
@@ -133,9 +134,13 @@ public class FacebookCollectionController extends BaseCollectionController{
 		if (facebookTask != null) {
 			collectionLogService.updateCount(id, facebookTask.getFbPostCount(), CollectionType.FACEBOOK);
 
-			if(collection.getFacebookStatus() != facebookTask.getFacebookStatus() && collection.getLastExecutionTime().before(facebookTask.getLastExecutionTime())){
-				collectionService.updateFacebookStatusAndLastExecutionTimeById(id, facebookTask.getFacebookStatus(), facebookTask.getLastExecutionTime());
+			if(collection.getFacebookStatus() != facebookTask.getFacebookStatus()){
+				collectionService.updateFacebookStatusById(id, facebookTask.getFacebookStatus());
 			}
+			if(facebookTask.getLastExecutionTime() != null && (collection.getLastExecutionTime() == null || collection.getLastExecutionTime().before(facebookTask.getLastExecutionTime()))){
+				collectionService.updateFacebookLastExecutionTimeById(id, facebookTask.getLastExecutionTime());
+			}
+			
 			return new ResponseWrapper(facebookTask, true, ResponseCode.SUCCESS.toString(), null);
 		}else if(collection.getFacebookStatus() != CollectionStatus.NOT_RUNNING){
 			collection.setFacebookStatus(CollectionStatus.NOT_RUNNING);
@@ -178,7 +183,11 @@ public class FacebookCollectionController extends BaseCollectionController{
 			collectionLogService.stop(id, ((CollectionTask) stopTaskResponse.getData()).getTweetCount(), CollectionType.FACEBOOK);
 		}
 		collectionService.updateFacebookStatusById(id, CollectionStatus.NOT_RUNNING);
-		((CollectionTask) stopTaskResponse.getData()).setFacebookStatus(CollectionStatus.NOT_RUNNING);
+		
+		if(stopTaskResponse.getData() != null){
+			((CollectionTask) stopTaskResponse.getData()).setFacebookStatus(CollectionStatus.NOT_RUNNING);
+		}
+		
 		return stopTaskResponse;
 	}
 
@@ -188,6 +197,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 		String collectionCode = collection.getCode();
 		CollectionTask task = null;
 
+		cache.setFbSyncStateMap(collectionCode, 1);
 		FacebookFeedTracker tracker = cache.getFacebookTracker(collectionCode);
 
 		if (tracker != null) {
@@ -249,6 +259,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 	private void clearCache(String collectionCode) {
 		cache.delFbSyncObjMap(collectionCode);
+		cache.delFbSyncStateMap(collectionCode);
 		cache.delFailedCollection(collectionCode);
 		cache.deleteFbPostCounter(collectionCode);
 		cache.delFbConfigMap(collectionCode);
