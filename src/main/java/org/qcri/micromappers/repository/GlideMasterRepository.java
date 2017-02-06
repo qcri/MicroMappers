@@ -11,6 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 public abstract interface GlideMasterRepository extends PagingAndSortingRepository<GlideMaster, Long> {
     Page<GlideMaster> findAll(Pageable pageable);
 	GlideMaster findById(Long id);
+    GlideMaster findByGlideCode(String glideCode);
 }
 
 

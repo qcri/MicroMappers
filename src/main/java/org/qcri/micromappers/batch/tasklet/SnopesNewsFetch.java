@@ -33,6 +33,7 @@ public class SnopesNewsFetch implements Tasklet {
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
         if(!Util.isTimeToSnopesFetchRun()){
+            logger.info("need to wait more");
             return RepeatStatus.FINISHED;
         }
 

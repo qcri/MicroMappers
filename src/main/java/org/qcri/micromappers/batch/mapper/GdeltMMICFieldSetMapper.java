@@ -36,7 +36,12 @@ public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
             int httpsIndex = fieldSet.readRawString(6).lastIndexOf("https://");
 
             if(httpIndex > 0 || httpsIndex>0){
-                gdeltMaster.setImgURL(fieldSet.readRawString(6).substring(fieldSet.readRawString(6).lastIndexOf("http")));
+                if(httpIndex > 0) {
+                    gdeltMaster.setImgURL(fieldSet.readRawString(6).substring(httpIndex));
+                }
+                else{
+                    gdeltMaster.setImgURL(fieldSet.readRawString(6).substring(httpsIndex));
+                }
             }
             else{
                 gdeltMaster.setImgURL(fieldSet.readRawString(6));

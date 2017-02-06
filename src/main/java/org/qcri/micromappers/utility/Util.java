@@ -10,10 +10,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.commons.validator.UrlValidator;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.exception.MicromappersException;
@@ -24,14 +27,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class Util
 {
 	private static Logger logger = Logger.getLogger(Util.class);
-	final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production
+	final private static long MAX_CHECK_TIME_MILLIS = 300000; // 5min for local.
+	//final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production
 	//final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
 	private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
-
+	private static UrlValidator urlValidator = new UrlValidator();
 
 	@Inject
 	private AccountService accountService;
@@ -46,6 +51,10 @@ public class Util
 	public static boolean isTimeToSnopesFetchRun(){
 
 		long currentTimeMillis = System.currentTimeMillis();
+		logger.info("currentTimeMillis : " + currentTimeMillis);
+		long diff = currentTimeMillis - timeOfLastTranslationProcessingMillis;
+		logger.info("currentTimeMillis differ : " + diff);
+		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_TIME_MILLIS);
 		// every 3hours
 		if ((currentTimeMillis - timeOfLastTranslationProcessingMillis) >= MAX_CHECK_TIME_MILLIS) {
 			return true;
@@ -117,6 +126,10 @@ public class Util
 		}
 
 		return buffer.toString();
+	}
+
+	public static boolean isVidateURL(String urlAddress){
+		return urlValidator.isValid(urlAddress);
 	}
 	
 }

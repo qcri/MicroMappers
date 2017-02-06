@@ -41,9 +41,9 @@ public class GlobalDataSourcesService {
         List<GlobalDataSources> dataSources;
         if(searchWord== null || searchWord.isEmpty()) {
             List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
-            logger.info("findAll - globalEventDefinitionList : " + globalEventDefinitionList.size());
+           // logger.info("findAll - globalEventDefinitionList : " + globalEventDefinitionList.size());
             List<GlideMaster> glideMasterList = glideMasterService.findAll();
-            logger.info("findAll - glideMasterList : " + glideMasterList.size());
+          //  logger.info("findAll - glideMasterList : " + glideMasterList.size());
             dataSources = new ArrayList<GlobalDataSources>();
             dataSources = this.populateGlideMaster(glideMasterList, dataSources);
             dataSources = this.populateSnopes(globalEventDefinitionList, dataSources);
@@ -250,7 +250,7 @@ public class GlobalDataSourcesService {
         List<WordCloud> finalWordCloudList = new ArrayList<WordCloud>();
 
         result.forEach((k,v)-> {
-            logger.info("Item : " + k + " Count : " + v);
+            //logger.info("Item : " + k + " Count : " + v);
             finalWordCloudList.add(new WordCloud(k,v*10));
         });
 
@@ -275,7 +275,7 @@ public class GlobalDataSourcesService {
             try {
                 Constants.populateStopWords();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error("createWordCloud : " + e);
             }
         }
 

@@ -20,8 +20,14 @@ public class HttpDownloadUtility {
         boolean downloadFileCompleted = false;
         HttpURLConnection httpConn = null;
         try{
+            if(!Util.isVidateURL(fileURL)){
+                return downloadFileCompleted;
+            }
             URL url = new URL(fileURL);
             httpConn = (HttpURLConnection) url.openConnection();
+            httpConn.setRequestProperty("Accept-Charset",  "UTF-8");
+            httpConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36");
+
             int responseCode = httpConn.getResponseCode();
 
             // always check HTTP response code first
@@ -57,15 +63,18 @@ public class HttpDownloadUtility {
             } else {
                 //System.out.println("No file to download. Server replied HTTP code: " + responseCode);
                 logger.error("No file to download. Server replied HTTP code: " + responseCode);
+                return downloadFileCompleted;
             }
 
 
         }
         catch(IOException e1){
             logger.error("IOException : " + e1);
+            return downloadFileCompleted;
         }
         catch(Exception e2){
             logger.error("Exception : " + e2);
+            return downloadFileCompleted;
         }
         finally{
             httpConn.disconnect();
@@ -79,6 +88,9 @@ public class HttpDownloadUtility {
         HttpURLConnection httpConn = null;
 
         try{
+            if(!Util.isVidateURL(fileURL)){
+                return downloadFileCompleted;
+            }
             URL url = new URL(fileURL);
 
             httpConn = (HttpURLConnection) url.openConnection();
@@ -121,15 +133,18 @@ public class HttpDownloadUtility {
 
             } else {
                 logger.error("No file to download. Server replied HTTP code: " + responseCode);
+                return downloadFileCompleted;
             }
 
 
         }
         catch(IOException e1){
             logger.error("IOException : " + e1);
+            return downloadFileCompleted;
         }
         catch(Exception e2){
             logger.error("Exception : " + e2);
+            return downloadFileCompleted;
         }
         finally{
             if(httpConn!=null) httpConn.disconnect();

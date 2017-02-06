@@ -43,6 +43,10 @@ public class GlideMasterService {
 		}
 	}
 
+    public GlideMaster getByGlideCode(String glideCode){
+        return glideMasterRepository.findByGlideCode(glideCode);
+    }
+
     public List<GlideMaster> findAll(){
         return (List<GlideMaster>) glideMasterRepository.findAll();
     }

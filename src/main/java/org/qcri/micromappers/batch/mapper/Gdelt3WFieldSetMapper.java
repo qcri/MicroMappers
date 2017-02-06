@@ -24,12 +24,22 @@ public class Gdelt3WFieldSetMapper implements LineMapper<Gdelt3W> {
 
         if(gdelt3wAsMap.keySet().contains("imagelink")){
             String imageLink = gdelt3wAsMap.get("imagelink").toString();
-            if(imageLink.lastIndexOf("http://") > 0 || imageLink.lastIndexOf("https://") > 0){
-                imageLink = imageLink.substring(imageLink.lastIndexOf("http")) ;
+
+            int httpIndex = imageLink.lastIndexOf("http://");
+            int httpsIndex = imageLink.lastIndexOf("https://");
+
+            if(httpIndex > 0 || httpsIndex > 0){
+                if(httpIndex > 0) {
+                    imageLink = imageLink.substring(imageLink.lastIndexOf("httpIndex")) ;
+                }
+                else{
+                    imageLink = imageLink.substring(imageLink.lastIndexOf("httpsIndex")) ;
+                }
             }
+
             gdelt3W = new Gdelt3W(gdelt3wAsMap.get("langcode").toString(),
                     gdelt3wAsMap.get("link").toString(),
-                    gdelt3wAsMap.get("imagelink").toString(),
+                    imageLink,
                     gdelt3wAsMap.get("glide").toString().replace("[","").replace("]",""),
                     "insert");
         }

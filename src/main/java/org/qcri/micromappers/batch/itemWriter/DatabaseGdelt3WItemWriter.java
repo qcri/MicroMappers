@@ -3,6 +3,7 @@ package org.qcri.micromappers.batch.itemWriter;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Gdelt3W;
 import org.qcri.micromappers.service.Gdelt3WService;
+import org.qcri.micromappers.service.GlideMasterService;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +20,8 @@ public class DatabaseGdelt3WItemWriter implements ItemWriter<Gdelt3W>{
     @Autowired
     Gdelt3WService gdelt3WService;
 
+    @Autowired
+    GlideMasterService glideMasterService;
 
     @Override
     public void write(List<? extends Gdelt3W> list) throws Exception {
