@@ -30,6 +30,11 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	
 	@Transactional
 	@Modifying
+    @Query("UPDATE Collection c SET c.lastExecutionTime = :lastExecutionTime WHERE c.id = :id")
+	public int updateFacebookLastExecutionTimeById(Long id, Date lastExecutiontime);
+	
+	@Transactional
+	@Modifying
     @Query("UPDATE Collection c SET c.facebookStatus = :facebookStatus, c.lastExecutionTime = :lastExecutionTime WHERE c.id = :id")
 	public int updateFacebookStatusAndLastExecutionTimeById(@Param("id") Long id, @Param("facebookStatus") CollectionStatus facebookStatus, @Param("lastExecutionTime") Date lastExecutionTime);
 	
@@ -52,4 +57,6 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	public Collection getByAccountAndGlobalEventDefinition(Account account, GlobalEventDefinition globalEventDefinition);
 
 	public Collection getByAccountAndGlideMaster(Account account,GlideMaster glideMaster);
+
+	
 }

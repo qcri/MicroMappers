@@ -26,7 +26,7 @@ public class GenericCache {
 	private Map<String, Long> fbPostCountersMap = null; //keeps downloaded docs counter
 	private Map<String, FacebookFeedTracker> fbTrackerMap = null; //keeps facebook tracker object
 	private final Map<String, Boolean> fbSyncObjMap;
-
+	private final Map<String, Integer> fbSyncStateMap;
 	private final Map<String, Integer> reconnectAttempts;
 
 	private GenericCache() {
@@ -40,6 +40,7 @@ public class GenericCache {
 		//        collectorStatus = new CollectorStatus();
 		reconnectAttempts = new HashMap<String,Integer>();
 		fbSyncObjMap = new ConcurrentHashMap<String, Boolean>();
+		fbSyncStateMap = new ConcurrentHashMap<String, Integer>();
 	}
 
 	public static GenericCache getInstance() {
@@ -351,5 +352,21 @@ public class GenericCache {
 	public void delFbSyncObjMap(String key){
 		fbSyncObjMap.remove(key);
 	}
+	
+	public Integer getFbSyncStateMap(String key){
+    	if(fbSyncStateMap.containsKey(key)){
+    		return fbSyncStateMap.get(key);
+    	}
+    	return null;
+    }
+    
+    public void setFbSyncStateMap(String key, Integer state){
+    	fbSyncStateMap.put(key, state);
+    	
+    }
+    
+    public void delFbSyncStateMap(String key){
+    	fbSyncStateMap.remove(key);
+    }
 
 }

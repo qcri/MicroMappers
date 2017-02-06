@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.deleteCookies("JSESSIONID")
 			.and()
 				.authorizeRequests()
-					.antMatchers("/admin/**", "/favicon.ico", "/resources/**", "/auth/**", "/signin/**", "/signup/**", "/disconnect/facebook", "/vendor/**", "/css/**").permitAll()
+					.antMatchers("/admin/**", "/img/**", "/resources/**", "/auth/**", "/signin/**", "/signup/**", "/disconnect/facebook", "/vendor/**", "/css/**").permitAll()
 					.antMatchers("/**").authenticated()
 			.and()
 			.apply(getSpringSocialConfigurer());

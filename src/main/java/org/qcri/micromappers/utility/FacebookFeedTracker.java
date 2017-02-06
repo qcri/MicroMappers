@@ -46,15 +46,15 @@ public class FacebookFeedTracker implements Closeable {
 	private final CollectionTask task;
 	private final LoadShedder fbApiHitShedder;
 	private Collection collection;
-	
+
 	private static DataFeedService dataFeedService;
 	private static CollectionService collectionService;
-	
+
 	private static final int DEFAULT_LIMIT = 100;
 	private static final Long HOUR_IN_MILLISECS = 60 * 60 * 1000L;
 	private static final Long MILLIS_IN_MINUTE = 60 * 1000L;
 	private GenericCache cache = GenericCache.getInstance();
-	
+
 	static{
 		dataFeedService = MicroMappersApplication.getApplicationContext().getBean(DataFeedService.class);
 		collectionService = MicroMappersApplication.getApplicationContext().getBean(CollectionService.class);
@@ -70,7 +70,7 @@ public class FacebookFeedTracker implements Closeable {
 		fbApiHitShedder = null;
 		this.facebook = getFacebookInstance(accessToken);
 	}
-	
+
 	public FacebookFeedTracker(CollectionTask task) {
 		this.facebook = getFacebookInstance(task.getAccessToken());
 		fbApiHitShedder = new LoadShedder(Integer.parseInt(configProperties.getProperty(MicromappersConfigurationProperty.FACEBOOK_MAX_API_HITS_HOURLY_PER_USER)),
@@ -87,6 +87,7 @@ public class FacebookFeedTracker implements Closeable {
 				Boolean syncObj = cache.getFbSyncObjMap(task.getCollectionCode()) == null ? Boolean.TRUE : cache.getFbSyncObjMap(task.getCollectionCode());
 				synchronized (syncObj) {
 					cache.setFbSyncObjMap(task.getCollectionCode(), syncObj);
+					cache.setFbSyncStateMap(task.getCollectionCode(), 0);
 					collectFacebookData();
 				}
 
@@ -103,15 +104,15 @@ public class FacebookFeedTracker implements Closeable {
 	private static Facebook getFacebookInstance(String accessToken) {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		builder.setDebugEnabled(false)
-				.setOAuthAppId(configProperties.getProperty(MicromappersConfigurationProperty.FACEBOOK_APP_KEY))
-				.setOAuthAppSecret(
-						configProperties.getProperty(MicromappersConfigurationProperty.FACEBOOK_APP_SECRET))
-				.setJSONStoreEnabled(true).setOAuthAccessToken(accessToken);
+		.setOAuthAppId(configProperties.getProperty(MicromappersConfigurationProperty.FACEBOOK_APP_KEY))
+		.setOAuthAppSecret(
+				configProperties.getProperty(MicromappersConfigurationProperty.FACEBOOK_APP_SECRET))
+		.setJSONStoreEnabled(true).setOAuthAccessToken(accessToken);
 
 		Configuration configuration = builder.build();
 		Facebook instance = new FacebookFactory(configuration).getInstance();
 		return instance;
-		
+
 	}
 
 	public void collectFacebookData() {
@@ -119,16 +120,16 @@ public class FacebookFeedTracker implements Closeable {
 		Date toTimestamp = new Date();
 		long fetchFromInMiliSecs = task.getFetchFrom() * HOUR_IN_MILLISECS;
 		Date fromTimestamp = new Date(System.currentTimeMillis() - fetchFromInMiliSecs);
-		
+
 		try {
 			//Search all profiles by keywords
 			List<FacebookProfile> fbProfiles = new ArrayList<FacebookProfile>();
-			
+
 			//Will uncomment the below code if we have to search posts by keywords also
 			/*if(StringUtils.isNotBlank(task.getToTrack())){
 				fbProfiles = searchProfiles(task.getToTrack(), -1, 0);
 			}*/
-			
+
 			//Add subscribed profilesIds to list
 			if(StringUtils.isNotBlank(task.getSubscribedProfiles())){
 				try {
@@ -144,15 +145,19 @@ public class FacebookFeedTracker implements Closeable {
 					(System.currentTimeMillis() - task.getLastExecutionTime().getTime()) <= fetchFromInMiliSecs) {
 				fromTimestamp = task.getLastExecutionTime();
 			}
-			
-			this.processPost(toTimestamp, fromTimestamp, fbProfiles);
-			if(cache.getFacebookConfig(collection.getCode()) != null){
+
+			if (cache.getFbSyncStateMap(task.getCollectionCode()) != null && cache.getFbSyncStateMap(task.getCollectionCode()) == 0) {
+				this.processPost(toTimestamp, fromTimestamp, fbProfiles);
 				task.setLastExecutionTime(toTimestamp);
 				cache.setFbConfigMap(task.getCollectionCode(), task);
-			}else{
+			} else {
 				logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+				if(cache.getFbSyncObjMap(task.getCollectionCode()) != null){
+					cache.getFbSyncObjMap(task.getCollectionCode()).notifyAll();
+				}
 				return;
 			}
+
 		} catch (FacebookException e) {
 			cache.setFailedCollection(task.getCollectionCode(), task);
 		}
@@ -163,76 +168,95 @@ public class FacebookFeedTracker implements Closeable {
 
 		Set<String> processedFbProfileIdsSet = new HashSet<String>();
 		for (FacebookProfile fbProfile : fbProfiles) {
-			
+
 			if(processedFbProfileIdsSet.contains(fbProfile.getId())){
 				continue;
 			}else{
 				processedFbProfileIdsSet.add(fbProfile.getId());
 			}
-			
+
 			int postsOffset = 0;
-			while (postsOffset >= 0 ) {
 
-				while(!fbApiHitShedder.canProcess())
-				{
-					try {
-						long deltaMillis = (System.currentTimeMillis() - fbApiHitShedder.getLastSetTime());
-						logger.info("Facebook collection waiting for: "+ Duration.ofMillis(deltaMillis).toMinutes());
-						
-						//Checking every minute whether the collection is running or stopped.
-						while(deltaMillis > 0){
-							CollectionTask tempTask = cache.getFacebookConfig(collection.getCode());
-							if(tempTask !=null){
-								Thread.sleep(MILLIS_IN_MINUTE);
-							}else{
-								logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
-								return;
+			if (cache.getFbSyncStateMap(task.getCollectionCode()) != null && cache.getFbSyncStateMap(task.getCollectionCode()) == 0) {
+				while (postsOffset >= 0 ) {
+
+					while(!fbApiHitShedder.canProcess() && cache.getFbSyncStateMap(task.getCollectionCode()) != null && cache.getFbSyncStateMap(task.getCollectionCode()) == 0)					
+					{
+						try {
+							long deltaMillis = (System.currentTimeMillis() - fbApiHitShedder.getLastSetTime());
+							logger.info("Facebook collection waiting for: "+ Duration.ofMillis(deltaMillis).toMinutes());
+
+							//Checking every minute whether the collection is running or stopped.
+							while(deltaMillis > 0){
+								CollectionTask tempTask = cache.getFacebookConfig(collection.getCode());
+								if(tempTask !=null){
+									Thread.sleep(MILLIS_IN_MINUTE);
+								}else{
+									logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+									return;
+								}
+								deltaMillis = deltaMillis - MILLIS_IN_MINUTE;
 							}
-							deltaMillis = deltaMillis - MILLIS_IN_MINUTE;
-						}
-						
-					} catch (InterruptedException e) {
-						logger.warn("Interrupted exception while sleeping in load shedder for collection code: "
-								+ task.getCollectionCode());
-					}
-				}
-				try {
-					ResponseList<Post> feed = facebook.getFeed(fbProfile.getId(), new Reading().fields(FIELDS_TO_FETCH)
-							.since(since).until(toTimestamp).order(Ordering.CHRONOLOGICAL).limit(DEFAULT_LIMIT)
-							.offset(postsOffset));
-					postsOffset = feed.size() == DEFAULT_LIMIT ? postsOffset + DEFAULT_LIMIT : -1;
-					Long count = 0L;
-					for (Post post : feed) {
-//						System.out.println("PostId: " +post.getId());
-						DataFeed dataFeed = new DataFeed();
-						dataFeed.setCollection(collection);
-						dataFeed.setFeedId(post.getId());
-						dataFeed.setProvider(CollectionType.FACEBOOK);
-						
-						//Persisting to dataFeed
-						try{
-							String postJson = new ObjectMapper().writeValueAsString(post);
-							DataFeed persistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, postJson);
-							if(persistedDataFeed != null){
-								count++;
-							}
-						}catch(MicromappersServiceException | JsonProcessingException e){
-							logger.error("Exception while persisting tweet to db & fileSystem", e);
+
+						} catch (InterruptedException e) {
+							logger.warn("Interrupted exception while sleeping in load shedder for collection code: "
+									+ task.getCollectionCode());
 						}
 					}
 
-					cache.incrFbCounter(task.getCollectionCode(), count);
-					count = 0L;
-				} catch (FacebookException e) {
-					logger.warn("Exception while fetching feeds for id: " + fbProfile.getId());
-					handleFacebookException(e, task.getCollectionCode());
-					postsOffset = -1;
+					if(cache.getFbSyncStateMap(task.getCollectionCode()) != null && cache.getFbSyncStateMap(task.getCollectionCode()) == 0){
+
+						try {
+							ResponseList<Post> feed = facebook.getFeed(fbProfile.getId(), new Reading().fields(FIELDS_TO_FETCH)
+									.since(since).until(toTimestamp).order(Ordering.CHRONOLOGICAL).limit(DEFAULT_LIMIT)
+									.offset(postsOffset));
+							postsOffset = feed.size() == DEFAULT_LIMIT ? postsOffset + DEFAULT_LIMIT : -1;
+							Long count = 0L;
+							for (Post post : feed) {
+								//						System.out.println("PostId: " +post.getId());
+								DataFeed dataFeed = new DataFeed();
+								dataFeed.setCollection(collection);
+								dataFeed.setFeedId(post.getId());
+								dataFeed.setProvider(CollectionType.FACEBOOK);
+
+								//Persisting to dataFeed
+								try{
+									String postJson = new ObjectMapper().writeValueAsString(post);
+									DataFeed persistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, postJson);
+									if(persistedDataFeed != null){
+										count++;
+									}
+								}catch(MicromappersServiceException | JsonProcessingException e){
+									logger.error("Exception while persisting tweet to db & fileSystem", e);
+								}
+							}
+
+							cache.incrFbCounter(task.getCollectionCode(), count);
+							count = 0L;
+						} catch (FacebookException e) {
+							logger.warn("Exception while fetching feeds for id: " + fbProfile.getId());
+							handleFacebookException(e, task.getCollectionCode());
+							postsOffset = -1;
+						}
+					}else{
+						logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+						if(cache.getFbSyncObjMap(task.getCollectionCode()) != null){
+							cache.getFbSyncObjMap(task.getCollectionCode()).notifyAll();
+						}
+						return;
+					}
 				}
+			}else{
+				logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+				if(cache.getFbSyncObjMap(task.getCollectionCode()) != null){
+					cache.getFbSyncObjMap(task.getCollectionCode()).notifyAll();
+				}
+				return;
 			}
 		}
 	}
 
-	
+
 	public List<FacebookProfile>  searchProfiles(String keyword, Integer limit, Integer offset){
 		List<FacebookProfile> searchedProfiles = new ArrayList<FacebookProfile>();
 		if(limit != -1){
@@ -261,16 +285,16 @@ public class FacebookFeedTracker implements Closeable {
 				offset = profiles.size() == limit ? offset + limit : -1;
 			}
 		}
-    	return searchedProfiles;
+		return searchedProfiles;
 	}
-	
+
 	public List<FacebookProfile> fetchPages(String keyword, Integer limit, Integer offset) {
 		if(limit>DEFAULT_LIMIT || limit < 0){
 			limit = DEFAULT_LIMIT;
 		}
-		
+
 		List<FacebookProfile> fbProfiles = new ArrayList<FacebookProfile>();
-		
+
 		if (offset >= 0) {
 			ResponseList<JSONObject> pageList = null;
 			try {
@@ -297,7 +321,7 @@ public class FacebookFeedTracker implements Closeable {
 				}
 			}
 		}
-		
+
 		return fbProfiles;
 	}
 
@@ -306,9 +330,9 @@ public class FacebookFeedTracker implements Closeable {
 		if(limit>DEFAULT_LIMIT || limit < 0){
 			limit = DEFAULT_LIMIT;
 		}
-		
+
 		List<FacebookProfile> fbProfiles = new ArrayList<FacebookProfile>();
-		
+
 		if (offset >= 0) {
 			ResponseList<JSONObject> groupList = null;
 			try {
@@ -333,20 +357,19 @@ public class FacebookFeedTracker implements Closeable {
 					}
 				}
 			}
-			
+
 		}
-		
 		return fbProfiles;
 	}
-	
-	
+
+
 	public List<FacebookProfile> fetchEvents(String keyword, Integer limit, Integer offset) {
 		if(limit>DEFAULT_LIMIT || limit < 0){
 			limit = DEFAULT_LIMIT;
 		}
-		
+
 		List<FacebookProfile> fbProfiles = new ArrayList<FacebookProfile>();
-		
+
 		if (offset >= 0) {
 			ResponseList<JSONObject> eventList = null;
 			try {
@@ -375,7 +398,7 @@ public class FacebookFeedTracker implements Closeable {
 		return fbProfiles;
 	}
 
-	
+
 	private void handleFacebookException(FacebookException e, String collectionCode) throws FacebookException {
 		boolean found = false;
 		switch (e.getErrorCode()) {
