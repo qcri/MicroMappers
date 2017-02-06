@@ -39,7 +39,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 	public ResponseWrapper start(Long id) {
 
-		logger.info("Starting the collection having collectionId: "+id);
+		logger.info("Starting the twitter collection having collectionId: "+id);
 		ResponseWrapper preparedCollectionTask = baseCollectionService.prepareCollectionTask(id, CollectionType.TWITTER);
 		if(!preparedCollectionTask.getSuccess()){
 			return preparedCollectionTask;
@@ -47,16 +47,16 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 		CollectionTask task = (CollectionTask) preparedCollectionTask.getData();
 
-		logger.info("Collection start request received for " + task.getCollectionCode());
-
 		//check if all twitter specific information is available in the request
 		if (!task.checkSocialConfigInfo()) {
+			logger.info("Twitter authentication token(s) are missing for collectionId: "+id);
 			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"One or more Twitter authentication token(s) are missing");
 		}
 
 		//check if query parameters are missing in the query
 		if (!task.isToTrackAvailable()) {
+			logger.info("Missing tracking keywords. At least one keyword is required for collectionId: "+id);
 			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"Missing tracking keywords. At least one keyword is required");
 		}
@@ -66,6 +66,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 		//check if a task is already running with same configurations
 		logger.info("Checking OAuth parameters for " + collectionCode);
 		if (cache.isConfigExists(task)) {
+			logger.info("This twitter user is already having a collection running");
 			CollectionTask tempTask = cache.getTwitterConfig(collectionCode);
 			if(tempTask != null){
 				return new ResponseWrapper(tempTask, true, tempTask.getTwitterStatus().toString(), 
@@ -99,6 +100,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			//Updating the status of collection in db
 			collectionService.updateTwitterStatusById(id, CollectionStatus.RUNNING);
+			logger.info("Twitter collection started successfully for collection: " + collectionCode);
 			return new ResponseWrapper(cache.getTwitterConfig(code), true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
 		} catch (Exception ex) {
@@ -108,7 +110,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 	}
 
 	public ResponseWrapper stop(Long id) {
-		logger.info("Stopping the collection having collectionId: "+id);
+		logger.info("Stopping the twitter collection having collectionId: "+id);
 		ResponseWrapper stopTaskResponse = stopTask(id);
 
 		if(stopTaskResponse == null) {
@@ -162,9 +164,10 @@ public class TwitterCollectionController extends BaseCollectionController {
 	}
 
 	public ResponseWrapper getStatus(Long id) {
-		Collection collection = collectionService.getById(id);
-
+		logger.info("Getting the status for twitter collectionId: "+id);
 		GenericCache cache = GenericCache.getInstance();
+		
+		Collection collection = collectionService.getById(id);
 		CollectionTask twitterTask = cache.getTwitterConfig(collection.getCode());
 		if (twitterTask != null) {
 			collectionLogService.updateCount(id, twitterTask.getTweetCount(), CollectionType.TWITTER);
@@ -192,6 +195,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 	
 	@Override
 	public ResponseWrapper getCount(Long id) {
+		logger.info("Getting the twitter collection count for collectionId: "+id);
 		Long collectionCount = collectionLogService.getCountByCollectionIdAndProvider(id, CollectionType.TWITTER);
 		return new ResponseWrapper(collectionCount, true, ResponseCode.SUCCESS.toString(), null);
 	}

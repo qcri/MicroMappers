@@ -48,7 +48,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 	
 	@Override
 	public ResponseWrapper start(Long id) {
-		logger.info("Starting the collection having collectionId: "+id);
+		logger.info("Starting the facebook collection having collectionId: "+id);
 		ResponseWrapper preparedCollectionTask = baseCollectionService.prepareCollectionTask(id, CollectionType.FACEBOOK);
 		if(!preparedCollectionTask.getSuccess()){
 			return preparedCollectionTask;
@@ -58,22 +58,22 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 		//check if all fb specific information is available in the request
 		if (!task.checkSocialConfigInfo()) {
+			logger.info("Facebook authentication token(s) are missing for collectionId: "+id);
 			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"Facebook authentication token(s) are missing");
 		}
 
 		//check if all query parameters are missing in the query
-		if (!(task.isToTrackAvailable() || task.isSubscribedProfilesAvailable())) {
+		if (!task.isSubscribedProfilesAvailable()) {
+			logger.info("Missing subscribed profiles. At least one profile should be subscribed for collectionId: "+id);
 			return new ResponseWrapper(null, false, CollectionStatus.FATAL_ERROR.toString(), 
 					"Missing subscribed profiles. At least one profile should be subscribed");
 		}
 		String collectionCode = task.getCollectionCode();
 
-		//check if a task is already running with same configurations
 		logger.info("Checking OAuth parameters for " + collectionCode);
-
 		if (cache.isConfigExists(task)) {
-			
+			logger.info("This facebook user is already having a collection running");
 			CollectionTask tempTask = cache.getFacebookConfig(collectionCode);
 			if(tempTask != null){
 				return new ResponseWrapper(tempTask, true, tempTask.getFacebookStatus().toString(), 
@@ -90,12 +90,13 @@ public class FacebookCollectionController extends BaseCollectionController{
 		try {
 
 			FacebookFeedTracker tracker = new FacebookFeedTracker(task);
+			logger.info("Starting the facebook tracker for collectionId: "+id);
 			tracker.start();
 
 			String code = task.getCollectionCode();
 			cache.incrFbCounter(code, 0L);
 
-			// if facebook connection successful then change the statuscode
+			// if facebook connection successful then change the status code
 			task.setFacebookStatus(CollectionStatus.RUNNING);
 			task.setStatusMessage(null);
 			cache.setFacebookTracker(code, tracker);
@@ -106,6 +107,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 			//Updating the status of collection in db
 			collectionService.updateFacebookStatusAndLastExecutionTimeById(id, CollectionStatus.RUNNING, task.getLastExecutionTime());
+			logger.info("Facebook collection started successfully for collection: " + collectionCode);
 			return new ResponseWrapper(cache.getFacebookConfig(code), true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
 		} catch (Exception ex) {
@@ -117,12 +119,13 @@ public class FacebookCollectionController extends BaseCollectionController{
 	
 	@Override
 	public ResponseWrapper getStatus(Long id) {
-
+		logger.info("Getting the status for facebook collectionId: "+id);
+		
 		Collection collection = collectionService.getById(id);
-
 		String code = collection.getCode();
 		CollectionTask failedTask = cache.getFailedCollectionTask(code);
 		if (failedTask != null) {
+			logger.info("Facebook collectionId: "+id + " was failed. Stopping it now.");
 			return stop(id);
 		}
 
@@ -144,6 +147,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 	@RequestMapping("/rerun")
 	public ResponseWrapper rerunCollection(@RequestParam("id") Long id) {
+		logger.info("Rerunning facebook collectionId: " + id);
 		Collection collection = collectionService.getById(id);
 		String code = collection.getCode();
 		return rerunCollection(code);
@@ -154,7 +158,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 		if(cache.getFbConfigMap(collectionCode) != null) {
 			FacebookFeedTracker tracker = cache.getFacebookTracker(collectionCode);
 			tracker.start();
-			logger.info("Collection " + collectionCode + " started.");
+			logger.info("Rerun facebook Collection: " + collectionCode + " successfully.");
 		}
 		return new ResponseWrapper(cache.getFacebookConfig(collectionCode), true, CollectionStatus.RUNNING.toString(), 
 				CollectionStatus.RUNNING.toString());
@@ -163,7 +167,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 	@Override
 	public ResponseWrapper stop(Long id) {
-		logger.info("Stopping the collection having collectionId: "+id);
+		logger.info("Stopping the facebook collection having collectionId: "+id);
 		ResponseWrapper stopTaskResponse = stopTask(id);
 
 		if(stopTaskResponse == null) {
@@ -254,6 +258,7 @@ public class FacebookCollectionController extends BaseCollectionController{
 
 	@Override
 	public ResponseWrapper getCount(Long id) {
+		logger.info("Getting the facebook collection count for collectionId: "+id);
 		Long collectionCount = collectionLogService.getCountByCollectionIdAndProvider(id, CollectionType.FACEBOOK);
 		return new ResponseWrapper(collectionCount, true, ResponseCode.SUCCESS.toString(), null);
 	}

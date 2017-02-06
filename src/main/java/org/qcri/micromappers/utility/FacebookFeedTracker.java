@@ -2,6 +2,7 @@ package org.qcri.micromappers.utility;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -51,6 +52,8 @@ public class FacebookFeedTracker implements Closeable {
 	
 	private static final int DEFAULT_LIMIT = 100;
 	private static final Long HOUR_IN_MILLISECS = 60 * 60 * 1000L;
+	private static final Long MILLIS_IN_MINUTE = 60 * 1000L;
+	private GenericCache cache = GenericCache.getInstance();
 	
 	static{
 		dataFeedService = MicroMappersApplication.getApplicationContext().getBean(DataFeedService.class);
@@ -81,9 +84,9 @@ public class FacebookFeedTracker implements Closeable {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				Boolean syncObj = GenericCache.getInstance().getFbSyncObjMap(task.getCollectionCode()) == null ? Boolean.TRUE : GenericCache.getInstance().getFbSyncObjMap(task.getCollectionCode());
+				Boolean syncObj = cache.getFbSyncObjMap(task.getCollectionCode()) == null ? Boolean.TRUE : cache.getFbSyncObjMap(task.getCollectionCode());
 				synchronized (syncObj) {
-					GenericCache.getInstance().setFbSyncObjMap(task.getCollectionCode(), syncObj);
+					cache.setFbSyncObjMap(task.getCollectionCode(), syncObj);
 					collectFacebookData();
 				}
 
@@ -94,7 +97,7 @@ public class FacebookFeedTracker implements Closeable {
 	@Override
 	public void close() throws IOException {
 		facebook.shutdown();
-		logger.info("AIDR-Fetcher: Collection stopped which was tracking ");
+		logger.info("Facebook collection stopped which was tracking collectionCode: "+collection.getCode());
 	}
 
 	private static Facebook getFacebookInstance(String accessToken) {
@@ -143,11 +146,15 @@ public class FacebookFeedTracker implements Closeable {
 			}
 			
 			this.processPost(toTimestamp, fromTimestamp, fbProfiles);
-			
-			task.setLastExecutionTime(toTimestamp);
-			GenericCache.getInstance().setFbConfigMap(task.getCollectionCode(), task);
+			if(cache.getFacebookConfig(collection.getCode()) != null){
+				task.setLastExecutionTime(toTimestamp);
+				cache.setFbConfigMap(task.getCollectionCode(), task);
+			}else{
+				logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+				return;
+			}
 		} catch (FacebookException e) {
-			GenericCache.getInstance().setFailedCollection(task.getCollectionCode(), task);
+			cache.setFailedCollection(task.getCollectionCode(), task);
 		}
 	}
 
@@ -170,7 +177,20 @@ public class FacebookFeedTracker implements Closeable {
 				{
 					try {
 						long deltaMillis = (System.currentTimeMillis() - fbApiHitShedder.getLastSetTime());
-						Thread.sleep(deltaMillis);
+						logger.info("Facebook collection waiting for: "+ Duration.ofMillis(deltaMillis).toMinutes());
+						
+						//Checking every minute whether the collection is running or stopped.
+						while(deltaMillis > 0){
+							CollectionTask tempTask = cache.getFacebookConfig(collection.getCode());
+							if(tempTask !=null){
+								Thread.sleep(MILLIS_IN_MINUTE);
+							}else{
+								logger.info("Facebook collection was stopped with collectionCode: "+collection.getCode() + ". Returning...");
+								return;
+							}
+							deltaMillis = deltaMillis - MILLIS_IN_MINUTE;
+						}
+						
 					} catch (InterruptedException e) {
 						logger.warn("Interrupted exception while sleeping in load shedder for collection code: "
 								+ task.getCollectionCode());
@@ -201,7 +221,7 @@ public class FacebookFeedTracker implements Closeable {
 						}
 					}
 
-					GenericCache.getInstance().incrFbCounter(task.getCollectionCode(), count);
+					cache.incrFbCounter(task.getCollectionCode(), count);
 					count = 0L;
 				} catch (FacebookException e) {
 					logger.warn("Exception while fetching feeds for id: " + fbProfile.getId());
@@ -360,6 +380,7 @@ public class FacebookFeedTracker implements Closeable {
 		boolean found = false;
 		switch (e.getErrorCode()) {
 		case 1:
+		case -1:
 		case 2:
 		case 4:
 		case 17:
