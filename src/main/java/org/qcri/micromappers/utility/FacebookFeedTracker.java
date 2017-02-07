@@ -98,7 +98,6 @@ public class FacebookFeedTracker implements Closeable {
 	@Override
 	public void close() throws IOException {
 		facebook.shutdown();
-		logger.info("Facebook collection stopped which was tracking collectionCode: "+collection.getCode());
 	}
 
 	private static Facebook getFacebookInstance(String accessToken) {
