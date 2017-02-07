@@ -21,7 +21,7 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="${info.eventUrl}" title="${info.title}">
+								<a href="${info.eventUrl}" title="${info.title}" target="_blank">
 								${info.title}
 								</a>
 							</td>

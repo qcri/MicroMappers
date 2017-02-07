@@ -14,7 +14,7 @@
 		<div class="collapse navbar-collapse" id="myNavbar">
 			<ul class="nav navbar-nav">
 				<li><a href="${rc.getContextPath()}/home">Home</a></li>
-                <li><a href="" target="_blank">Tutorial</a></li>
+                <li><a href="https://sites.google.com/view/micromappers/home" target="_blank">Tutorial</a></li>
                 <li><a href="http://clickers.micromappers.org/" target="_blank">Clickers</a></li>
 				<li><a href="http://aidr-web.qcri.org/MMAPI" target="_blank">Maps</a></li>
 				<li><a href="http://micromappers.org/" target="_blank">About</a></li>
