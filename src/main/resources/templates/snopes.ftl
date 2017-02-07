@@ -31,10 +31,10 @@
 							<td>${info.articleTag}</td>
 							<td>
 								<span class="label label-info">
-								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="view details" TARGET="_blank"><strong>&nbsp;Info</strong></a>
+								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="View details" TARGET="_blank"><strong>Info</strong></a>
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" title="Create collection"><strong>&nbsp;Create</strong></a></span>
+								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" title="Create collection"><strong>Create</strong></a></span>
                                 </span>
 
 						</tr>

@@ -73,7 +73,7 @@
 										<span class="glyphicon glyphicon-edit"></span>
 									</i>
 								</span>
-								<span data-placement="top" data-toggle="tooltip" title="download">
+								<span data-placement="top" data-toggle="tooltip" title="Download">
 									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}" data-page="${page.pageNumber}">
                                         <span class="glyphicon glyphicon-download"></span>
                                     </i>
