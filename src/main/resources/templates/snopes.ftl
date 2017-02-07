@@ -30,13 +30,16 @@
 							</td>
 							<td>${info.articleTag}</td>
 							<td>
-								<span class="label label-info">
-								<i class="icon-info-sign"></i><a href="${info.eventUrl}" title="View details" TARGET="_blank"><strong>Info</strong></a>
-								</span>&nbsp;&nbsp;
-								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" title="Create collection"><strong>Create</strong></a></span>
-                                </span>
-
+								<span class="btn btn-primary btn-xs" title="View details">
+									<a href="${info.eventUrl}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info
+									</a>
+								</span>
+								<span class="btn btn-primary btn-xs" title="Create collection">
+									<a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-cog"></span>&nbsp;Create
+									</a>
+								</span>
 						</tr>
 						</#list>
 					</tbody>

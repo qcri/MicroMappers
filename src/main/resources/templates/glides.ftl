@@ -26,18 +26,27 @@
 							<td title="${info.updated}">
 								${info.updated}
 							</td>
-							<td><span class="label label-info">
-								<i class="icon-info-sign"></i><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank"><strong>Info</strong></a>
-								</span>&nbsp;&nbsp;
-								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}"><strong>Create</strong></a></span>
-                                </span>&nbsp;&nbsp;
-								<span class="label label-info">
-								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}"><strong>3w</strong></a></span>
-                                </span>&nbsp;&nbsp;
-								<span class="label label-info">
-								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}"><strong>MMIC</strong></a></span>
-                                </span>
+							<td>
+								<span class="btn btn-primary btn-xs" title="View details">
+									<a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info
+									</a>
+								</span>
+								<span class="btn btn-primary btn-xs" title="Create collection">
+									<a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-cog"></span>&nbsp;Create
+									</a>
+								</span>
+								<span class="btn btn-primary btn-xs">
+									<a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-book"></span>&nbsp;3w
+									</a>
+								</span>
+								<span class="btn btn-primary btn-xs">
+									<a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}" target="_blank" style="color:white;">
+									<span class="glyphicon glyphicon-book"></span>&nbsp;MMIC
+									</a>
+								</span>
 							</td>
 						</tr>
 						</#list>

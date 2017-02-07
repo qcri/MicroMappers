@@ -31,16 +31,20 @@
 									by ${info.owner}
 								</#if>
 							</td>
-							<td>
-								<#if info.provider == "ALL" || info.provider == "TWITTER">
-									<i class="fa fa-twitter twitter-color"></i>&nbsp;${info.twitterStatus}
-								</#if>
-								<#if info.provider == "ALL">
-									,&nbsp;
-								</#if>
-								<#if info.provider == "ALL" || info.provider == "FACEBOOK">
-									<i class="fa fa-facebook facebook-color"></i>&nbsp;${info.facebookStatus}
-								</#if>
+							<td class="col-md-2">
+								<div>
+									<#if info.provider == "ALL" || info.provider == "TWITTER">
+										<i class="fa fa-twitter twitter-color"></i>&nbsp;${info.twitterStatus}
+									</#if>
+									<!-- <#if info.provider == "ALL">
+										,&nbsp;
+									</#if> -->
+								</div>
+								<div>
+									<#if info.provider == "ALL" || info.provider == "FACEBOOK">
+										<i class="fa fa-facebook facebook-color"></i>&nbsp;${info.facebookStatus}
+									</#if>
+								</div>
 							</td>
 							<td>
 								<#if info.globalEventDefinition?? >
@@ -52,7 +56,7 @@
 								</#if>
 								
 							</td>
-							<td>
+							<td class="col-md-1">
 								<#if info.isTrashed()>
 									<span data-placement="top" data-toggle="tooltip" title="Restore">
 										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
