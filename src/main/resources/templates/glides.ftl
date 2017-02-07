@@ -27,16 +27,16 @@
 								${info.updated}
 							</td>
 							<td><span class="label label-info">
-								<i class="icon-info-sign"></i><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank"><strong>&nbsp;Info</strong></a>
+								<i class="icon-info-sign"></i><a href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank"><strong>Info</strong></a>
 								</span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}"><strong>&nbsp;Create</strong></a></span>
+								<i class="icon-cogs"></i><a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}"><strong>Create</strong></a></span>
                                 </span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}"><strong>&nbsp;3w</strong></a></span>
+								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}"><strong>3w</strong></a></span>
                                 </span>&nbsp;&nbsp;
 								<span class="label label-info">
-								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}"><strong>&nbsp;MMIC</strong></a></span>
+								<i class="icon-book"></i><a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}"><strong>MMIC</strong></a></span>
                                 </span>
 							</td>
 						</tr>

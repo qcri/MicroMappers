@@ -75,7 +75,7 @@
 								<#if info.glideMaster?? >
                                     <a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" target="_blank">${info.glideMaster.glideCode}</a>
 								<#else>
-                                    <a href="eventUrl" target="_blank">${info.globalEventDefinition.title}</a>
+                                    <a href="${info.globalEventDefinition.eventUrl}" target="_blank">${info.globalEventDefinition.title}</a>
 								</#if>
 							</td>
                             <td>
