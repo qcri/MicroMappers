@@ -6,7 +6,7 @@
 		<div class="container" style="min-height:400px;">
 			<div class="row">
                 <div class="btn-group">
-                    <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+                    <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
                 </div>
                 <div class="row-fluid well well-small ">
 					<#if connectionMap["twitter"]?size gt 0 >

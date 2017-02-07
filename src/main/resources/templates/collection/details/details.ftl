@@ -6,7 +6,8 @@
 		<div class="container" style="min-height:400px;">
 			<div class="row col-md-12" >
                 <div class="btn-group">
-                    <a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+                    <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
+                    <a class="btn" href="${rc.getContextPath()}/collection/view/list"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;My collections</a>
                 </div>
 				<div class="table-responsive">
                     <table class="table" style="margin-bottom: 0px;">
