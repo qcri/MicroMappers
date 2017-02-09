@@ -102,21 +102,30 @@ function autoRefreshCollectionCount()
 {    
      var id = '${collectionInfo.id}';
      
-     $.get( "${rc.getContextPath()}/collection/status?id="+id );
-     
-     if(toStartTwitterCountScheduler()){
-         $.get( "${rc.getContextPath()}/twitter/count?id="+id )
-             .done(function( data ) {
-                 $('#twitterCount').html(data.data);
-         });
-     }
-     
-     if(toStartFacebookCountScheduler()){
-         $.get( "${rc.getContextPath()}/facebook/count?id="+id )
-             .done(function( data ) {
-                 $('#facebookCount').html(data.data);
-         });
-     }
+     $.get( "${rc.getContextPath()}/collection/status?id="+id )
+         .done(function( statusData ) {
+             if(toStartTwitterCountScheduler()){
+                 $.get( "${rc.getContextPath()}/twitter/count?id="+id )
+                     .done(function( data ) {
+                         if('${collectionInfo.twitterStatus}' != statusData.data.twitterStatus){
+                             location.reload();
+                         }else{
+                             $('#twitterCount').html(data.data);
+                         }
+                 });
+             }
+             
+             if(toStartFacebookCountScheduler()){
+                 $.get( "${rc.getContextPath()}/facebook/count?id="+id )
+                     .done(function( data ) {
+                         if('${collectionInfo.facebookStatus}' != statusData.data.facebookStatus){
+                             location.reload();
+                         }else{
+                             $('#facebookCount').html(data.data);
+                         }
+                 });
+             }
+     });
 }
 
 if(toStartTwitterCountScheduler() || toStartFacebookCountScheduler()){

@@ -31,7 +31,7 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	@Transactional
 	@Modifying
     @Query("UPDATE Collection c SET c.lastExecutionTime = :lastExecutionTime WHERE c.id = :id")
-	public int updateFacebookLastExecutionTimeById(Long id, Date lastExecutiontime);
+	public int updateFacebookLastExecutionTimeById(@Param("id") Long id, @Param("lastExecutionTime") Date lastExecutiontime);
 	
 	@Transactional
 	@Modifying
@@ -48,7 +48,8 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
     @Query("UPDATE Collection c SET c.twitterStatus = :twitterStatus, c.facebookStatus = :facebookStatus, c.isTrashed = :isTrashed WHERE c.id = :id")
 	public int updatingTwitterStatusAndFacebookStatusAndTrashStatusById(@Param("id") Long id, @Param("twitterStatus") CollectionStatus twitterStatus, @Param("facebookStatus") CollectionStatus facebookStatus, @Param("isTrashed") Boolean isTrashed);
 	
-	public List<Collection> findByTwitterStatusIn(List<CollectionStatus> statusList);
+	@Query("SELECT c from Collection c where c.twitterStatus IN :statusList OR c.facebookStatus IN :statusList")
+	public List<Collection> findByTwitterStatusOrFacebookStatusIn(@Param("statusList") List<CollectionStatus> statusList);
 
 	public Long countByNameIgnoreCase(String name);
 

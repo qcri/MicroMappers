@@ -26,7 +26,7 @@ public class ScheduledTasksService
 	private static Logger logger = Logger.getLogger(ScheduledTasksService.class);
 
 
-	@Scheduled(fixedDelay = 1 * 60 * 1000) // 10 minutes - in milliseconds
+	@Scheduled(fixedDelay = 10 * 60 * 1000) // 10 minutes - in milliseconds
 	private void scheduledTaskUpdateCollections() {
 		List<Collection> collections;
 		try {
