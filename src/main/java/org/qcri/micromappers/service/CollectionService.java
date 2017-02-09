@@ -124,7 +124,7 @@ public class CollectionService
 			statuses.add(CollectionStatus.RUNNING);
 			statuses.add(CollectionStatus.RUNNING_WARNING);
 			statuses.add(CollectionStatus.WARNING);
-			return collectionRepository.findByTwitterStatusIn(statuses);
+			return collectionRepository.findByTwitterStatusOrFacebookStatusIn(statuses);
 		}catch (Exception e) {
 			logger.error("Error while getting running collections from db", e);
 			throw new MicromappersServiceException("Error while getting running collections from db", e);
