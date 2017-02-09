@@ -39,6 +39,10 @@ public class Gdelt3WService {
         return gdelt3WRepository.findAllbyState(Constants.GDELT_3W_MMIC_PROCESSED);
     }
 
+    public List<Gdelt3W> findbyImageUrl(String imgURL){
+        return gdelt3WRepository.findByImgURL(imgURL);
+    }
+
     public Gdelt3W saveOrUpdate(Gdelt3W gdelt3W){
         try{
             return gdelt3WRepository.save(gdelt3W);

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class ImageDescription extends ExtendedBaseEntity {
     private static final long serialVersionUID = -881973526366597368L;
 
-    @Column(name = "tags", length = 6000)
+    @Column(name = "tags", length = 6000, nullable=true)
     String tags;
 
     @Column(name = "text", length = 3000)

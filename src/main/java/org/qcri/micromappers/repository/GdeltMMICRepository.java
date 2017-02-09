@@ -24,6 +24,7 @@ public abstract interface GdeltMMICRepository extends PagingAndSortingRepository
 
     public GdeltMMIC findById(Long id);
 
+    public List<GdeltMMIC> findByImgURL(String imgURL);
     public List<GdeltMMIC> findByComputerVisionEnabled(boolean computerVisionEnabled);
 
 }

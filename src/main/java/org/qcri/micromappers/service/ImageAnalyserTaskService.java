@@ -8,6 +8,7 @@ import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.ImageAnalyserTaskRepository;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.ComputerVisionStatus;
+import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.qcri.micromappers.utility.Util;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -34,6 +35,8 @@ public class ImageAnalyserTaskService {
     @Inject
     private ImageAnalysisService imageAnalysisService;
 
+
+
     public List<ImageAnalyserTask> findByState(String state){
         List<ImageAnalyserTask> tasks = null;
         if(state.equalsIgnoreCase(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_ONGOING.getStatus())){
@@ -56,13 +59,15 @@ public class ImageAnalyserTaskService {
         String imageURL = this.getImageURL(taskRecord);
 
         if(imageURL != null){
-            String response = MSCognitiveClassifier.analyzeImage(imageURL);
-            //String response = MSCognitiveProcessor.getTempJson();
-            ImageAnalysis analysis = MSCognitiveProcessor.processClassifiedInfo(response, taskRecord, imageURL);
-            if(analysis!=null){
-                imageAnalysisService.createImageAnalysis(analysis);
-                imageAnalyserTask.setState(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus());
-                saveOrUpdate(imageAnalyserTask);
+            if(HttpDownloadUtility.isExist(imageURL) && !this.isProcessed(imageURL)){
+                String response = MSCognitiveClassifier.analyzeImage(imageURL);
+                //String response = MSCognitiveProcessor.getTempJson();
+                ImageAnalysis analysis = MSCognitiveProcessor.processClassifiedInfo(response, taskRecord, imageURL);
+                if(analysis!=null){
+                    imageAnalysisService.createImageAnalysis(analysis);
+                    imageAnalyserTask.setState(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus());
+                    saveOrUpdate(imageAnalyserTask);
+                }
             }
         }
         else{
@@ -70,6 +75,7 @@ public class ImageAnalyserTaskService {
         }
 
     }
+
 
     private String getImageURL(Object taskRecord){
         if(taskRecord instanceof Gdelt3W){
@@ -121,5 +127,13 @@ public class ImageAnalyserTaskService {
         }
 
         return imageUrl;
+    }
+
+    private boolean isProcessed(String imgURL){
+        ImageAnalysis imageAnalysis = imageAnalysisService.findByImgURL(imgURL);
+        if(imageAnalysis != null){
+            return true;
+        }
+        return false;
     }
 }

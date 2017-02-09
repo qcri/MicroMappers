@@ -41,6 +41,11 @@ public class GdeltMMICService {
         return gdeltMMICRepository.findAllbyState("processed");
     }
 
+    public List<GdeltMMIC> findByImgURL(String imgURL){
+        return gdeltMMICRepository.findByImgURL(imgURL);
+    }
+
+
     public GdeltMMIC getById(Long id){
         return gdeltMMICRepository.findById(id);
     }

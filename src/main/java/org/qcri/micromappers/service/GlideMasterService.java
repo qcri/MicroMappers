@@ -47,6 +47,10 @@ public class GlideMasterService {
         return glideMasterRepository.findByGlideCode(glideCode);
     }
 
+    public GlideMaster findByComputerVisionEnabled(boolean computerVisionEnabled){
+        return glideMasterRepository.findByComputerVisionEnabled(computerVisionEnabled);
+    }
+
     public List<GlideMaster> findAll(){
         return (List<GlideMaster>) glideMasterRepository.findAll();
     }

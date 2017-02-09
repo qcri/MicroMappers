@@ -12,6 +12,7 @@ public abstract interface GlideMasterRepository extends PagingAndSortingReposito
     Page<GlideMaster> findAll(Pageable pageable);
 	GlideMaster findById(Long id);
     GlideMaster findByGlideCode(String glideCode);
+    GlideMaster findByComputerVisionEnabled(boolean computerVisionEnabled);
 }
 
 
