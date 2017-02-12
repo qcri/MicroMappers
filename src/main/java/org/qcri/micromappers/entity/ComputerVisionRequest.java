@@ -26,7 +26,10 @@ public class ComputerVisionRequest extends ExtendedBaseEntity {
     @Column(name = "account_id", nullable=false)
     long accountId;
 
-    public ComputerVisionRequest(String state, long collectionId, long dataFeedId, long glideMasterId, long accountId) {
+    public ComputerVisionRequest(String state){
+        this.state = state;
+    }
+    public ComputerVisionRequest(String state, Long collectionId, Long dataFeedId, Long glideMasterId, Long accountId) {
         this.state = state;
         this.collectionId = collectionId;
         this.dataFeedId = dataFeedId;

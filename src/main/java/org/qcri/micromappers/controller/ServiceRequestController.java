@@ -82,8 +82,8 @@ public class ServiceRequestController {
         if(type.equalsIgnoreCase("gdelt")){
             glideMasterId = id;
             computerVisionRequest =
-                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST,collectionId
-                            ,dataFeedId,glideMasterId,accountId);
+                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST);
+            computerVisionRequest.setGlideMasterId(glideMasterId);
         }
         if(type.equalsIgnoreCase("collection")){
             collectionId = id;

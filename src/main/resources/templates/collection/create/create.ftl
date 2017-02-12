@@ -18,7 +18,7 @@
 					<#if eventType?? && eventType='snopes'>
                         <a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Snopes Global Events</a>
 					<#else>
-                        <a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
+                        <a class="btn" href="${rc.getContextPath()}/global/events/gdelt/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
 					</#if>
                 </div>
 				<ul class="nav nav-tabs">
