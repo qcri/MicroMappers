@@ -32,15 +32,12 @@ $('.image-classifier').on('click', function(e) {
 	e.preventDefault();
 
 	var id = $(this).data('id');
-	window.location="${rc.getContextPath()}/service/request/cv?type=gdelt&id="+id+"&acid="+id;
-
 	var url = "${rc.getContextPath()}/service/request/cv?type=gdelt&id="+id+"&acid="+id;
 
 	$.ajax({
 		type: "GET",
 		url: url,
 		dataType:"json",
-		data: JSON.stringify(data),
 		success: function(data){
 			if(data.success){
 				showInfoAlert(data.message);

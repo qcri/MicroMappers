@@ -68,28 +68,23 @@ public class ServiceRequestController {
     }
 
     private ComputerVisionRequest loadComputerVisionRequest (String type, long id, long accountId){
-        Long collectionId = null;
-        Long dataFeedId = null;
-        Long glideMasterId = null;
+
         ComputerVisionRequest computerVisionRequest = null;
         if(type.equalsIgnoreCase("datafeed")){
-            dataFeedId = id;
             computerVisionRequest =
-                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST,collectionId
-                            ,dataFeedId,glideMasterId,accountId);
+                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST);
+            computerVisionRequest.setDataFeedId(id);
 
         }
         if(type.equalsIgnoreCase("gdelt")){
-            glideMasterId = id;
             computerVisionRequest =
                     new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST);
-            computerVisionRequest.setGlideMasterId(glideMasterId);
+            computerVisionRequest.setGlideMasterId(id);
         }
         if(type.equalsIgnoreCase("collection")){
-            collectionId = id;
             computerVisionRequest =
-                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST,collectionId
-                            ,dataFeedId,glideMasterId,accountId);
+                    new ComputerVisionRequest(Constants.COMPUTER_VISION_ON_REQUEST);
+            computerVisionRequest.setCollectionId(id);
 
         }
 
