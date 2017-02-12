@@ -21,7 +21,6 @@
 						<tr>
 							<td>
                                 <a id="${info.glideCode}" href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank" class="hoverMe">${info.glideCode}</a>
-                                &nbsp;&nbsp;<iframe src="http://reliefweb.int/disaster/${info.glideCode}" class="iframetooltip"></iframe>
 							</td>
 							<td title="${info.updated}">
 								${info.updated}
@@ -50,6 +49,10 @@
 							</td>
 						</tr>
 						</#list>
+						<div  id="reliefWebDiv" style="display: none;background: black; padding: 5px 5px;justify-content: center;  align-items: center;position: fixed;">
+						    <iframe id="reliefWebIFrame" src="http://reliefweb.int/disaster/TC-2016-000111-VNM" scrolling="no1" style="height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						    </iframe>
+						</div>
 					</tbody>
 					<tfoot>
 						<tr>
@@ -90,5 +93,6 @@
 		<script>
 			<#include "cookies.js">
 		</script>
+		<script src="${rc.getContextPath()}/js/glides.js"></script>
 	</body>
 </html>
