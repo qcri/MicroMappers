@@ -64,7 +64,7 @@ public class GlobalEventController {
         return "snopes";
     }
 
-    @RequestMapping(value={"/glides"})
+    @RequestMapping(value={"/gdelt/glides"})
     public String glides(Model model, HttpServletRequest request,
                         @RequestParam(value = "page", defaultValue = "1") String page) {
 
@@ -76,7 +76,7 @@ public class GlobalEventController {
 
 
         model.addAttribute("page", pageInfo);
-        return "glides";
+        return "/gdelt/glides";
     }
 
     @RequestMapping(value={"/gdelt/data3w"})

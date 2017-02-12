@@ -14,7 +14,7 @@ public class ImageAnalyserTask extends ExtendedBaseEntity {
     String state;
 
     @ManyToOne
-    @JoinColumn(name = "collection_id", nullable=false)
+    @JoinColumn(name = "collection_id", nullable=true)
     Collection collection;
 
     @OneToOne

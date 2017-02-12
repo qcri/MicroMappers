@@ -38,7 +38,7 @@
 					<div class="well">
 						<h4><i class="icon-check"></i> Disaster Global Events</h4>
 						<p>Monitor World Diaster Information</p>
-						<a href="${rc.getContextPath()}/global/events/glides" class="btn btn-primary">
+						<a href="${rc.getContextPath()}/global/events/gdelt/glides" class="btn btn-primary">
                             Manage <i class="icon-chevron-right"></i>
 						</a>
 					</div>

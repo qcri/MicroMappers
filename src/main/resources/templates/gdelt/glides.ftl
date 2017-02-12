@@ -31,6 +31,9 @@
 									<span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info
 									</a>
 								</span>
+								<span class="image-classifier btn btn-primary btn-xs" data-placement="top" data-toggle="tooltip" title="Add Image Classifer" data-title="cv" data-id="${info.id}" data-page="${page.pageNumber}">
+									<span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier
+								</span>
 								<span class="btn btn-primary btn-xs" title="Create collection">
 									<a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}" target="_blank" style="color:white;">
 									<span class="glyphicon glyphicon-cog"></span>&nbsp;Create
@@ -63,7 +66,7 @@
 										<#if page.isFirstPage()>
 											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
 										<#else>
-											<li><a href="${rc.getContextPath()}/global/events/glides?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+											<li><a href="${rc.getContextPath()}/global/events/gdelt/glides?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
 										</#if>
 										
 										<#list page.navigatePageNumbers as index>
@@ -72,13 +75,13 @@
 											<#else>
 												<li>
 											</#if>
-												<a href="${rc.getContextPath()}/global/events/glides?page=${index?counter}">${index?counter}</a></li>
+												<a href="${rc.getContextPath()}/global/events/gdelt/glides?page=${index}">${index}</a></li>
 										</#list>
 										<!-- Last Page -->
 										<#if page.isLastPage()>
 											<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
 										<#else>
-											<li ><a href="${rc.getContextPath()}/global/events/glides?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+											<li ><a href="${rc.getContextPath()}/global/events/gdelt/glides?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
 										</#if>
 									</ul>
 								</div>
@@ -92,7 +95,7 @@
 		<#include "_footer.html">
 		<script>
 			<#include "cookies.js">
+			<#include "/gdelt/glides.js">
 		</script>
-		<script src="${rc.getContextPath()}/js/glides.js"></script>
 	</body>
 </html>

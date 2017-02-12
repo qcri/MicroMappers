@@ -32,6 +32,12 @@ public class Constants
   public static final Integer DEFAULT_PAGE_SIZE = 10;
   public static final Integer DEFAULT_NAVIGATION_PAGE_SIZE = 10;
 
+  public static final String COMPUTER_VISION_ON_REQUEST = "on request";
+  public static final String COMPUTER_VISION_APPROVED = "approved";
+  public static final String COMPUTER_VISION_REJECTED = "rejected";
+  public static final String COMPUTER_VISION_COMPLETED = "COMPLETED";
+
+
   public static List<String> STOP_WORDS;
 
   public static void populateStopWords() throws Exception {

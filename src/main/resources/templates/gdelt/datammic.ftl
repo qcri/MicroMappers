@@ -8,7 +8,7 @@
     <div class="row">
         <div class="btn-group">
             <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
-            <a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
+            <a class="btn" href="${rc.getContextPath()}/global/events/gdelt/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
         </div>
         <table class="table table-striped table-bordered">
             <thead>
