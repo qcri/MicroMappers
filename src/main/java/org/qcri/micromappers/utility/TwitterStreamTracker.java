@@ -61,17 +61,21 @@ public class TwitterStreamTracker implements Closeable {
 	}
 
 	private static Configuration task2configuration(CollectionTask task) {
+		return getTwitterConfiguration(task.getAccessToken(), task.getAccessTokenSecret());
+	}
+	
+	private static Configuration getTwitterConfiguration(String accessToken, String accessTokenSecret) {
 		ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
 		configurationBuilder.setDebugEnabled(false)
 		.setJSONStoreEnabled(true)
 		.setOAuthConsumerKey(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_KEY))
 		.setOAuthConsumerSecret(configProperties.getProperty(MicromappersConfigurationProperty.TWITTER_APP_SECRET))
-		.setOAuthAccessToken(task.getAccessToken())
-		.setOAuthAccessTokenSecret(task.getAccessTokenSecret());
+		.setOAuthAccessToken(accessToken)
+		.setOAuthAccessTokenSecret(accessTokenSecret);
 		Configuration configuration = configurationBuilder.build();
 		return configuration;
 	}
-
+	
 	static FilterQuery task2query(CollectionTask collectionTask) throws NumberFormatException {
 		FilterQuery query = new FilterQuery();
 
