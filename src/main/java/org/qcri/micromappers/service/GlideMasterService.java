@@ -3,11 +3,13 @@ package org.qcri.micromappers.service;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
+import org.qcri.micromappers.entity.ComputerVisionRequest;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.GlideMasterRepository;
 import org.qcri.micromappers.utility.Constants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,11 +28,17 @@ public class GlideMasterService {
     private GlideMasterRepository glideMasterRepository;
 
 
+    @Autowired
+    ComputerVisionRequestService computerVisionRequestService;
+
+
     public Page<GlideMaster> listAllByPage(Integer pageNumber) {
         PageRequest request =
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "updated");
 
-        return glideMasterRepository.findAll(request);
+        Page<GlideMaster> pages = glideMasterRepository.findAll(request);
+        pages = this.resetPageConent(pages);
+        return pages;
     }
     
     public GlideMaster getById(Long id)
@@ -53,5 +61,51 @@ public class GlideMasterService {
 
     public List<GlideMaster> findAll(){
         return (List<GlideMaster>) glideMasterRepository.findAll();
+    }
+
+    public Page<GlideMaster> resetPageConent(Page<GlideMaster> pages){
+        List<GlideMaster> glideMasterList = pages.getContent();
+
+        glideMasterList.forEach(item->{
+            this.getComputerVisionApprovalState(item);
+            this.getComputerVisionRejectState(item);
+            this.getComputerVisionOnRequestState(item);
+        });
+
+        return pages;
+
+    }
+
+    private GlideMaster getComputerVisionRejectState(GlideMaster glideMaster){
+        List<ComputerVisionRequest> rejectedRequest = computerVisionRequestService.findComputerVisionRequestOnRejected();
+        rejectedRequest.forEach(item->{
+            if(item.getGlideMasterId() == glideMaster.getId()){
+                glideMaster.setComputerVisionRequestState(Constants.COMPUTER_VISION_REJECTED);
+            }
+        });
+
+        return glideMaster;
+    }
+
+    private GlideMaster getComputerVisionApprovalState(GlideMaster glideMaster){
+        List<ComputerVisionRequest> approvedRequest = computerVisionRequestService.findComputerVisionRequestOnRunning();
+        approvedRequest.forEach(item->{
+            if(item.getGlideMasterId() == glideMaster.getId()){
+                glideMaster.setComputerVisionRequestState(Constants.COMPUTER_VISION_APPROVED);
+            }
+        });
+
+        return glideMaster;
+    }
+
+    private GlideMaster getComputerVisionOnRequestState(GlideMaster glideMaster){
+        List<ComputerVisionRequest> pendingRequest =computerVisionRequestService.findComputerVisionRequestOnRequest();
+        pendingRequest.forEach(item->{
+            if(item.getGlideMasterId() == glideMaster.getId()){
+                glideMaster.setComputerVisionRequestState(Constants.COMPUTER_VISION_ON_REQUEST);
+            }
+        });
+
+        return glideMaster;
     }
 }

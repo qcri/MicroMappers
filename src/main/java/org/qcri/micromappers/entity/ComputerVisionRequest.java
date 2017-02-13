@@ -26,6 +26,7 @@ public class ComputerVisionRequest extends ExtendedBaseEntity {
     @Column(name = "account_id", nullable=false)
     long accountId;
 
+    public ComputerVisionRequest(){}
     public ComputerVisionRequest(String state){
         this.state = state;
     }

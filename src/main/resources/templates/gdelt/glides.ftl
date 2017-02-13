@@ -31,9 +31,23 @@
 									<span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info
 									</a>
 								</span>
-								<span class="image-classifier btn btn-primary btn-xs" data-placement="top" data-toggle="tooltip" title="Add Image Classifer" data-title="cv" data-id="${info.id}" data-page="${page.pageNumber}">
-									<span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier
-								</span>
+								<#if info.computerVisionRequestState??>
+									<#if info.computerVisionRequestState == "approved">
+                                    	<span class="image-classifier btn btn-primary btn-xs disabled" data-placement="top" data-toggle="tooltip" title="Image Classifier is running" data-title="cv" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier Running
+										</span>
+									<#else>
+                                    	<span class="image-classifier btn btn-primary btn-xs disabled" data-placement="top" data-toggle="tooltip" title="Image Classifer on request already" data-title="cv" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier Pending
+										</span>
+									</#if>
+								<#else>
+                                    <span class="image-classifier btn btn-primary btn-xs" data-placement="top" data-toggle="tooltip" title="Add Image Classifer" data-title="cv" data-id="${info.id}" data-page="${page.pageNumber}">
+									<span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier Request
+									</span>
+								</#if>
+
+
 								<span class="btn btn-primary btn-xs" title="Create collection">
 									<a href="${rc.getContextPath()}/collection/view/create?type=gdelt&typeId=${info.id}" target="_blank" style="color:white;">
 									<span class="glyphicon glyphicon-cog"></span>&nbsp;Create

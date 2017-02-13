@@ -10,10 +10,7 @@ import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.models.GdeltMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.models.PageInfo;
-import org.qcri.micromappers.service.Gdelt3WService;
-import org.qcri.micromappers.service.GdeltMMICService;
-import org.qcri.micromappers.service.GlideMasterService;
-import org.qcri.micromappers.service.GlobalEventDefinitionService;
+import org.qcri.micromappers.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -49,6 +46,7 @@ public class GlobalEventController {
     @Autowired
     GdeltMMICService gdeltMMICService;
 
+
     @RequestMapping(value={"","/","snopes"})
     public String index(Model model, HttpServletRequest request,
     		@RequestParam(value = "page", defaultValue = "1") String page) {
@@ -72,10 +70,12 @@ public class GlobalEventController {
         Page<GlideMaster> pages =  glideMasterService.listAllByPage(pageNumber);
 
         PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
+
         pageInfo.setList(pages.getContent());
 
-
         model.addAttribute("page", pageInfo);
+
+
         return "/gdelt/glides";
     }
 
