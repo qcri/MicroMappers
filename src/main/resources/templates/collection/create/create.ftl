@@ -75,14 +75,15 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="twitterDatePicker">Twitter Old Data Range :</label>
+								<label class="control-label col-sm-3" for="twitterDatePicker" title="Twitter history search">Dates :</label>
 								<div class="row">
 									<div class="col-sm-6" style="padding-right: 30px;">
 										<div class="input-daterange input-group" id="twitterDatePicker">
 										    <input type="text" class="input-sm form-control" name="start" id="twitterStartDate"/>
 										    <span class="input-group-addon">to</span>
 										    <input type="text" class="input-sm form-control" name="end" id="twitterEndDate"/>
-										</div>						
+										</div>
+                                        <div class="breadcrumb">It will fetch historical data. Please do not enter "To" if you want to collect future data</div>
 									</div>
 								</div>
 							</div>

@@ -155,8 +155,14 @@ public class CollectionDetailsInfo implements Serializable{
 		collection.setFetchInterval(this.getFetchInterval());
 		collection.setFetchFrom(this.getFetchFrom());
 		collection.setComputerVisionEnabled(this.isComputerVisionEnabled());
-		collection.setTwitterSinceDate(new Date(this.getTwitterSinceDate()));
-		collection.setTwitterUntilDate(new Date(this.getTwitterUntilDate()));
+
+		if(this.getTwitterSinceDate() != null) {
+			collection.setTwitterSinceDate(new Date(this.getTwitterSinceDate()));
+		}
+		if(this.getTwitterUntilDate() != null){
+			collection.setTwitterUntilDate(new Date(this.getTwitterUntilDate()));
+		}
+
 		if(this.getTwitterUntilDate() == null && this.getTwitterSinceDate() != null){
 			collection.setTwitterUntilDate(new Date());
 		}
