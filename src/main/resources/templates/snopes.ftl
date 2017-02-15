@@ -21,7 +21,7 @@
 						<#list page.list as info>
 						<tr>
 							<td>
-								<a href="${info.eventUrl}" title="${info.title}" target="_blank">
+								<a href="${info.eventUrl}" title="${info.title}" target="_blank" class="hoverMe">
 								${info.title}
 								</a>
 							</td>
@@ -42,6 +42,10 @@
 								</span>
 						</tr>
 						</#list>
+						<div  id="urlModalDiv" style="display: none;background: black; padding: 5px 5px;justify-content: center;  align-items: center;position: fixed;">
+						    <iframe id="urlModalIFrame" src="http://reliefweb.int/disaster/TC-2016-000111-VNM" scrolling="no1" style="height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						    </iframe>
+						</div>
 					</tbody>
 					<tfoot>
 						<tr>
@@ -81,6 +85,7 @@
 		<#include "_footer.html">
 		<script>
 			<#include "cookies.js">
+			<#include "urlpopup.js">
 		</script>
 	</body>
 </html>

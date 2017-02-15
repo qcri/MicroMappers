@@ -73,9 +73,9 @@
 						<tr>
 							<td>
 								<#if info.glideMaster?? >
-                                    <a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" target="_blank">${info.glideMaster.glideCode}</a>
+                                    <a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" class="hoverMe" target="_blank">${info.glideMaster.glideCode}</a>
 								<#else>
-                                    <a href="${info.globalEventDefinition.eventUrl}" target="_blank">${info.globalEventDefinition.title}</a>
+                                    <a href="${info.globalEventDefinition.eventUrl}" class="hoverMe" target="_blank">${info.globalEventDefinition.title}</a>
 								</#if>
 							</td>
                             <td>
@@ -92,6 +92,10 @@
 								${info.source}
                             </td>
 						</#list>
+						<div  id="urlModalDiv" style="display: none;background: black; padding: 5px 5px;justify-content: center;  align-items: center;position: fixed;">
+						    <iframe id="urlModalIFrame" src="http://reliefweb.int/disaster/TC-2016-000111-VNM" scrolling="no1" style="height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						    </iframe>
+						</div>
 					</tbody>
 				</table>
 			</div>
@@ -100,6 +104,7 @@
 		<#include "_footer.html">
 		<script>
 			<#include  "cookies.js">
+			<#include "urlpopup.js">
 		</script>
 	</body>
     <script>
