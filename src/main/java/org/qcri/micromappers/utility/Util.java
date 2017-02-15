@@ -32,8 +32,8 @@ import org.springframework.stereotype.Component;
 public class Util
 {
 	private static Logger logger = Logger.getLogger(Util.class);
-	final private static long MAX_CHECK_TIME_MILLIS = 300000; // 5min for local.
-	//final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production
+	//final private static long MAX_CHECK_TIME_MILLIS = 300000; // 5min for local.
+	final private static long MAX_CHECK_TIME_MILLIS = 21600000;  // 6 hours for production
 	//final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
 	private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
 	private static UrlValidator urlValidator = new UrlValidator();
@@ -55,7 +55,7 @@ public class Util
 		long diff = currentTimeMillis - timeOfLastTranslationProcessingMillis;
 		logger.info("currentTimeMillis differ : " + diff);
 		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_TIME_MILLIS);
-		// every 3hours
+		// every 6hours
 		if ((currentTimeMillis - timeOfLastTranslationProcessingMillis) >= MAX_CHECK_TIME_MILLIS) {
 			return true;
 		}
