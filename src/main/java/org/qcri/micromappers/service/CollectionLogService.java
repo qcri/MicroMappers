@@ -119,6 +119,21 @@ public class CollectionLogService
 			return Boolean.FALSE;
 		}
 	}
+	
+	public Boolean incrementCount(Long collectionId, Long count, CollectionType provider)
+	{
+		try{
+			CollectionLog latestByCollectionLog = getLatestByCollectionIdAndProvider(collectionId, provider);
+			if(latestByCollectionLog != null){
+				latestByCollectionLog.setCount(latestByCollectionLog.getCount() + count);
+				saveOrUpdate(latestByCollectionLog);
+			}
+			return Boolean.TRUE;
+		}catch (Exception e) {
+			logger.error("Error while updating count in collectionLog for collectionId: "+ collectionId, e);
+			return Boolean.FALSE;
+		}
+	}
 
 	public Long getCountByCollectionIdAndProvider(Long collectionId, CollectionType provider){
 		Long count = collectionLogRepository.getCollectionCountByCollectionIdAndProvider(collectionId, provider);

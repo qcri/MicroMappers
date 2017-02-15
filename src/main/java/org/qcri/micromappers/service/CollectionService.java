@@ -117,6 +117,20 @@ public class CollectionService
 			return Boolean.FALSE;
 		}
 	}
+	
+	public Boolean updateTwitterLastExecutionTimeById(Long id, Date lastExecutiontime){
+		try{
+			int updateStatus = collectionRepository.updateTwitterLastExecutionTimeById(id, lastExecutiontime);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while updating twitter last execution time by id", e);
+			return Boolean.FALSE;
+		}
+	}
 
 	public List<Collection> getAllRunningCollections(){
 		try{

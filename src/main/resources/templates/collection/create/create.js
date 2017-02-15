@@ -91,18 +91,28 @@ $(document).ready(function() {
           
           
      });
+    
+    $('#twitterDatePicker').datepicker({
+        format: "dd/mm/yyyy",
+        endDate: "today",
+        maxViewMode: 3,
+        clearBtn: true,
+        todayHighlight: true,
+        autoclose: true,
+        startDate: "21-03-2006"
+    });
 });
 
 $('#provider').change(function() {
     if(document.getElementsByName('provider')[0].value == 'TWITTER'){
         $('#facebookConfigDiv').hide();
-        $('#keywordsDiv').show();
+        $('#twitterConfigDiv').show();
     }else if(document.getElementsByName('provider')[0].value == 'FACEBOOK'){
         $('#facebookConfigDiv').show();
-        $('#keywordsDiv').hide();
+        $('#twitterConfigDiv').hide();
     }else{
         $('#facebookConfigDiv').show();
-        $('#keywordsDiv').show();
+        $('#twitterConfigDiv').show();
     }
 });
 
@@ -131,6 +141,14 @@ function createCollection() {
             provider: document.getElementsByName('provider')[0].value,
     };
     
+    if($('#twitterStartDate').val() != ""){
+        data.twitterSinceDate = $('#twitterStartDate').data('datepicker').viewDate.getTime();
+    }
+    
+    if($('#twitterEndDate').val() != ""){
+        data.twitterUntilDate = $('#twitterEndDate').data('datepicker').viewDate.getTime();
+    }
+        
     if(eventType != null && eventType.toLowerCase() === "snopes" && eventTypeId != null){
         data.globalEventDefinition = {};
         data.globalEventDefinition.id = eventTypeId;

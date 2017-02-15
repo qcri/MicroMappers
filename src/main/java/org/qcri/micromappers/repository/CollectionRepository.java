@@ -45,6 +45,11 @@ public abstract interface CollectionRepository extends CrudRepository<Collection
 	
 	@Transactional
 	@Modifying
+    @Query("UPDATE Collection c SET c.twitterLastExecutionTime = :twitterLastExecutionTime WHERE c.id = :id")
+	public int updateTwitterLastExecutionTimeById(@Param("id") Long id, @Param("twitterLastExecutionTime") Date twitterLastExecutionTime);
+	
+	@Transactional
+	@Modifying
     @Query("UPDATE Collection c SET c.twitterStatus = :twitterStatus, c.facebookStatus = :facebookStatus, c.isTrashed = :isTrashed WHERE c.id = :id")
 	public int updatingTwitterStatusAndFacebookStatusAndTrashStatusById(@Param("id") Long id, @Param("twitterStatus") CollectionStatus twitterStatus, @Param("facebookStatus") CollectionStatus facebookStatus, @Param("isTrashed") Boolean isTrashed);
 	

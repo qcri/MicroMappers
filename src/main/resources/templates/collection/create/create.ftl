@@ -66,16 +66,30 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group" id="keywordsDiv">
-							<label class="control-label col-sm-3" for="track">Keywords :</label>
-							<div class="col-sm-6"> 
-								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
+						<div id="twitterConfigDiv">
+							<div class="form-group" id="keywordsDiv">
+								<label class="control-label col-sm-3" for="track">Keywords :</label>
+								<div class="col-sm-6"> 
+									<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="twitterDatePicker">Twitter Old Data Range :</label>
+								<div class="row">
+									<div class="col-sm-6" style="padding-right: 30px;">
+										<div class="input-daterange input-group" id="twitterDatePicker">
+										    <input type="text" class="input-sm form-control" name="start" id="twitterStartDate"/>
+										    <span class="input-group-addon">to</span>
+										    <input type="text" class="input-sm form-control" name="end" id="twitterEndDate"/>
+										</div>						
+									</div>
+								</div>
 							</div>
 						</div>
 						
+						
 						<div id="facebookConfigDiv" hidden=true>
-						
-						
 							<div class="form-group">
 								<label class="control-label col-sm-3" for="subscribedProfiles">Subscribed Profiles :</label>
 								<div class="col-sm-6"> 

@@ -98,7 +98,10 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			String code = task.getCollectionCode();
 			cache.incrTwtCounter(code, 0L);
-
+			
+			//Starting the twitter Crawler
+			twitterCollectionService.crawlTweets(task);
+			
 			// if twitter streaming connection successful then change the status code
 			task.setTwitterStatus(CollectionStatus.RUNNING);
 			task.setStatusMessage(null);
@@ -110,6 +113,8 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			//Updating the status of collection in db
 			collectionService.updateTwitterStatusById(id, CollectionStatus.RUNNING);
+			
+			
 			logger.info("Twitter collection started successfully for collection: " + collectionCode);
 			return new ResponseWrapper(cache.getTwitterConfig(code), true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
@@ -189,6 +194,10 @@ public class TwitterCollectionController extends BaseCollectionController {
 			if(collection.getTwitterStatus() != twitterTask.getTwitterStatus()){
 				collectionService.updateTwitterStatusById(id, twitterTask.getTwitterStatus());
 			}
+			if(twitterTask.getTwitterLastExecutionTime() != null && (collection.getTwitterLastExecutionTime() == null || collection.getTwitterLastExecutionTime().before(twitterTask.getTwitterLastExecutionTime()))){
+				collectionService.updateTwitterLastExecutionTimeById(id, twitterTask.getTwitterLastExecutionTime());
+			}
+			
 			return new ResponseWrapper(twitterTask, true, ResponseCode.SUCCESS.toString(), null);
 		}else if(collection.getTwitterStatus() != CollectionStatus.NOT_RUNNING){
 			collection.setTwitterStatus(CollectionStatus.NOT_RUNNING);

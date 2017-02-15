@@ -1,25 +1,26 @@
 package org.qcri.micromappers.utility;
 
-import org.apache.log4j.Logger;
-import org.springframework.core.io.ClassPathResource;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.log4j.Logger;
+import org.springframework.core.io.ClassPathResource;
 
 public class Constants
 {
   private static Logger logger = Logger.getLogger(Constants.class);
 
   public static long ONE_HOUR_IN_MILLISECS = 3600000L;
+  public static final String DATE_FORMAT = "yyyy-MM-dd";
+  
+  public static final Integer MAX_TWEET_LOOKUP_COUNT_IN_ONE_HIT = 100;
+  public static final Integer TWITTER_SEARCH_API_DELAY_IN_MILLISECS = 2000;
   
   public static final String GDELT_PROCESSED_EXTENTION = ".processed";
   public static final String GDELT_3W_SIGNATURE = "3W";
