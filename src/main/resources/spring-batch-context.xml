@@ -46,12 +46,12 @@
 				</step>
 			</flow>
 			<flow>
-				<step id="snopstep1" allow-start-if-complete="true" next="snopstep2">
+				<step id="snopstep1" allow-start-if-complete="true">
 					<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
 				</step>
-				<step id="snopstep2" allow-start-if-complete="true">
+				<!--<step id="snopstep2" allow-start-if-complete="true">
 					<tasklet ref="SnopesFactFetchTasklet"></tasklet>
-				</step>
+				</step>-->
 			</flow>
 			<flow>
 				<step id="step1" allow-start-if-complete="true" next="step2">
