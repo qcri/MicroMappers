@@ -75,7 +75,7 @@
 							</div>
 							
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="twitterDatePicker" title="Twitter history search">Dates :</label>
+								<label class="control-label col-sm-3" for="twitterDatePicker" title="Enter to collect Twitter historical data">Twitter From Date :</label>
 								<div class="row">
 									<div class="col-sm-6" style="padding-right: 30px;">
 										<div class="input-daterange input-group" id="twitterDatePicker">
@@ -83,7 +83,7 @@
 										    <span class="input-group-addon">to</span>
 										    <input type="text" class="input-sm form-control" name="end" id="twitterEndDate"/>
 										</div>
-                                        <div class="breadcrumb">It will fetch historical data. Please do not enter "To" if you want to collect future data</div>
+                                        <div class="breadcrumb">Enter dates if you want to collect historical data also, otherwise leave empty & collect only Realtime data.</div>
 									</div>
 								</div>
 							</div>
@@ -103,7 +103,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<label class="control-label col-sm-3" for="fetchInterval">Facebook Fetch Interval :</label>
 								<div class="col-sm-6">
 									<select class="form-control" name="fetchInterval">
 										<option value="2" selected>2 hours</option>
@@ -117,7 +117,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<label class="control-label col-sm-3" for="fetchFrom">Facebook Fetch From Last :</label>
 								<div class="col-sm-6">
 									<select class="form-control" name="fetchFrom">
 										<option value="168" selected>7 days</option>

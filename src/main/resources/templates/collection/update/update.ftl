@@ -95,7 +95,7 @@
 								</div>
 							</div> -->
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<label class="control-label col-sm-3" for="fetchInterval">Facebook Fetch Interval :</label>
 								<div class="col-sm-6">
 									<select class="form-control" id="fetchInterval" name="fetchInterval">
 										<option value="2" selected>2 hours</option>
@@ -109,7 +109,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<label class="control-label col-sm-3" for="fetchFrom">Facebook Fetch From Last :</label>
 								<div class="col-sm-6">
 									<select class="form-control" id="fetchFrom" name="fetchFrom">
 										<option value="168" selected>7 days</option>

@@ -160,8 +160,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td>Fetch Interval:</td>
-									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.fetchInterval}">${collectionInfo.fetchInterval}</td>
+									<td>Facebook Fetch Interval:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.fetchInterval}">${collectionInfo.fetchInterval} hours</td>
 								</tr>
 							</#if>
 							<tr>
