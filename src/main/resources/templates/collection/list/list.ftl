@@ -85,8 +85,8 @@
 							</td>
 						</tr>
 						</#list>
-						<div  id="urlModalDiv" style="display: none;background: black; padding: 5px 5px;justify-content: center;  align-items: center;position: fixed;">
-						    <iframe id="urlModalIFrame" src="http://reliefweb.int/disaster/TC-2016-000111-VNM" scrolling="no1" style="height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						<div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;padding:0px;">
+						    <iframe id="urlModalIFrame"  scrolling="no1" style="width:100%;height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
 						    </iframe>
 						</div>
 					</tbody>
