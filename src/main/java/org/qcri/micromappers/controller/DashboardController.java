@@ -3,10 +3,13 @@ package org.qcri.micromappers.controller;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.qcri.micromappers.entity.GlideMaster;
+import org.qcri.micromappers.entity.SentimentAnalysis;
 import org.qcri.micromappers.models.GlobalDataSources;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.models.WordCloud;
 import org.qcri.micromappers.service.GlobalDataSourcesService;
+import org.qcri.micromappers.service.SentimentAnalysisService;
+import org.qcri.micromappers.utility.ComputerVisionStatus;
 import org.qcri.micromappers.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +38,9 @@ public class DashboardController {
 
     @Autowired
     GlobalDataSourcesService globalDataSourcesService;
+
+    @Autowired
+    SentimentAnalysisService sentimentAnalysisService;
 
     @RequestMapping(value={"/global"})
     public String globalOverview(Model model, HttpServletRequest request,
@@ -78,6 +84,29 @@ public class DashboardController {
         model.addAttribute("wordClouds", getWordCloudModelData(globalDataSourcesList));
 
         return "/dashboard/global";
+    }
+
+    @RequestMapping(value={"/keywordSentiment"})
+    public String getMMICData(Model model,
+                              @RequestParam(value = "page", defaultValue = "1") String page,
+                              @RequestParam(value = "cid", defaultValue = "0") String cid) {
+
+        int pageNumber = Integer.valueOf(page);
+        long collection_Id = Long.valueOf(cid);
+
+
+        Page<SentimentAnalysis> pages =  sentimentAnalysisService.findByStateAndCollectionId(pageNumber,
+                ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
+                collection_Id);
+
+        PageInfo<SentimentAnalysis> pageInfo = new PageInfo<>(pages);
+        pageInfo.setList(pages.getContent());
+
+
+        model.addAttribute("page", pageInfo);
+        model.addAttribute("cid",collection_Id);
+
+        return "/dashboard/keywordSentiment";
     }
 
 

@@ -13,14 +13,14 @@
 						<tr>
 							<th>Name</th>
 							<th>Status</th>
-							<th>Event</th>
+							<!--<th>Event</th>-->
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<#list page.list as info>
 						<tr>
-							<td>
+							<td width="30%">
 								<#if info.globalEventDefinition?? >
 									<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.globalEventDefinition.title}">
 								<#elseif info.glideMaster?? >
@@ -31,7 +31,7 @@
 									by ${info.owner}
 								</#if>
 							</td>
-							<td class="col-md-2">
+							<td class="col-md-2" width="20%">
 								<div>
 									<#if info.provider == "ALL" || info.provider == "TWITTER">
 										<i class="fa fa-twitter twitter-color"></i>&nbsp;${info.twitterStatus}
@@ -46,7 +46,7 @@
 									</#if>
 								</div>
 							</td>
-							<td>
+							<!--<td width="20%">
 								<#if info.globalEventDefinition?? >
 									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}" class="hoverMe">
 										${info.globalEventDefinition.title}
@@ -55,8 +55,8 @@
 									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" class="hoverMe" target="_blank" >${info.glideMaster.glideCode}</a>
 								</#if>
 								
-							</td>
-							<td class="col-md-1">
+							</td>-->
+							<td class="col-md-1" width="50%">
 								<#if info.isTrashed()>
 									<span data-placement="top" data-toggle="tooltip" title="Restore">
 										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
@@ -82,13 +82,18 @@
                                         <span class="glyphicon glyphicon-download"></span>
                                     </i>
 								</span>
+                                <span data-placement="top" data-toggle="tooltip" title="Text Analystics">
+									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}" data-page="${page.pageNumber}">
+                                        <span class="glyphicon glyphicon-tasks"></span>
+                                    </i></a>
+								</span>
 							</td>
 						</tr>
 						</#list>
-						<div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;padding:0px;">
+						<!--<div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;padding:0px;">
 						    <iframe id="urlModalIFrame"  scrolling="no1" style="width:100%;height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
 						    </iframe>
-						</div>
+						</div>-->
 					</tbody>
 					<tfoot>
 						<tr>
@@ -145,9 +150,9 @@
 							<button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
 						</div>
 					</div>
-					/.modal-content 
+					/.modal-content
 				</div>
-				/.modal-dialog 
+				/.modal-dialog
 				</div> -->
 			<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
 				<div class="modal-dialog">

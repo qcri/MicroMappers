@@ -36,7 +36,7 @@
 									</a>
 								</span>
 								<span class="btn btn-primary btn-xs" title="Create collection">
-									<a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" target="_blank" style="color:white;">
+									<a href="${rc.getContextPath()}/collection/view/create?type=snopes&typeId=${info.id}" style="color:white;">
 									<span class="glyphicon glyphicon-cog"></span>&nbsp;Create
 									</a>
 								</span>

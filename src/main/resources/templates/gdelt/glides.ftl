@@ -54,12 +54,12 @@
 									</a>
 								</span>
 								<span class="btn btn-primary btn-xs">
-									<a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}" target="_blank" style="color:white;">
+									<a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}" style="color:white;">
 									<span class="glyphicon glyphicon-book"></span>&nbsp;3w
 									</a>
 								</span>
 								<span class="btn btn-primary btn-xs">
-									<a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}" target="_blank" style="color:white;">
+									<a href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${info.glideCode}" style="color:white;">
 									<span class="glyphicon glyphicon-book"></span>&nbsp;MMIC
 									</a>
 								</span>
