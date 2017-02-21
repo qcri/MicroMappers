@@ -46,7 +46,7 @@ public class DashboardController {
 
     @RequestMapping(value={"/global"})
     public String globalOverview(Model model, HttpServletRequest request,
-                         @RequestParam(value = "page", defaultValue = "1") String page,
+                                 @RequestParam(value = "page", defaultValue = "1") String page,
                                  @RequestParam(value = "q", defaultValue = "") String searchWord) {
 
         int pageNumber = Integer.valueOf(page);
@@ -66,7 +66,7 @@ public class DashboardController {
             j = globalDataSourcesList.size() - 1;
         }
 
-        logger.debug("sublist : " + i + " - " + j);
+        //logger.debug("sublist : " + i + " - " + j);
 
         List<GlobalDataSources> pageDataSet = new ArrayList<GlobalDataSources>();
         for(int k= 0; k < globalDataSourcesList.size(); k++){

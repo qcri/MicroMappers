@@ -17,7 +17,7 @@
                                 <tr>
                                     <td style="width: 50%">
                                         <form id="filterWords" action="${rc.getContextPath()}/dashboard/global?page=${index}" class="form-main">
-                                            <div class="col-md-10 col-sm-10 col-xs-12">
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
                                                 <label class="sr-only" for="search">Search</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control input-search" name="q" id="q" placeholder="Search">
@@ -27,6 +27,11 @@
                                             <div class="col-md-2 col-sm-2 col-xs-12">
                                                 <button type="submit" class="btn btn-primary" onclick="searchBy()">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="hidden-sm hidden-xs"> Search </span>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                <button type="submit" class="btn btn-primary" onclick="searchBy()">
+                                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span><span class="hidden-sm hidden-xs"> Refresh </span>
                                                 </button>
                                             </div>
                                     </td>

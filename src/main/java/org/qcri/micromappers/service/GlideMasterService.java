@@ -63,6 +63,11 @@ public class GlideMasterService {
         return (List<GlideMaster>) glideMasterRepository.findAll();
     }
 
+    public List<GlideMaster> findAllBySearchKey(String searchKeyWord){
+        String word = "%" + searchKeyWord.toUpperCase() + "%";
+        return (List<GlideMaster>) glideMasterRepository.findAllByKeyWord(word);
+    }
+
     public Page<GlideMaster> resetPageConent(Page<GlideMaster> pages){
         List<GlideMaster> glideMasterList = pages.getContent();
 

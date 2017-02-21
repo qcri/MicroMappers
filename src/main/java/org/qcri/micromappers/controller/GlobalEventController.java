@@ -11,8 +11,12 @@ import org.qcri.micromappers.models.GdeltMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.*;
+import org.qcri.micromappers.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,20 +68,47 @@ public class GlobalEventController {
 
     @RequestMapping(value={"/gdelt/glides"})
     public String glides(Model model, HttpServletRequest request,
-                        @RequestParam(value = "page", defaultValue = "1") String page) {
+                         @RequestParam(value = "page", defaultValue = "1") String page,
+                         @RequestParam(value = "q", defaultValue = "") String searchWord) {
 
         int pageNumber = Integer.valueOf(page);
-        Page<GlideMaster> pages =  glideMasterService.listAllByPage(pageNumber);
+        Page<GlideMaster> pages = null;
+        if(searchWord.isEmpty() || searchWord == null){
+           pages =  glideMasterService.listAllByPage(pageNumber);
+        }
+        else{
+            List<GlideMaster> glideMasterList = glideMasterService.findAllBySearchKey(searchWord);
+            PageRequest pageRequestreq =
+                    new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
 
+            int max = (Constants.DEFAULT_PAGE_SIZE*(pageNumber+1)>glideMasterList.size())?
+                    glideMasterList.size(): Constants.DEFAULT_PAGE_SIZE*(pageNumber+1);
+
+            int i = (pageNumber -1) * Constants.DEFAULT_PAGE_SIZE;
+            int j = i + (Constants.DEFAULT_PAGE_SIZE-1);
+
+            if(j >= glideMasterList.size()){
+                j = glideMasterList.size() - 1;
+            }
+
+            List<GlideMaster> pageDataSet = new ArrayList<GlideMaster>();
+            for(int k= 0; k < glideMasterList.size(); k++){
+                if(k>=i && k <= j){
+                    pageDataSet.add(glideMasterList.get(k));
+                }
+            }
+
+            pages = new PageImpl<GlideMaster>(pageDataSet, pageRequestreq, glideMasterList.size());
+
+        }
         PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
 
         pageInfo.setList(pages.getContent());
-
         model.addAttribute("page", pageInfo);
-
 
         return "/gdelt/glides";
     }
+
 
     @RequestMapping(value={"/gdelt/data3w"})
     public String get3WData(Model model, HttpServletRequest request,HttpServletResponse response,
