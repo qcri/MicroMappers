@@ -21,4 +21,10 @@ public abstract interface SentimentAnalysisRepository extends PagingAndSortingRe
                                                        @Param("collection_id")long collection_id,
                                                        @Param("state")String state);
 
+
+    @Query("SELECT d FROM SentimentAnalysis d WHERE d.state=:state and d.collectionId=:collection_id")
+    List<SentimentAnalysis> findByCollectionIdAndState(@Param("collection_id")long collection_id,
+                                                       @Param("state")String state);
+
+
 }

@@ -31,4 +31,9 @@ public class SentimentAnalysisService {
         return sentimentAnalysisRepository.findByCollectionIdAndState(request, collection_id, state);
     }
 
+    public List<SentimentAnalysis> findByStateAndCollectionId(String state, long collection_id){
+
+        return sentimentAnalysisRepository.findByCollectionIdAndState(collection_id, state);
+    }
+
 }
