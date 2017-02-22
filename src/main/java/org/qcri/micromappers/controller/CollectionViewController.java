@@ -2,6 +2,7 @@ package org.qcri.micromappers.controller;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,11 +68,7 @@ public class CollectionViewController {
      */
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public String getAllCollections(Model model, HttpServletRequest request, HttpServletResponse response,
-    		@RequestParam(value = "page", defaultValue = "1") Integer page,
-			@RequestParam(value = "id", defaultValue = "") String id,
-    		@RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize,
-			@RequestParam(value = "sortColumn", required = false, defaultValue = "createdAt") String sortColumn,
-			@RequestParam(value = "sortDirection", required = false, defaultValue = "DESC") Direction sortDirection) {
+			@RequestParam(value = "id", defaultValue = "") String id) {
 
 		if(id != null){
 			if(!id.isEmpty())
@@ -80,14 +77,13 @@ public class CollectionViewController {
 			}
 		}
 		Account account = util.getAuthenticatedUser();
-        
-        Page<Collection> pagedCollection =  collectionService.getAllByPage(account, page, pageSize, sortColumn, sortDirection);
-        Page<CollectionDetailsInfo> pagedCollectionDetailsInfo = pagedCollection.map(pc -> pc.toCollectionDetailsInfo());
-        
-        PageInfo<CollectionDetailsInfo> pageInfo = new PageInfo<>(pagedCollectionDetailsInfo);
-        pageInfo.setList(pagedCollectionDetailsInfo.getContent());
 
-        model.addAttribute("page", pageInfo);
+		List<Collection> pagedCollection = collectionService.getAllByAccount(account);
+
+		List<CollectionDetailsInfo> pagedCollectionDetailsInfo = new ArrayList<CollectionDetailsInfo>();
+		pagedCollection.forEach(item->pagedCollectionDetailsInfo.add(item.toCollectionDetailsInfo()));
+
+        model.addAttribute("page", pagedCollectionDetailsInfo);
         return "collection/list/list";
     }
 

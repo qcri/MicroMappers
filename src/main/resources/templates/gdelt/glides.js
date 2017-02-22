@@ -26,3 +26,5 @@ $('.image-classifier').on('click', function(e) {
 		}
 	});
 });
+
+$('#glideData').DataTable();

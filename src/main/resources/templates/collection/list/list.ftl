@@ -8,7 +8,7 @@
                 <div class="btn-group">
                     <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
                 </div>
-				<table class="table table-striped table-bordered">
+				<table id="collectionGrid" class="table table-striped table-bordered">
 					<thead>
 						<tr>
 							<th>Name</th>
@@ -18,7 +18,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<#list page.list as info>
+						<#list page as info>
 						<tr>
 							<td width="30%">
 								<#if info.globalEventDefinition?? >
@@ -78,12 +78,12 @@
 									</i>
 								</span>
 								<span data-placement="top" data-toggle="tooltip" title="Download">
-									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}" data-page="${page.pageNumber}">
+									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
                                         <span class="glyphicon glyphicon-download"></span>
                                     </i>
 								</span>
                                 <span data-placement="top" data-toggle="tooltip" title="Text Analystics">
-									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}" data-page="${page.pageNumber}">
+									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}">
                                         <span class="glyphicon glyphicon-tasks"></span>
                                     </i></a>
 								</span>
@@ -95,37 +95,6 @@
 						    </iframe>
 						</div>-->
 					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="4" class="text-center">
-								<div style="margin:0px;">
-									<ul class="pagination pull-right">
-										<!-- First Page -->
-										<#if page.isFirstPage()>
-										<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
-										<#else>
-										<li><a href="${rc.getContextPath()}/collection/view/list?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-										</#if>
-										<#list page.navigatePageNumbers as index>
-										<#if page.getPageNumber() == index>
-										<li class="active">
-											<#else>
-										<li>
-											</#if>
-											<a href="${rc.getContextPath()}/collection/view/list?page=${index}">${index}</a>
-										</li>
-										</#list>
-										<!-- Last Page -->
-										<#if page.isLastPage()>
-										<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
-										<#else>
-										<li ><a href="${rc.getContextPath()}/collection/view/list?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-										</#if>
-									</ul>
-								</div>
-							</td>
-						</tr>
-					</tfoot>
 				</table>
 			</div>
 			<!-- <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">

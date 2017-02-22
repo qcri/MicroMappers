@@ -90,12 +90,10 @@ public class DashboardController {
 
     @RequestMapping(value={"/keywordSentiment"})
     public String getMMICData(Model model, HttpServletRequest request,HttpServletResponse response,
-                              @RequestParam(value = "page", defaultValue = "1") String page,
                               @RequestParam(value = "cid", defaultValue = "0") String cid,
                               @RequestParam(value = "dw", defaultValue = "") String dw) {
 
 
-        int pageNumber = Integer.valueOf(page);
         long collection_Id = Long.valueOf(cid);
 
         if(dw != null){
@@ -107,15 +105,8 @@ public class DashboardController {
 
         model = this.sentimentBubbleScore(collection_Id, model);
 
-        Page<SentimentAnalysis> pages =  sentimentAnalysisService.findByStateAndCollectionId(pageNumber,
-                ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
-                collection_Id);
-
-        PageInfo<SentimentAnalysis> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", sentimentAnalysisService.findByStateAndCollectionId(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
+                collection_Id));
         model.addAttribute("cid",collection_Id);
 
         return "/dashboard/keywordSentiment";

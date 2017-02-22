@@ -52,90 +52,18 @@ public class GlobalEventController {
 
 
     @RequestMapping(value={"","/","snopes"})
-    public String index(Model model, HttpServletRequest request,
-    		@RequestParam(value = "page", defaultValue = "1") String page,
-                        @RequestParam(value = "q", defaultValue = "") String searchWord) {
-    	
-        int pageNumber = Integer.valueOf(page);
+    public String index(Model model, HttpServletRequest request) {
 
-        Page<GlobalEventDefinition> pages = null;
-
-        if(searchWord.isEmpty() || searchWord == null){
-            pages =  globalEventDefinitionService.listAllByPage(pageNumber);
-        }
-        else{
-            List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.listAllBySearchKeyword(searchWord);
-            PageRequest pageRequestreq =
-                    new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
-
-            int max = (Constants.DEFAULT_PAGE_SIZE*(pageNumber+1)>globalEventDefinitionList.size())?
-                    globalEventDefinitionList.size(): Constants.DEFAULT_PAGE_SIZE*(pageNumber+1);
-
-            int i = (pageNumber -1) * Constants.DEFAULT_PAGE_SIZE;
-            int j = i + (Constants.DEFAULT_PAGE_SIZE-1);
-
-            if(j >= globalEventDefinitionList.size()){
-                j = globalEventDefinitionList.size() - 1;
-            }
-
-            List<GlobalEventDefinition> pageDataSet = new ArrayList<GlobalEventDefinition>();
-            for(int k= 0; k < globalEventDefinitionList.size(); k++){
-                if(k>=i && k <= j){
-                    pageDataSet.add(globalEventDefinitionList.get(k));
-                }
-            }
-
-            pages = new PageImpl<GlobalEventDefinition>(pageDataSet, pageRequestreq, globalEventDefinitionList.size());
-        }
-
-
-        PageInfo<GlobalEventDefinition> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE));
         return "snopes";
     }
 
     @RequestMapping(value={"/gdelt/glides"})
-    public String glides(Model model, HttpServletRequest request,
-                         @RequestParam(value = "page", defaultValue = "1") String page,
-                         @RequestParam(value = "q", defaultValue = "") String searchWord) {
+    public String glides(Model model, HttpServletRequest request) {
 
-        int pageNumber = Integer.valueOf(page);
-        Page<GlideMaster> pages = null;
-        if(searchWord.isEmpty() || searchWord == null){
-           pages =  glideMasterService.listAllByPage(pageNumber);
-        }
-        else{
-            List<GlideMaster> glideMasterList = glideMasterService.findAllBySearchKey(searchWord);
-            PageRequest pageRequestreq =
-                    new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
-
-            int max = (Constants.DEFAULT_PAGE_SIZE*(pageNumber+1)>glideMasterList.size())?
-                    glideMasterList.size(): Constants.DEFAULT_PAGE_SIZE*(pageNumber+1);
-
-            int i = (pageNumber -1) * Constants.DEFAULT_PAGE_SIZE;
-            int j = i + (Constants.DEFAULT_PAGE_SIZE-1);
-
-            if(j >= glideMasterList.size()){
-                j = glideMasterList.size() - 1;
-            }
-
-            List<GlideMaster> pageDataSet = new ArrayList<GlideMaster>();
-            for(int k= 0; k < glideMasterList.size(); k++){
-                if(k>=i && k <= j){
-                    pageDataSet.add(glideMasterList.get(k));
-                }
-            }
-
-            pages = new PageImpl<GlideMaster>(pageDataSet, pageRequestreq, glideMasterList.size());
-
-        }
-        PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
-
-        pageInfo.setList(pages.getContent());
-        model.addAttribute("page", pageInfo);
+      //  PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
+      //  pageInfo.setList(glideMasterService.findAll());
+        model.addAttribute("page", glideMasterService.findAll());
 
         return "/gdelt/glides";
     }
@@ -143,7 +71,6 @@ public class GlobalEventController {
 
     @RequestMapping(value={"/gdelt/data3w"})
     public String get3WData(Model model, HttpServletRequest request,HttpServletResponse response,
-                         @RequestParam(value = "page", defaultValue = "1") String page,
                             @RequestParam(value = "glideCode") String glideCode,
                             @RequestParam(value = "dw", defaultValue = "") String dw) {
 
@@ -154,27 +81,7 @@ public class GlobalEventController {
             }
         }
 
-        int pageNumber = Integer.valueOf(page);
-        Page<Gdelt3W> pages =  gdelt3WService.findbyGlideCode(pageNumber, glideCode);
-
-        PageInfo<Gdelt3W> pageInfo = new PageInfo<>(pages);
-        List<Gdelt3W> gdelt3Ws = pages.getContent();
-        JSONParser parser = new JSONParser();
-        gdelt3Ws.forEach((temp) -> {
-            try {
-                if(temp.getWheres() != null){
-                    JSONArray array = (JSONArray)parser.parse(temp.getWheres());
-                    temp.setJsWheres(array);
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        });
-
-        pageInfo.setList(gdelt3Ws);
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", gdelt3WService.findAllByGlideCode(glideCode));
         model.addAttribute("glideCode",glideCode);
 
         return "/gdelt/data3w";
@@ -215,14 +122,7 @@ public class GlobalEventController {
             }
         }
 
-        int pageNumber = Integer.valueOf(page);
-        Page<GdeltMMIC> pages =  gdeltMMICService.findbyGlideCode(pageNumber, glideCode);
-
-        PageInfo<GdeltMMIC> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", gdeltMMICService.findAllByGlideCode(glideCode));
         model.addAttribute("glideCode",glideCode);
 
         return "/gdelt/datammic";

@@ -6,6 +6,8 @@ $.ajaxSetup({
     }
 });
 
+$('#collectionGrid').DataTable();
+
 $('.confirm-edit').on('click', function(e) {
     e.preventDefault();
     var id = $(this).data('id');
@@ -31,7 +33,7 @@ $('.confirm-download').on('click', function(e) {
 
     var id = $(this).data('id');
     var page_no = $(this).data('page');
-    window.location="${rc.getContextPath()}/collection/view/list?page="+page_no+"&id="+id;
+    window.location="${rc.getContextPath()}/collection/view/list?id="+id;
 });
 
 

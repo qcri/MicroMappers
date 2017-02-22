@@ -143,5 +143,9 @@ public class CollaboratorService
 		
         return collaboratorRepository.findByAccount(account, pageRequest);
 	}
+
+	public List<Collaborator> getAllByAccount(Account account) {
+		return collaboratorRepository.findByAccount(account);
+	}
 	
 }
