@@ -33,8 +33,11 @@ public class SnopesNewsFetch implements Tasklet {
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
         if(!Util.isTimeToSnopesFetchRun()){
-            logger.info("need to wait more");
+            logger.info("need to wait more for Snopes");
             return RepeatStatus.FINISHED;
+        }
+        else{
+            Util.timeOfLastSnopesProcessingMillis = System.currentTimeMillis();
         }
 
         WebClient client = new WebClient();
@@ -96,6 +99,7 @@ public class SnopesNewsFetch implements Tasklet {
         }catch(Exception e){
             logger.error("RepeatStatus: " + e);
         }
+
         return RepeatStatus.FINISHED;
     }
 

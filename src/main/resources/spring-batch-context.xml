@@ -46,12 +46,15 @@
 				</step>
 			</flow>
 			<flow>
-				<step id="snopstep1" allow-start-if-complete="true">
+				<step id="snopstep1" allow-start-if-complete="true" next="snopstep3">
 					<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
 				</step>
-				<!--<step id="snopstep2" allow-start-if-complete="true">
+				<!-- <step id="snopstep2" allow-start-if-complete="true">
 					<tasklet ref="SnopesFactFetchTasklet"></tasklet>
 				</step>-->
+				<step id="snopstep3" allow-start-if-complete="true">
+					<tasklet ref="GoogleNewsRssFetchTasklet"></tasklet>
+				</step>
 			</flow>
 			<flow>
 				<step id="step1" allow-start-if-complete="true" next="step2">
@@ -109,6 +112,7 @@
 	<bean id="SnopesNewsFetchTasklet" class="org.qcri.micromappers.batch.tasklet.SnopesNewsFetch"></bean>
 	<bean id="ImageAnalysisFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalysisFetch"></bean>
 	<bean id="ImageAnalyserTaskFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalyserTaskFetch"></bean>
+	<bean id="GoogleNewsRssFetchTasklet" class="org.qcri.micromappers.batch.tasklet.GoogleNewsFetch"></bean>
 
 	<!-- Multi-ItemReader -->
 	<bean id="multiResourceItemReader" class="org.springframework.batch.item.file.MultiResourceItemReader">

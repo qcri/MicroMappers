@@ -40,7 +40,13 @@ public class GlobalEventDefinitionService {
 
         return globalEventDefinitionRepository.findAll(request);
     }
-    
+
+    public List<GlobalEventDefinition> listAllBySearchKeyword(String searchKeyword) {
+
+        return globalEventDefinitionRepository.findAllBySearchKeyWord(searchKeyword);
+    }
+
+
     public GlobalEventDefinition getById(Long id)
 	{
 		try{

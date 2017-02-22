@@ -53,10 +53,41 @@ public class GlobalEventController {
 
     @RequestMapping(value={"","/","snopes"})
     public String index(Model model, HttpServletRequest request,
-    		@RequestParam(value = "page", defaultValue = "1") String page) {
+    		@RequestParam(value = "page", defaultValue = "1") String page,
+                        @RequestParam(value = "q", defaultValue = "") String searchWord) {
     	
         int pageNumber = Integer.valueOf(page);
-        Page<GlobalEventDefinition> pages =  globalEventDefinitionService.listAllByPage(pageNumber);
+
+        Page<GlobalEventDefinition> pages = null;
+
+        if(searchWord.isEmpty() || searchWord == null){
+            pages =  globalEventDefinitionService.listAllByPage(pageNumber);
+        }
+        else{
+            List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.listAllBySearchKeyword(searchWord);
+            PageRequest pageRequestreq =
+                    new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");
+
+            int max = (Constants.DEFAULT_PAGE_SIZE*(pageNumber+1)>globalEventDefinitionList.size())?
+                    globalEventDefinitionList.size(): Constants.DEFAULT_PAGE_SIZE*(pageNumber+1);
+
+            int i = (pageNumber -1) * Constants.DEFAULT_PAGE_SIZE;
+            int j = i + (Constants.DEFAULT_PAGE_SIZE-1);
+
+            if(j >= globalEventDefinitionList.size()){
+                j = globalEventDefinitionList.size() - 1;
+            }
+
+            List<GlobalEventDefinition> pageDataSet = new ArrayList<GlobalEventDefinition>();
+            for(int k= 0; k < globalEventDefinitionList.size(); k++){
+                if(k>=i && k <= j){
+                    pageDataSet.add(globalEventDefinitionList.get(k));
+                }
+            }
+
+            pages = new PageImpl<GlobalEventDefinition>(pageDataSet, pageRequestreq, globalEventDefinitionList.size());
+        }
+
 
         PageInfo<GlobalEventDefinition> pageInfo = new PageInfo<>(pages);
         pageInfo.setList(pages.getContent());

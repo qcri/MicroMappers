@@ -27,8 +27,8 @@
 			<div class="row">
 				<div id="featured-apps" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-star"></i> Snopes Global Events</h4>
-						<p>Monitor Snopes news</p>
+						<h4><i class="icon-star"></i> Global Events</h4>
+						<p>Monitor world news and rumors</p>
 						<a href="${rc.getContextPath()}/global/events/snopes" class="btn btn-primary">
                             Manage <i class="icon-chevron-right"></i>
 						</a>

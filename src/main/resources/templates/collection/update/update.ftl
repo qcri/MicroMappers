@@ -20,7 +20,7 @@
 				<div class="btn-group">
 					<a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
 				<#if collectionInfo.globalEventDefinition??>
-					<a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Snopes Global Events</a>
+					<a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;News Global Events</a>
 				<#else>
 					<a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
 				</#if>

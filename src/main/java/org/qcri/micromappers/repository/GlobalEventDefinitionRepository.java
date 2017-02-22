@@ -23,6 +23,9 @@ public abstract interface GlobalEventDefinitionRepository extends PagingAndSorti
 
     @Query("SELECT d FROM GlobalEventDefinition d WHERE d.state=:state and d.articleTag like CONCAT('%',:words,'%') or d.searchKeyword like CONCAT('%',:words,'%')")
     List<GlobalEventDefinition> findByStateAndTag(@Param("state")String state, @Param("words")String words);
+
+    @Query("SELECT d FROM GlobalEventDefinition d WHERE d.articleTag like CONCAT('%',:words,'%') or d.searchKeyword like CONCAT('%',:words,'%') or d.title like CONCAT('%',:words,'%')")
+    List<GlobalEventDefinition> findAllBySearchKeyWord(@Param("words")String words);
 }
 
 
