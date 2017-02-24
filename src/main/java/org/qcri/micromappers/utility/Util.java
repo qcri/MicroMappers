@@ -35,9 +35,11 @@ public class Util
 	final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 300000; // 5min for local.
 	//final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 21600000;  // 6 hours for production
 	final private static long MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS = 300000;
+	final private static long MAX_CHECK_FACT_CHECK_TIME_MILLIS = 300000;
 	//final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
 	public static long timeOfLastSnopesProcessingMillis = System.currentTimeMillis(); //initialize at startup
 	public static long timeOfLastGoogleNewsProcessingMillis = System.currentTimeMillis(); //initialize at startup
+	public static long timeOfLastFactCheckProcessingMillis = System.currentTimeMillis();
 	private static UrlValidator urlValidator = new UrlValidator();
 
 	@Inject
@@ -77,6 +79,21 @@ public class Util
 		}
 		return false;
 	}
+
+	public static boolean isTimeToFactCheckFetchRun(){
+
+		long currentTimeMillis = System.currentTimeMillis();
+		logger.info("currentTimeMillis : " + currentTimeMillis);
+		long diff = currentTimeMillis - MAX_CHECK_FACT_CHECK_TIME_MILLIS;
+		logger.info("currentTimeMillis differ : " + diff);
+		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_FACT_CHECK_TIME_MILLIS);
+		// every 6hours
+		if ((currentTimeMillis - timeOfLastFactCheckProcessingMillis) >= MAX_CHECK_FACT_CHECK_TIME_MILLIS) {
+			return true;
+		}
+		return false;
+	}
+
 
 
 

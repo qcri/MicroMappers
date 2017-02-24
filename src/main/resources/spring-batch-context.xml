@@ -46,14 +46,17 @@
 				</step>
 			</flow>
 			<flow>
-				<step id="snopstep1" allow-start-if-complete="true" next="snopstep3">
+				<step id="newsstep1" allow-start-if-complete="true" next="newsstep3">
 					<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
 				</step>
 				<!-- <step id="snopstep2" allow-start-if-complete="true">
 					<tasklet ref="SnopesFactFetchTasklet"></tasklet>
 				</step>-->
-				<step id="snopstep3" allow-start-if-complete="true">
+				<step id="newsstep3" allow-start-if-complete="true" next="newsstep4">
 					<tasklet ref="GoogleNewsRssFetchTasklet"></tasklet>
+				</step>
+				<step id="newsstep4" allow-start-if-complete="true">
+					<tasklet ref="FactCheckFetchTasklet"></tasklet>
 				</step>
 			</flow>
 			<flow>
@@ -102,7 +105,6 @@
 					</tasklet>
 				</step>
 			</flow>
-
 		</split>
 	</job>
 
@@ -113,6 +115,7 @@
 	<bean id="ImageAnalysisFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalysisFetch"></bean>
 	<bean id="ImageAnalyserTaskFetchTasklet" class="org.qcri.micromappers.batch.tasklet.ImageAnalyserTaskFetch"></bean>
 	<bean id="GoogleNewsRssFetchTasklet" class="org.qcri.micromappers.batch.tasklet.GoogleNewsFetch"></bean>
+	<bean id="FactCheckFetchTasklet" class="org.qcri.micromappers.batch.tasklet.FactCheckFetch"></bean>
 
 	<!-- Multi-ItemReader -->
 	<bean id="multiResourceItemReader" class="org.springframework.batch.item.file.MultiResourceItemReader">
@@ -192,7 +195,7 @@
 	<!-- this is where we are scheduling the job to run using our scheduler every 15 min, note how the method of the
 	     scheduler and the cron expression to be used are being specified -->
 	<task:scheduled-tasks>
-		<task:scheduled ref="myScheduler" method="run" cron="0 0/15 * * * ?"/>
+		<task:scheduled ref="myScheduler" method="run" cron="0 0/30 * * * ?"/>
 	</task:scheduled-tasks>
 
 </beans>			
