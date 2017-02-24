@@ -84,4 +84,5 @@ public class Gdelt3WFieldSetMapper implements LineMapper<Gdelt3W> {
     public void setDelegate(JsonLineMapper delegate) {
         this.delegate = delegate;
     }
+
 }

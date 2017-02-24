@@ -9,11 +9,11 @@
         <div class="btn-group">
             <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
             <a class="btn" href="${rc.getContextPath()}/global/events/gdelt/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
+            <a class="btn" href="${rc.getContextPath()}/global/events/gdelt/datammic?glideCode=${glideCode}"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;<strong>${glideCode}</strong></a>
         </div>
         <table ID="dataMMICGrid" class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th>Code</th>
                 <th>Article Info</th>
                 <th>Image Info</th>
                 <th>Where</th>
@@ -24,8 +24,7 @@
             <tbody>
 			<#list page as info>
             <tr>
-                <td>${info.glideCode}</td>
-                <td title="${info.articleURL}"><a href="${info.articleURL}" target="_blank">Read</a></td>
+                <td title="${info.articleURL}"><a href="${info.articleURL}" target="_blank" class="hoverMe">Read</a></td>
                 <td title="${info.imgURL}"><a href="${info.imgURL}" target="_blank">
                     <img src="${info.imgURL}" alt="${rc.getContextPath()}/img/tb_blue_404.png" height="42" width="42"
                          onError="this.onerror=null;this.src='${rc.getContextPath()}/img/tb_blue_404.png';"></a></td>
@@ -38,6 +37,10 @@
                 <td></td>
             </tr>
 			</#list>
+            <div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;padding:0px">
+                <iframe id="urlModalIFrame"  scrolling="no1" style="width:100%;height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+                </iframe>
+            </div>
             </tbody>
             <tfoot>
             <tr>
@@ -61,8 +64,9 @@
 <!-- /container -->
 <#include "_footer.html">
 <script>
-			<#include "cookies.js">
-            $('#dataMMICGrid').DataTable();
-		</script>
+    <#include "urlpopup.js">
+    <#include "cookies.js">
+    $('#dataMMICGrid').DataTable();
+</script>
 </body>
 </html>

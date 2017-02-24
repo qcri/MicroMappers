@@ -138,7 +138,7 @@ public class GlobalDataSourcesService {
         globalEventDefinitionList.forEach((temp) -> {
             try {
                 GlobalDataSources a = new GlobalDataSources();
-                a.setSource(GlobalDataSourceType.SNOPES.getValue());
+                a.setSource(GlobalDataSourceType.NEWS.getValue());
                 a.setGlobalEventDefinition(temp);
 
                 List<CollectionDetailsInfo> collectionDetailsInfoList = this.getCollectionDetails(temp.getCollection());
@@ -223,8 +223,10 @@ public class GlobalDataSourcesService {
                 keywords.addAll(this.createWordCloud(parts));
             }
             else{
-                String[] parts = globalEventDefinition.getSearchKeyword().split(",");
-                keywords.addAll(this.createWordCloud(parts));
+                if(globalEventDefinition.getSearchKeyword() != null){
+                    String[] parts = globalEventDefinition.getSearchKeyword().split(",");
+                    keywords.addAll(this.createWordCloud(parts));
+                }
             }
         }
 

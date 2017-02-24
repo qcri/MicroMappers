@@ -81,7 +81,20 @@ public class GlobalEventController {
             }
         }
 
-        model.addAttribute("page", gdelt3WService.findAllByGlideCode(glideCode));
+        List<Gdelt3W> gdelt3Ws = gdelt3WService.findAllByGlideCode(glideCode);
+        JSONParser parser = new JSONParser();
+        gdelt3Ws.forEach((temp) -> {
+            try {
+                if(temp.getWheres() != null){
+                    JSONArray array = (JSONArray)parser.parse(temp.getWheres());
+                    temp.setJsWheres(array);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        });
+
+        model.addAttribute("page", gdelt3Ws);
         model.addAttribute("glideCode",glideCode);
 
         return "/gdelt/data3w";

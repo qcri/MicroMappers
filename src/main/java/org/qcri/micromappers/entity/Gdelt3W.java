@@ -155,6 +155,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
         this.state = state;
     }
 
+
     public JSONArray getJsWheres() {
         return jsWheres;
     }

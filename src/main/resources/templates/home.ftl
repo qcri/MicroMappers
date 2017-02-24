@@ -16,8 +16,8 @@
 				</div>
 				<div id="dashboard" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-list"></i> My Collections</h4>
-						<p>Monitor My collections</p>
+						<h4><i class="icon-list"></i> My Repository</h4>
+						<p>Monitor you own customerized data collection</p>
 						<a href="${rc.getContextPath()}/collection/view/list" class="btn btn-primary">
 						Manage <i class="icon-chevron-right"></i>
 						</a>
@@ -37,7 +37,7 @@
 				<div id="categories" class="col-md-6">
 					<div class="well">
 						<h4><i class="icon-check"></i> Disaster Global Events</h4>
-						<p>Monitor World Diaster Information</p>
+						<p>Monitor World Diaster Information. GDELT Data Repo</p>
 						<a href="${rc.getContextPath()}/global/events/gdelt/glides" class="btn btn-primary">
                             Manage <i class="icon-chevron-right"></i>
 						</a>
@@ -56,7 +56,7 @@
 				</div>
 				<div id="users-list" class="col-md-6">
 					<div class="well">
-						<h4><i class="icon-user"></i> My Collaborators</h4>
+						<h4><i class="icon-user"></i> My Community</h4>
 						<p>Coming Soon</p>
 						<a href="" class="btn btn-primary disabled">
 						Manage <i class="icon-chevron-right"></i>

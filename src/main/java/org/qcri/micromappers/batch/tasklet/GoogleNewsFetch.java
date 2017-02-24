@@ -8,6 +8,7 @@ import com.sun.syndication.io.XmlReader;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.service.GlobalEventDefinitionService;
+import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.Util;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -41,6 +42,7 @@ public class GoogleNewsFetch implements Tasklet {
             return RepeatStatus.FINISHED;
         }
         else{
+            logger.info("running for Google News");
             Util.timeOfLastGoogleNewsProcessingMillis = System.currentTimeMillis();
         }
 
@@ -64,6 +66,7 @@ public class GoogleNewsFetch implements Tasklet {
                 GlobalEventDefinition globalEventDefinition =
                         new GlobalEventDefinition(title, publishedDate,articleLink, author);
                 globalEventDefinition.setDescription(title);
+                globalEventDefinition.setState(Constants.SNOPES_STATE_ACTIVE);
 
                 globalEventDefinitionService.create(globalEventDefinition);
             }

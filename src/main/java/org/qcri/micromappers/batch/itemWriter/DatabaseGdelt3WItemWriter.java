@@ -42,6 +42,8 @@ public class DatabaseGdelt3WItemWriter implements ItemWriter<Gdelt3W>{
         for(int i =0; i < code.length; i++){
             Gdelt3W temp = new Gdelt3W(gdelt3W.getLanguageCode(),gdelt3W.getArticleURL(),gdelt3W.getImgURL(),
                     code[i].trim(),gdelt3W.getState());
+            temp.setWheres(gdelt3W.getWheres());
+            temp.setWho(gdelt3W.getWho());
             temp.setComputerVisionEnabled(isComputerVisionRequested(code[i].trim()));
             gdelt3WService.saveOrUpdate(temp);
         }

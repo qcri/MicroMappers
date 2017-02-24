@@ -39,13 +39,15 @@ public class DatabaseGdeltMMICItemWriter implements ItemWriter<GdeltMMIC>{
         String[] code = gdeltMMIC.getGlideCode().split(",");
 
         for(int i =0; i < code.length; i++){
-            GdeltMMIC temp = new GdeltMMIC(gdeltMMIC.getLanguageCode(), gdeltMMIC.getArticleURL(),
-                    gdeltMMIC.getTimestamp(), gdeltMMIC.getLocation(),
-                    gdeltMMIC.getLat(), gdeltMMIC.getLon(), gdeltMMIC.getImgURL(), code[i].trim());
+            if(this.validateGlideCode(code[i].trim())){
+                GdeltMMIC temp = new GdeltMMIC(gdeltMMIC.getLanguageCode(), gdeltMMIC.getArticleURL(),
+                        gdeltMMIC.getTimestamp(), gdeltMMIC.getLocation(),
+                        gdeltMMIC.getLat(), gdeltMMIC.getLon(), gdeltMMIC.getImgURL(), code[i].trim());
 
-            temp.setComputerVisionEnabled(this.isComputerVisionRequested(code[i].trim()));
+                temp.setComputerVisionEnabled(this.isComputerVisionRequested(code[i].trim()));
 
-            gdeltMMICService.saveOrUpdate(temp);
+                gdeltMMICService.saveOrUpdate(temp);
+            }
         }
     }
 
@@ -58,5 +60,19 @@ public class DatabaseGdeltMMICItemWriter implements ItemWriter<GdeltMMIC>{
         }
 
         return false;
+    }
+
+    private boolean validateGlideCode(String glideCode){
+
+        if(glideCode.length() < 18 || glideCode.length() > 18){
+            return false;
+        }
+
+        if(glideCode.split("-").length < 2){
+            return false;
+        }
+
+        return true;
+
     }
 }

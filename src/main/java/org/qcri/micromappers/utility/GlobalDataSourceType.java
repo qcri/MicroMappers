@@ -5,6 +5,7 @@ package org.qcri.micromappers.utility;
  */
 public enum GlobalDataSourceType {
     SNOPES("snopes"),
+    GOOGLENEWS("googlenews"),
     GDELT("gdelt"),
     NEWS("news"),
     GDELT3W("gdlet3w"),
