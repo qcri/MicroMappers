@@ -9,11 +9,12 @@ import javax.json.JsonObject;
 
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.DataFeed;
+import org.qcri.micromappers.entity.SentimentAnalysis;
 import org.qcri.micromappers.entity.TextDisambiguityAnalysis;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.DataFeedRepository;
 import org.qcri.micromappers.utility.CollectionType;
-import org.qcri.micromappers.utility.Status;
+import org.qcri.micromappers.utility.TextAnalyticsStatus;
 import org.qcri.micromappers.utility.Util;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -27,6 +28,8 @@ public class DataFeedService
 	private DataFeedRepository dataFeedRepository;
 	@Inject
 	private TextDisambiguityService textDisambiguityService;
+	@Inject
+	private SentimentAnalysisService sentimentAnalysisService;
 	@Inject
 	private Util util;
 
@@ -86,6 +89,7 @@ public class DataFeedService
 				if(toDisambiguateText){
 					persistToTextDisambiguitor(dataFeed, feed);
 				}
+				persistToSentimentAnalysis(dataFeed, feed);
 				return dataFeed;
 			}catch(DataIntegrityViolationException de){
 				logger.warn("DataIntegrityViolationException: Cannot save data_feed. As this record already exists for this colleciton.");
@@ -118,12 +122,28 @@ public class DataFeedService
 				textDisambiguityAnalysis.setCollectionId(dataFeed.getCollection().getId());
 				textDisambiguityAnalysis.setFeedId(dataFeed.getFeedId());
 				textDisambiguityAnalysis.setFeedText(feed.getString("text"));
-				textDisambiguityAnalysis.setStatus(Status.ONGOING);
+				textDisambiguityAnalysis.setStatus(TextAnalyticsStatus.ONGOING);
 
 				textDisambiguityService.saveOrUpdate(textDisambiguityAnalysis);
 			}
 		}catch (Exception e) {
 			logger.error("Exception while persisting to textDisambiguityAnalysis",e);
+		}
+	}
+	
+	public void persistToSentimentAnalysis(DataFeed dataFeed, JsonObject feed){
+		try{
+			if(dataFeed.getProvider() == CollectionType.TWITTER){
+				SentimentAnalysis sentimentAnalysis = new SentimentAnalysis();
+				sentimentAnalysis.setCollectionId(dataFeed.getCollection().getId());
+				sentimentAnalysis.setFeedId(dataFeed.getFeedId());
+				sentimentAnalysis.setFeedText(feed.getString("text"));
+				sentimentAnalysis.setState(TextAnalyticsStatus.ONGOING);
+				
+				sentimentAnalysisService.saveOrUpdate(sentimentAnalysis);
+			}
+		}catch (Exception e) {
+			logger.error("Exception while persisting to sentimentAnalysis",e);
 		}
 	}
 }

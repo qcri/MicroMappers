@@ -4,7 +4,7 @@ package org.qcri.micromappers.utility;
  * @author Kushal
  *
  */
-public enum Status {
+public enum TextAnalyticsStatus {
 	ONGOING,
 	COMPLETED;
 }

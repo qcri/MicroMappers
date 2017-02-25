@@ -6,7 +6,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import org.qcri.micromappers.utility.Status;
+import org.qcri.micromappers.utility.TextAnalyticsStatus;
 
 /**
  * @author Kushal
@@ -26,7 +26,7 @@ public class TextDisambiguityAnalysis extends ExtendedBaseEntity {
     
 	@Enumerated(EnumType.STRING)
     @Column(name="status")
-	private Status status;
+	private TextAnalyticsStatus status;
 
     @Column(name="first_label_score",precision = 20, scale =20)
 	private Double firstLabelScore;
@@ -43,14 +43,14 @@ public class TextDisambiguityAnalysis extends ExtendedBaseEntity {
 	/**
 	 * @return the status
 	 */
-	public Status getStatus() {
+	public TextAnalyticsStatus getStatus() {
 		return status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(Status status) {
+	public void setStatus(TextAnalyticsStatus status) {
 		this.status = status;
 	}
 
