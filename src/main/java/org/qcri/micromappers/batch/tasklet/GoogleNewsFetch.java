@@ -56,11 +56,12 @@ public class GoogleNewsFetch implements Tasklet {
         entries.forEach(item -> {
           //  System.out.println(item);
             String articleLink = ((SyndEntryImpl) item).getLink();
-
-            GlobalEventDefinition definition = globalEventDefinitionService.findByEventUrl(articleLink);
+            String title = ((SyndEntryImpl) item).getTitle();
+            //findByEventURLAndTitle
+            GlobalEventDefinition definition = globalEventDefinitionService.findByEventURLAndTitleAndAuthor(articleLink, title, author);
 
             if(definition == null){
-                String title = ((SyndEntryImpl) item).getTitle();
+
                 String publishedDate = ((SyndEntryImpl) item).getPublishedDate().toString();
 
                 GlobalEventDefinition globalEventDefinition =

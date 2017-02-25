@@ -60,7 +60,13 @@ public class GlideMasterService {
     }
 
     public List<GlideMaster> findAll(){
-        return (List<GlideMaster>) glideMasterRepository.findAll();
+        List<GlideMaster> glideMasterList =  (List<GlideMaster>) glideMasterRepository.findAll();
+
+        glideMasterList.forEach(item->{
+            item.setTotalDataNumber();
+        });
+
+        return glideMasterList;
     }
 
     public List<GlideMaster> findAllBySearchKey(String searchKeyWord){

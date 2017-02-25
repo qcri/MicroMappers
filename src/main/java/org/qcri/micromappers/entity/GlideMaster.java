@@ -41,6 +41,9 @@ public class GlideMaster extends ExtendedBaseEntity {
     @Transient
     private String computerVisionRequestState;
 
+    @Transient
+    private int totalDataNumber;
+
     public GlideMaster() {
     }
 
@@ -82,6 +85,14 @@ public class GlideMaster extends ExtendedBaseEntity {
 
     public void setGdeltMMICList(List<GdeltMMIC> gdeltMMICList) {
         GdeltMMICList = gdeltMMICList;
+    }
+
+    public int getTotalDataNumber() {
+        return totalDataNumber;
+    }
+
+    public void setTotalDataNumber() {
+        this.totalDataNumber = this.Gdelt3WList.size() + this.GdeltMMICList.size() + this.collection.size();
     }
 
     @JsonIgnore

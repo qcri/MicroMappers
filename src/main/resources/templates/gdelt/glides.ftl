@@ -13,7 +13,7 @@
 					<thead>
 						<tr>
 							<th>Title</th>
-							<th>Updated</th>
+							<th>Data</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -24,7 +24,7 @@
                                 <a id="${info.glideCode}" href="http://reliefweb.int/disaster/${info.glideCode}" target="_blank" class="hoverMe">${info.glideCode}</a>
 							</td>
 							<td title="${info.updated}">
-								${info.updated}
+								${info.totalDataNumber}
 							</td>
 							<td>
 								<span class="btn btn-primary btn-xs" title="View details">

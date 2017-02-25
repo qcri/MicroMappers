@@ -9,6 +9,7 @@ import org.qcri.micromappers.entity.GdeltMMIC;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.models.GdeltMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
+import org.qcri.micromappers.models.GlobalDataSources;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.*;
 import org.qcri.micromappers.utility.Constants;
@@ -25,10 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jlucas on 12/21/16.
@@ -54,7 +52,12 @@ public class GlobalEventController {
     @RequestMapping(value={"","/","snopes"})
     public String index(Model model, HttpServletRequest request) {
 
-        model.addAttribute("page", globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE));
+        List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
+
+        Comparator<GlobalEventDefinition> globalEventComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        globalEventDefinitionList.sort(globalEventComparator.reversed());
+
+        model.addAttribute("page", globalEventDefinitionList);
         return "snopes";
     }
 
@@ -63,6 +66,7 @@ public class GlobalEventController {
 
       //  PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
       //  pageInfo.setList(glideMasterService.findAll());
+
         model.addAttribute("page", glideMasterService.findAll());
 
         return "/gdelt/glides";

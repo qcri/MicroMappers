@@ -34,6 +34,10 @@ public class GlobalEventDefinitionService {
         return globalEventDefinitionRepository.findByEventUrl(eventUrl);
     }
 
+    public GlobalEventDefinition findByEventURLAndTitleAndAuthor(String eventURL, String title, String author){
+        return globalEventDefinitionRepository.findByEventURLAndTitleAndAuthor(eventURL,title, author);
+    }
+
     public Page<GlobalEventDefinition> listAllByPage(Integer pageNumber) {
         PageRequest request =
                 new PageRequest(pageNumber - 1, Constants.DEFAULT_PAGE_SIZE, Sort.Direction.DESC, "createdAt");

@@ -11,10 +11,10 @@
 				<table id="newsData" class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th style="width: 20%">Title</th>
-							<th style="width: 40%">Summary</th>
-							<th style="width: 25%">Tag</th>
-							<th style="width: 15%">Action</th>
+							<th WIDTH="35%">Title</th>
+							<th WIDTH="35%">Summary</th>
+							<th WIDTH="15%">Source</th>
+							<th WIDTH="15%">Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -25,10 +25,14 @@
 								${info.title}
 								</a>
 							</td>
-							<td title="${info.description}">
+							<#if info.articleTag??>
+                            	<td title="${info.articleTag}">
+							<#else>
+                            	<td>
+							</#if>
 								${info.description}
 							</td>
-							<td>${info.articleTag}</td>
+							<td>${info.author}</td>
 							<td>
 								<span class="btn btn-primary btn-xs" title="View details">
 									<a href="${info.eventUrl}" target="_blank" style="color:white;">
