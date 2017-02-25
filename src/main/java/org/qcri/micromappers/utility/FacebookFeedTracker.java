@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.json.JsonObject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.qcri.micromappers.MicroMappersApplication;
@@ -22,7 +24,6 @@ import org.qcri.micromappers.service.DataFeedService;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import facebook4j.Facebook;
@@ -220,12 +221,13 @@ public class FacebookFeedTracker implements Closeable {
 
 								//Persisting to dataFeed
 								try{
-									String postJson = new ObjectMapper().writeValueAsString(post);
-									DataFeed persistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, postJson);
+									JsonObject postJson = new ObjectMapper().convertValue(post, JsonObject.class);
+									
+									DataFeed persistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, postJson, Boolean.FALSE);
 									if(persistedDataFeed != null){
 										count++;
 									}
-								}catch(MicromappersServiceException | JsonProcessingException e){
+								}catch(MicromappersServiceException e){
 									logger.error("Exception while persisting tweet to db & fileSystem", e);
 								}
 							}

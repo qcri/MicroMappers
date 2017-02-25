@@ -12,9 +12,11 @@ import javax.json.JsonObject;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.MicroMappersApplication;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.DataFeed;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionTask;
+import org.qcri.micromappers.service.CollectionLabelService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.DataFeedService;
 import org.qcri.micromappers.service.EmailService;
@@ -52,6 +54,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 
 	private List<Predicate<JsonObject>> filters = new ArrayList<>();
 	private Collection collection;
+	private CollectionLabel collectionLabel;
 	private static int max  = 3;
 	private static int min = 1;
 	private long timeToSleep = 0;
@@ -61,6 +64,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 
 	private static DataFeedService dataFeedService;
 	private static CollectionService collectionService;
+	private static CollectionLabelService collectionLabelService;
 	private static EmailService emailService;
 
 	static{
@@ -68,11 +72,13 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 		dataFeedService = MicroMappersApplication.getApplicationContext().getBean(DataFeedService.class);
 		collectionService = MicroMappersApplication.getApplicationContext().getBean(CollectionService.class);
 		emailService = MicroMappersApplication.getApplicationContext().getBean(EmailService.class);
+		collectionLabelService = MicroMappersApplication.getApplicationContext().getBean(CollectionLabelService.class);
 	}
 
 	public TwitterStatusListener(CollectionTask task) {
 		this.task = task;
 		collection = collectionService.getByCode(task.getCollectionCode());
+		collectionLabel = collectionLabelService.getByCollectionId(task.getId());
 	}
 
 	/**
@@ -111,7 +117,7 @@ class TwitterStatusListener implements StatusListener, ConnectionLifeCycleListen
 
 		//Persisting to dataFeed
 		try{
-			DataFeed presistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, originalDoc.toString());
+			DataFeed presistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, originalDoc, collectionLabel != null);
 
 			//incrementing the counterMap
 			if(presistedDataFeed != null){

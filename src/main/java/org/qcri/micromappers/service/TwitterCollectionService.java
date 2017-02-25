@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.DataFeed;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.UserConnection;
@@ -198,7 +199,7 @@ public class TwitterCollectionService
 	 * @param collection
 	 * @param tweets
 	 */
-	public void persistTweets(Collection collection, List<JsonObject> tweets){
+	public void persistTweets(Collection collection, List<JsonObject> tweets, CollectionLabel collectionLabel){
 		DataFeed dataFeed = null;
 		long counter = 0;
 		for (JsonObject tweet : tweets) {
@@ -209,7 +210,7 @@ public class TwitterCollectionService
 
 			//Persisting to dataFeed
 			try{
-				DataFeed presistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, tweet.toString());
+				DataFeed presistedDataFeed = dataFeedService.persistToDbAndFile(dataFeed, tweet, collectionLabel != null);
 
 				if(presistedDataFeed != null){
 					counter++;

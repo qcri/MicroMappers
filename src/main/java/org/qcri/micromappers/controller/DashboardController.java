@@ -13,6 +13,7 @@ import org.qcri.micromappers.service.GlobalDataSourcesService;
 import org.qcri.micromappers.service.SentimentAnalysisService;
 import org.qcri.micromappers.utility.ComputerVisionStatus;
 import org.qcri.micromappers.utility.Constants;
+import org.qcri.micromappers.utility.TextAnalyticsStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -105,8 +106,7 @@ public class DashboardController {
 
         model = this.sentimentBubbleScore(collection_Id, model);
 
-        model.addAttribute("page", sentimentAnalysisService.findByStateAndCollectionId(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
-                collection_Id));
+        model.addAttribute("page", sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id));
         model.addAttribute("cid",collection_Id);
 
         return "/dashboard/keywordSentiment";
@@ -125,8 +125,7 @@ public class DashboardController {
     private Model sentimentBubbleScore(long collection_Id, Model model){
 
         List<SentimentAnalysis> sentimentAnalysisList =
-                sentimentAnalysisService.findByStateAndCollectionId(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
-                        collection_Id);
+                sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id);
 
         try{
 
@@ -158,8 +157,7 @@ public class DashboardController {
     private void downloadSentimentAnalysisData(HttpServletResponse response, long collection_Id){
         try{
             List<SentimentAnalysis> sentimentAnalysisList =
-                    sentimentAnalysisService.findByStateAndCollectionId(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus(),
-                            collection_Id);
+                    sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id);
 
             response.setContentType("text/csv");
             String reportName = "sentiment_" + collection_Id+"_"+new Date().getTime()+".csv";
