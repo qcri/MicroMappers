@@ -140,6 +140,7 @@
 									<td>Subscribed Profiles:</td>
 									<td>
 										<div class="row">
+										<#if collectionInfo.subscribedProfiles??>
 											<#list collectionInfo.subscribedProfiles?eval as profile>
 												<div class="profile-div" title="${profile.name}">
 													<div style="float: left">
@@ -156,6 +157,7 @@
 	    											<div style="float: right;padding: -5px;margin: -5px;color: #3c7ac6"><a href=${profile.link} target="_blank" title="${profile.link}"><i class="fa fa-external-link link"></i></a></div>
 												</div>
 											</#list>
+										</#if>
 										</div>
 									</td>
 								</tr>

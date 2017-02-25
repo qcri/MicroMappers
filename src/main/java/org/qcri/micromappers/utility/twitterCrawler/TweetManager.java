@@ -23,7 +23,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.models.CollectionTask;
+import org.qcri.micromappers.service.CollectionLabelService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.TwitterCollectionService;
 import org.qcri.micromappers.utility.Constants;
@@ -48,6 +50,8 @@ public class TweetManager {
 	@Autowired
 	private CollectionService collectionService;
 	@Autowired
+	private CollectionLabelService collectionLabelService;
+	@Autowired
 	private TwitterCollectionService twitterCollectionService;
 
 	/**
@@ -61,7 +65,8 @@ public class TweetManager {
 
 		try {
 			Collection collection = collectionService.getByCode(task.getCollectionCode());
-
+			CollectionLabel collectionLabel = collectionLabelService.getByCollectionId(collection.getId());
+			
 			String refreshCursor = null;
 
 			outerLace: while (GenericCache.getInstance().getTwitterConfig(task.getCollectionCode()) != null) {
@@ -132,7 +137,7 @@ public class TweetManager {
 								
 					try{
 						List<JsonObject> fullTweets = twitterCollectionService.searchTweets(tweetIdsList, task.getAccessToken(), task.getAccessTokenSecret());
-						twitterCollectionService.persistTweets(collection, fullTweets);
+						twitterCollectionService.persistTweets(collection, fullTweets, collectionLabel);
 						task.setTwitterLastExecutionTime(results.get(Constants.MAX_TWEET_LOOKUP_COUNT_IN_ONE_HIT - 1).getDate());
 
 						results = results.subList(Constants.MAX_TWEET_LOOKUP_COUNT_IN_ONE_HIT, results.size());
@@ -162,7 +167,7 @@ public class TweetManager {
 				
 				try{
 					List<JsonObject> fullTweets = twitterCollectionService.searchTweets(tweetIdsList, task.getAccessToken(), task.getAccessTokenSecret());
-					twitterCollectionService.persistTweets(collection, fullTweets);
+					twitterCollectionService.persistTweets(collection, fullTweets, collectionLabel);
 					task.setTwitterLastExecutionTime(results.get(Math.min(Constants.MAX_TWEET_LOOKUP_COUNT_IN_ONE_HIT, results.size()) - 1).getDate());
 
 					results = results.subList(Math.min(Constants.MAX_TWEET_LOOKUP_COUNT_IN_ONE_HIT, results.size()), results.size());
