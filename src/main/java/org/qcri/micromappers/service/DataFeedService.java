@@ -143,6 +143,7 @@ public class DataFeedService
 				sentimentAnalysis.setCollectionId(dataFeed.getCollection().getId());
 				sentimentAnalysis.setFeedId(dataFeed.getFeedId());
 				sentimentAnalysis.setFeedText(feed.getString("text"));
+				sentimentAnalysis.setFeedPath(dataFeed.getCollection().getCode());
 				sentimentAnalysis.setCreatedAt(formatTwitterDate(feed.getString("created_at")));
 				sentimentAnalysis.setState(TextAnalyticsStatus.ONGOING);
 				

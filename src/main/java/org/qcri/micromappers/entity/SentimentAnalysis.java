@@ -31,6 +31,9 @@ public class SentimentAnalysis extends ExtendedBaseEntity {
     @Column(length = 50, name="feed_id", nullable = false)
     private String feedId;
 
+    @Column(length = 100, name="feed_path", nullable = false)
+    private String feedPath;
+    
     @Column(length = 500, name="feed_text")
     private String feedText;
 
@@ -100,5 +103,19 @@ public class SentimentAnalysis extends ExtendedBaseEntity {
 	 */
 	public void setState(TextAnalyticsStatus state) {
 		this.state = state;
+	}
+
+	/**
+	 * @return the feedPath
+	 */
+	public String getFeedPath() {
+		return feedPath;
+	}
+
+	/**
+	 * @param feedPath the feedPath to set
+	 */
+	public void setFeedPath(String feedPath) {
+		this.feedPath = feedPath;
 	}
 }
