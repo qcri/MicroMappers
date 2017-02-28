@@ -154,6 +154,7 @@ public class BaseCollectionService{
 						}
 					}else{
 						if(collectionInfo.getCollectionLabel() != null){
+							collectionInfo.getCollectionLabel().setCollection(updatedCollection);
 							collectionLabelService.create(collectionInfo.getCollectionLabel());
 						}
 					}
