@@ -121,35 +121,6 @@ public class TwitterCollectionService
 	}
 
 
-	/** This method is used to crawl the older tweets by criteria.
-	 * @param collectionTask
-	 */
-	public void crawlTweets(CollectionTask collectionTask){
-
-		
-		
-		DateFormat dateFormatter = new SimpleDateFormat(Constants.DATE_FORMAT);
-		if(collectionTask != null){
-			if(collectionTask.getTwitterUntilDate() != null){
-				TwitterCriteria criteria = TwitterCriteria.create();
-
-				criteria.setUntil(dateFormatter.format(collectionTask.getLastExecutionTime() != null ? collectionTask.getLastExecutionTime() : collectionTask.getTwitterUntilDate()));
-
-				if(collectionTask.getTwitterSinceDate() != null){
-					criteria.setSince(dateFormatter.format(collectionTask.getTwitterSinceDate()));
-				}
-
-				if(StringUtils.isNotBlank(collectionTask.getToTrack())){
-					criteria.setQuerySearch(collectionTask.getToTrack());
-				}
-
-				logger.info("Starting the twitter crawler for collection Code: "+collectionTask.getCollectionCode() + "with query : "+ criteria.toString());
-				tweetManager.getTweets(collectionTask, criteria);
-			}
-		}
-	}
-
-
 	/**
 	 * This method is used to search the full tweets from twitterAPI by tweetIds.
 	 * 
