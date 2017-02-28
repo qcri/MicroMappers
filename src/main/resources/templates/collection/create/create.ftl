@@ -23,7 +23,7 @@
                 </div>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#general">General</a></li>
-<!-- 					<li><a data-toggle="tab" href="#advanced">Advanced</a></li> -->
+					<li><a data-toggle="tab" href="#textDisambiguityConfig" id="textDisambiguityConfigTab">Text Disambiguity Config</a></li>
 				</ul>
 				<div class="tab-content" style="margin-top:15px">
 				
@@ -136,6 +136,40 @@
 							</label>
 						</div>
 						
+					</div>
+					
+<!-- 					Text Disambiguity tab -->
+					<div id="textDisambiguityConfig" class="tab-pane fade">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="textDisambiguityTopic">Text Disambiguity Topic :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Text Disambiguity Topic" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabel">First Label :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabel" placeholder="First Label" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabel">Second Label :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabel" placeholder="Second Label" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabelTags">First Label Tags :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated tags for first label" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabelTags">Second Label Tags :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated tags for second label" required>
+							</div>
+						</div>
 					</div>
 				</div>
 				

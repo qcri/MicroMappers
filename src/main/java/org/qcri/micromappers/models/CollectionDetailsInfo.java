@@ -9,6 +9,7 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.utility.CollectionStatus;
@@ -48,6 +49,7 @@ public class CollectionDetailsInfo implements Serializable{
     private Long twitterSinceDate;
     private Long twitterUntilDate;
     private boolean isComputerVisionEnabled;
+    private CollectionLabel collectionLabel;
     
 	public String getTrack() {
 		return track;
@@ -270,5 +272,17 @@ public class CollectionDetailsInfo implements Serializable{
 	 */
 	public void setTwitterUntilDate(Long twitterUntilDate) {
 		this.twitterUntilDate = twitterUntilDate;
+	}
+	/**
+	 * @return the collectionLabel
+	 */
+	public CollectionLabel getCollectionLabel() {
+		return collectionLabel;
+	}
+	/**
+	 * @param collectionLabel the collectionLabel to set
+	 */
+	public void setCollectionLabel(CollectionLabel collectionLabel) {
+		this.collectionLabel = collectionLabel;
 	}
 }

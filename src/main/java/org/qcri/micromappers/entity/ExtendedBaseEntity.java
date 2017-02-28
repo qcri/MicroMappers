@@ -21,7 +21,10 @@ public class ExtendedBaseEntity extends BaseEntity
   private void prePersist()
   {
     Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-    setCreatedAt(currentTimestamp);
+    if(createdAt == null){
+    	setCreatedAt(currentTimestamp);
+    }
+    
     setUpdatedAt(currentTimestamp);
   }
   

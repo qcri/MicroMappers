@@ -2,7 +2,11 @@ package org.qcri.micromappers.service;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.json.JsonObject;
@@ -35,7 +39,7 @@ public class DataFeedService
 
 	private static Logger logger = Logger.getLogger(DataFeedService.class);
 	private static MicromappersConfigurator configProperties = MicromappersConfigurator.getInstance();
-
+	private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy", Locale.ENGLISH);
 
 	private DataFeed create(DataFeed dataFeed)
 	{
@@ -122,6 +126,7 @@ public class DataFeedService
 				textDisambiguityAnalysis.setCollectionId(dataFeed.getCollection().getId());
 				textDisambiguityAnalysis.setFeedId(dataFeed.getFeedId());
 				textDisambiguityAnalysis.setFeedText(feed.getString("text"));
+				textDisambiguityAnalysis.setCreatedAt(formatTwitterDate(feed.getString("created_at")));
 				textDisambiguityAnalysis.setStatus(TextAnalyticsStatus.ONGOING);
 
 				textDisambiguityService.saveOrUpdate(textDisambiguityAnalysis);
@@ -138,6 +143,7 @@ public class DataFeedService
 				sentimentAnalysis.setCollectionId(dataFeed.getCollection().getId());
 				sentimentAnalysis.setFeedId(dataFeed.getFeedId());
 				sentimentAnalysis.setFeedText(feed.getString("text"));
+				sentimentAnalysis.setCreatedAt(formatTwitterDate(feed.getString("created_at")));
 				sentimentAnalysis.setState(TextAnalyticsStatus.ONGOING);
 				
 				sentimentAnalysisService.saveOrUpdate(sentimentAnalysis);
@@ -146,4 +152,18 @@ public class DataFeedService
 			logger.error("Exception while persisting to sentimentAnalysis",e);
 		}
 	}
+	
+	
+	private Timestamp formatTwitterDate(String date){
+        try{
+            simpleDateFormat.setLenient(true);
+            Date s = simpleDateFormat.parse(date);
+            Timestamp timestamp = new Timestamp(s.getTime());
+            return timestamp;
+        }
+        catch(Exception e){
+            logger.error("Exception while parsing twitter date: " + e);
+            return null;
+        }
+    }
 }

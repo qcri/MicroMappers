@@ -117,4 +117,16 @@ public class CollectionLabel extends ExtendedBaseEntity
 	public void setSecondLabelTags(String secondLabelTags) {
 		this.secondLabelTags = secondLabelTags;
 	}
+	
+	public CollectionLabel clone() {
+		CollectionLabel collectionLabel = new CollectionLabel();
+		collectionLabel.setCollection(collection);
+		collectionLabel.setTopic(topic);
+		collectionLabel.setFirstLabel(firstLabel);
+		collectionLabel.setSecondLabel(secondLabel);
+		collectionLabel.setFirstLabelTags(firstLabelTags);
+		collectionLabel.setSecondLabelTags(secondLabelTags);
+		return collectionLabel;
+	}
+
 }

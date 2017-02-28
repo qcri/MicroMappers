@@ -59,7 +59,9 @@
 		<script>
 			<#include "cookies.js">
 			<#include "urlpopup.js">
-            $('#newsData').DataTable();
+            $('#newsData').dataTable( {
+			    columnDefs: [ { "orderable": false, "targets": 3 } ]
+			} );
 		</script>
 	</body>
 </html>

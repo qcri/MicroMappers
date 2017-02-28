@@ -27,4 +27,6 @@ $('.image-classifier').on('click', function(e) {
 	});
 });
 
-$('#glideData').DataTable();
+$('#glideData').dataTable( {
+    columnDefs: [ { "orderable": false, "targets": 2 } ]
+} );

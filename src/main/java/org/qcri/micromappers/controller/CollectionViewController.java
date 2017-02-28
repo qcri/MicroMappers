@@ -14,11 +14,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
-import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.service.CollaboratorService;
+import org.qcri.micromappers.service.CollectionLabelService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
 import org.qcri.micromappers.service.GlideMasterService;
@@ -29,8 +30,6 @@ import org.qcri.micromappers.utility.configurator.MicromappersConfigurationPrope
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
 import org.qcri.micromappers.utility.persister.ZipDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,16 +49,17 @@ public class CollectionViewController {
 	@Autowired
 	private CollectionService collectionService;
 	@Autowired
-	CollectionLogService collectionLogService;
+	private CollectionLogService collectionLogService;
 	@Autowired
-	CollaboratorService collaboratorService;
+	private CollaboratorService collaboratorService;
 	@Autowired 
 	private Util util;
     @Autowired
-    GlobalEventDefinitionService globalEventDefinitionService;
+    private GlobalEventDefinitionService globalEventDefinitionService;
     @Autowired
-    GlideMasterService glideMasterService;
-
+    private GlideMasterService glideMasterService;
+    @Autowired
+    private CollectionLabelService collectionLabelService;
     
     /** This method is used to populate the paginated collection list for the authenticated user.
      * @param model
@@ -155,6 +155,16 @@ public class CollectionViewController {
     			model.addAttribute("facebookCount",facebookCount);
     		}
     	}
+    	
+    	CollectionLabel collectionLabel = null;
+    	try{
+    		collectionLabel = collectionLabelService.getByCollectionId(id);
+    	}catch (Exception e) {
+			logger.error("Exception while fetching collection label for collection id: "+id);
+		}
+    	
+    	collectionDetailsInfo.setCollectionLabel(collectionLabel);
+    	
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	model.addAttribute("collectionCreatedAt", collection.getCreatedAt());
     	
@@ -171,6 +181,15 @@ public class CollectionViewController {
     	CollectionDetailsInfo collectionDetailsInfo = null;
     	if(collection != null){
     		collectionDetailsInfo = collection.toCollectionDetailsInfo();
+    		
+    		CollectionLabel collectionLabel = null;
+        	try{
+        		collectionLabel = collectionLabelService.getByCollectionId(id);
+        	}catch (Exception e) {
+    			logger.error("Exception while fetching collection label for collection id: "+id);
+    		}
+        	
+        	collectionDetailsInfo.setCollectionLabel(collectionLabel);
     	}
     	model.addAttribute("collectionInfo", collectionDetailsInfo);
     	

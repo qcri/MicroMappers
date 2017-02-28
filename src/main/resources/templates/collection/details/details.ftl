@@ -174,6 +174,28 @@
 								<td>Collaborators:</td>
 								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionCollaborators}">${collectionCollaborators}</td>
 							</tr>
+							<#if collectionInfo.collectionLabel?? && (collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER")>
+								<tr>
+									<td>Text Disambiguity Topic:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.topic}">${collectionInfo.collectionLabel.topic}</td>
+								</tr>
+								<tr>
+									<td>First Label:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.firstLabel}">${collectionInfo.collectionLabel.firstLabel}</td>
+								</tr>
+								<tr>
+									<td>Second Label:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.secondLabel}">${collectionInfo.collectionLabel.secondLabel}</td>
+								</tr>
+								<tr>
+									<td>First Label Tags:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.firstLabelTags}">${collectionInfo.collectionLabel.firstLabelTags}</td>
+								</tr>
+								<tr>
+									<td>Second Label Tags:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.secondLabelTags}">${collectionInfo.collectionLabel.secondLabelTags}</td>
+								</tr>
+							</#if>
 						</tbody>
 					</table>
 				</div>

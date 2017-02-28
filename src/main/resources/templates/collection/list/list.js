@@ -6,7 +6,9 @@ $.ajaxSetup({
     }
 });
 
-$('#collectionGrid').DataTable();
+$('#collectionGrid').dataTable( {
+    columnDefs: [ { "orderable": false, "targets": 2 } ]
+} );
 
 $('.confirm-edit').on('click', function(e) {
     e.preventDefault();
