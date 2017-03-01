@@ -2,8 +2,6 @@
 package org.qcri.micromappers.service;
 
 import java.io.StringReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,7 +11,6 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
@@ -22,7 +19,6 @@ import org.qcri.micromappers.entity.DataFeed;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.UserConnection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
-import org.qcri.micromappers.models.CollectionTask;
 import org.qcri.micromappers.models.TwitterProfile;
 import org.qcri.micromappers.repository.CollectionRepository;
 import org.qcri.micromappers.utility.CollectionType;
@@ -31,8 +27,6 @@ import org.qcri.micromappers.utility.GenericCache;
 import org.qcri.micromappers.utility.Util;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
-import org.qcri.micromappers.utility.twitterCrawler.TweetManager;
-import org.qcri.micromappers.utility.twitterCrawler.TwitterCriteria;
 import org.springframework.stereotype.Service;
 
 import twitter4j.ResponseList;
@@ -52,8 +46,6 @@ public class TwitterCollectionService
 	private CollectionRepository collectionRepository;
 	@Inject
 	private UserConnectionService userConnectionService;
-	@Inject
-	private TweetManager tweetManager;
 	@Inject
 	private DataFeedService dataFeedService;
 	@Inject
@@ -117,35 +109,6 @@ public class TwitterCollectionService
 			return searchedUsersList.subList(0, limit);
 		}else{
 			return searchedUsersList;
-		}
-	}
-
-
-	/** This method is used to crawl the older tweets by criteria.
-	 * @param collectionTask
-	 */
-	public void crawlTweets(CollectionTask collectionTask){
-
-		
-		
-		DateFormat dateFormatter = new SimpleDateFormat(Constants.DATE_FORMAT);
-		if(collectionTask != null){
-			if(collectionTask.getTwitterUntilDate() != null){
-				TwitterCriteria criteria = TwitterCriteria.create();
-
-				criteria.setUntil(dateFormatter.format(collectionTask.getLastExecutionTime() != null ? collectionTask.getLastExecutionTime() : collectionTask.getTwitterUntilDate()));
-
-				if(collectionTask.getTwitterSinceDate() != null){
-					criteria.setSince(dateFormatter.format(collectionTask.getTwitterSinceDate()));
-				}
-
-				if(StringUtils.isNotBlank(collectionTask.getToTrack())){
-					criteria.setQuerySearch(collectionTask.getToTrack());
-				}
-
-				logger.info("Starting the twitter crawler for collection Code: "+collectionTask.getCollectionCode() + "with query : "+ criteria.toString());
-				tweetManager.getTweets(collectionTask, criteria);
-			}
 		}
 	}
 

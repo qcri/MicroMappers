@@ -9,6 +9,7 @@ import org.qcri.micromappers.models.TwitterProfile;
 import org.qcri.micromappers.service.BaseCollectionService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.TwitterCollectionCrawler;
 import org.qcri.micromappers.service.TwitterCollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
@@ -42,6 +43,8 @@ public class TwitterCollectionController extends BaseCollectionController {
 	private CollectionLogService collectionLogService;
 	@Autowired
 	private TwitterCollectionService twitterCollectionService;
+	@Autowired
+	private TwitterCollectionCrawler twitterCollectionCrawler;
 	
 
 	private GenericCache cache = GenericCache.getInstance();
@@ -100,7 +103,7 @@ public class TwitterCollectionController extends BaseCollectionController {
 			cache.incrTwtCounter(code, 0L);
 			
 			//Starting the twitter Crawler
-			twitterCollectionService.crawlTweets(task);
+			twitterCollectionCrawler.crawlTweets(task);
 			
 			// if twitter streaming connection successful then change the status code
 			task.setTwitterStatus(CollectionStatus.RUNNING);
