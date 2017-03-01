@@ -16,6 +16,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -83,7 +84,14 @@ public class SnopesNewsFetch implements Tasklet {
                         globalEventDefinition.setEventUrl(itemUrl);
 
                         HtmlMeta metaDatePublished = ((HtmlMeta)item.getFirstByXPath("meta[@itemprop='datePublished']"));
-                        globalEventDefinition.setDatePublished(metaDatePublished.getContentAttribute());
+                        if(metaDatePublished.getContentAttribute() != null){
+                            if(metaDatePublished.getContentAttribute().contains("2017")){
+                                globalEventDefinition.setDatePublished(metaDatePublished.getContentAttribute());
+                            }
+                            else{
+                                globalEventDefinition.setDatePublished(new Timestamp(System.currentTimeMillis()).toString());
+                            }
+                        }
 
                         globalEventDefinition.setAuthor("snopes");
 

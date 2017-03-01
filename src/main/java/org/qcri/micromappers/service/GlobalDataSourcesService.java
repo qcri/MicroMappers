@@ -138,7 +138,8 @@ public class GlobalDataSourcesService {
         globalEventDefinitionList.forEach((temp) -> {
             try {
                 GlobalDataSources a = new GlobalDataSources();
-                a.setSource(GlobalDataSourceType.NEWS.getValue());
+                //a.setSource(GlobalDataSourceType.NEWS.getValue());
+                a.setSource(temp.getAuthor());
                 a.setGlobalEventDefinition(temp);
 
                 List<CollectionDetailsInfo> collectionDetailsInfoList = this.getCollectionDetails(temp.getCollection());
