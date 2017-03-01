@@ -143,31 +143,31 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="textDisambiguityTopic">Text Disambiguity Topic :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Text Disambiguity Topic" required>
+								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Please add topic word. e.g. Jordan" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="firstLabel">First Label :</label>
+							<label class="control-label col-sm-3" for="firstLabel">First Category :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="firstLabel" placeholder="First Label" required>
+								<input type="text" class="form-control" name="firstLabel" placeholder="please name first category" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="secondLabel">Second Label :</label>
+							<label class="control-label col-sm-3" for="secondLabel">Second Cateogry :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="secondLabel" placeholder="Second Label" required>
+								<input type="text" class="form-control" name="secondLabel" placeholder="please name Second category" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="firstLabelTags">First Label Tags :</label>
+							<label class="control-label col-sm-3" for="firstLabelTags">First Category Labels :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated tags for first label" required>
+								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated related lables for first category" required>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="secondLabelTags">Second Label Tags :</label>
+							<label class="control-label col-sm-3" for="secondLabelTags">Second Category Labels :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated tags for second label" required>
+								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated related lables for second category" required>
 							</div>
 						</div>
 					</div>

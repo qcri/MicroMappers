@@ -129,31 +129,31 @@
 						<div class="form-group">
 							<label class="control-label col-sm-3" for="textDisambiguityTopic">Text Disambiguity Topic :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Text Disambiguity Topic" required value="${collectionInfo.collectionLabel.topic}">
+								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Please add topic word. e.g. Jordan" required value="${collectionInfo.collectionLabel.topic}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="firstLabel">First Label :</label>
+							<label class="control-label col-sm-3" for="firstLabel">First Category :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="firstLabel" placeholder="First Label" required value="${collectionInfo.collectionLabel.firstLabel}">
+								<input type="text" class="form-control" name="firstLabel" placeholder="First category" required value="${collectionInfo.collectionLabel.firstLabel}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="secondLabel">Second Label :</label>
+							<label class="control-label col-sm-3" for="secondLabel">Second Category :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="secondLabel" placeholder="Second Label" required value="${collectionInfo.collectionLabel.secondLabel}">
+								<input type="text" class="form-control" name="secondLabel" placeholder="Second category" required value="${collectionInfo.collectionLabel.secondLabel}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="firstLabelTags">First Label Tags :</label>
+							<label class="control-label col-sm-3" for="firstLabelTags">First Category Labels :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated tags for first label" required value="${collectionInfo.collectionLabel.firstLabelTags}">
+								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated related lables for first category" required value="${collectionInfo.collectionLabel.firstLabelTags}">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-3" for="secondLabelTags">Second Label Tags :</label>
+							<label class="control-label col-sm-3" for="secondLabelTags">Second Category Labels :</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated tags for second label" required value="${collectionInfo.collectionLabel.secondLabelTags}">
+								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated related lables for second category" required value="${collectionInfo.collectionLabel.secondLabelTags}">
 							</div>
 						</div>
 					</div>
