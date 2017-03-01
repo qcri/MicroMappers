@@ -37,14 +37,14 @@
 	<!-- Actual Job Steps -->
 	<job id="myJob" xmlns="http://www.springframework.org/schema/batch" restartable="true" job-repository="jobRepository">
 		<split id="split1">
-			<flow>
+			<!--<flow>
 				<step id="imagecvstep1" allow-start-if-complete="true" next="imagecvstep2">
 					<tasklet ref="ImageAnalyserTaskFetchTasklet"></tasklet>
 				</step>
 				<step id="imagecvstep2" allow-start-if-complete="true">
 					<tasklet ref="ImageAnalysisFetchTasklet"></tasklet>
 				</step>
-			</flow>
+			</flow>-->
 			<flow>
 				<step id="newsstep1" allow-start-if-complete="true" next="newsstep3">
 					<tasklet ref="SnopesNewsFetchTasklet"></tasklet>
@@ -76,7 +76,7 @@
 						</listeners>
 					</tasklet>
 				</step>
-				<step id="step3" allow-start-if-complete="true">
+				<step id="step3" allow-start-if-complete="true" next="step4">
 					<tasklet transaction-manager="transactionManager">
 						<chunk skip-limit="1000" reader="multiResourceItemReader3W" processor="gdelt3WItemProcessor" writer="gdelt3WItemWriter"
 							   commit-interval="100">
@@ -91,14 +91,14 @@
 						</listeners>
 					</tasklet>
 				</step>
-			</flow>
-			<flow>
-				<step id="media1" allow-start-if-complete="true" next="media2">
+			<!--</flow>
+			<flow>-->
+				<step id="step4" allow-start-if-complete="true" next="step5">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="databaseItemReader" processor="mmicMediaItemProcessor" writer="databaseItemWriter" commit-interval="100" />
 					</tasklet>
 				</step>
-				<step id="media2" allow-start-if-complete="true">
+				<step id="step5" allow-start-if-complete="true">
 					<tasklet transaction-manager="transactionManager">
 						<chunk reader="database3wItemReader" processor="gdelt3wMediaItemProcessor" writer="databaseItemWriter"
 							   commit-interval="100"/>
