@@ -32,10 +32,10 @@ import org.springframework.stereotype.Component;
 public class Util
 {
 	private static Logger logger = Logger.getLogger(Util.class);
-	final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 10800000; // 3hours.
+	final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 600000; // 3hours.
 	//final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 21600000;  // 6 hours for production
-	final private static long MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS = 21600000; //6hours
-	final private static long MAX_CHECK_FACT_CHECK_TIME_MILLIS = 18000000; //5hr
+	final private static long MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS = 600000; //6hours
+	final private static long MAX_CHECK_FACT_CHECK_TIME_MILLIS = 600000; //1hr
 	//final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
 	public static long timeOfLastSnopesProcessingMillis = System.currentTimeMillis(); //initialize at startup
 	public static long timeOfLastGoogleNewsProcessingMillis = System.currentTimeMillis(); //initialize at startup
