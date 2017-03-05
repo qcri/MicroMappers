@@ -18,16 +18,17 @@
 					<input type="hidden" id="oldfetchFrom" value="${collectionInfo.fetchFrom}">
 				</#if>
 				<div class="btn-group">
-					<a class="btn" href="${rc.getContextPath()}/home"><i class="icon-tags"></i>&nbsp;Home</a>
+					<a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
 				<#if collectionInfo.globalEventDefinition??>
-					<a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="icon-tags"></i>&nbsp;Snopes Global Events</a>
+					<a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;News Global Events</a>
 				<#else>
-					<a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="icon-tags"></i>&nbsp;Global Disaster Events</a>
+					<a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
 				</#if>
+                    <a class="btn" href="${rc.getContextPath()}/collection/view/list"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;My Collections</a>
 				</div>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#general">General</a></li>
-<!-- 					<li><a data-toggle="tab" href="#advanced">Advanced</a></li> -->
+					<li><a data-toggle="tab" href="#textDisambiguityConfig" id="textDisambiguityConfigTab">Text Disambiguity Config</a></li>
 				</ul>
 				<div class="tab-content" style="margin-top:15px">
 				
@@ -95,7 +96,7 @@
 								</div>
 							</div> -->
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<label class="control-label col-sm-3" for="fetchInterval">Facebook Fetch Interval :</label>
 								<div class="col-sm-6">
 									<select class="form-control" id="fetchInterval" name="fetchInterval">
 										<option value="2" selected>2 hours</option>
@@ -109,7 +110,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<label class="control-label col-sm-3" for="fetchFrom">Facebook Fetch From Last :</label>
 								<div class="col-sm-6">
 									<select class="form-control" id="fetchFrom" name="fetchFrom">
 										<option value="168" selected>7 days</option>
@@ -119,6 +120,40 @@
 										<option value="4320">6 months</option>
 									</select>
 								</div>
+							</div>
+						</div>
+					</div>
+					
+					<!--Text Disambiguity tab -->
+					<div id="textDisambiguityConfig" class="tab-pane fade">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="textDisambiguityTopic">Text Disambiguity Topic :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Please add topic word. e.g. Jordan" required value="${collectionInfo.collectionLabel.topic}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabel">First Category :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabel" placeholder="First category" required value="${collectionInfo.collectionLabel.firstLabel}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabel">Second Category :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabel" placeholder="Second category" required value="${collectionInfo.collectionLabel.secondLabel}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabelTags">First Category Labels :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated related lables for first category" required value="${collectionInfo.collectionLabel.firstLabelTags}">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabelTags">Second Category Labels :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated related lables for second category" required value="${collectionInfo.collectionLabel.secondLabelTags}">
 							</div>
 						</div>
 					</div>

@@ -1,12 +1,16 @@
 package org.qcri.micromappers.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.models.CollectionTask;
+import org.qcri.micromappers.models.TwitterProfile;
 import org.qcri.micromappers.service.BaseCollectionService;
 import org.qcri.micromappers.service.CollectionLogService;
 import org.qcri.micromappers.service.CollectionService;
+import org.qcri.micromappers.service.TwitterCollectionCrawler;
+import org.qcri.micromappers.service.TwitterCollectionService;
 import org.qcri.micromappers.utility.CollectionStatus;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.GenericCache;
@@ -16,6 +20,9 @@ import org.qcri.micromappers.utility.TwitterStreamTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,6 +41,11 @@ public class TwitterCollectionController extends BaseCollectionController {
 	private CollectionService collectionService;
 	@Autowired
 	private CollectionLogService collectionLogService;
+	@Autowired
+	private TwitterCollectionService twitterCollectionService;
+	@Autowired
+	private TwitterCollectionCrawler twitterCollectionCrawler;
+	
 
 	private GenericCache cache = GenericCache.getInstance();
 
@@ -89,7 +101,10 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			String code = task.getCollectionCode();
 			cache.incrTwtCounter(code, 0L);
-
+			
+			//Starting the twitter Crawler
+			twitterCollectionCrawler.crawlTweets(task);
+			
 			// if twitter streaming connection successful then change the status code
 			task.setTwitterStatus(CollectionStatus.RUNNING);
 			task.setStatusMessage(null);
@@ -101,6 +116,8 @@ public class TwitterCollectionController extends BaseCollectionController {
 
 			//Updating the status of collection in db
 			collectionService.updateTwitterStatusById(id, CollectionStatus.RUNNING);
+			
+			
 			logger.info("Twitter collection started successfully for collection: " + collectionCode);
 			return new ResponseWrapper(cache.getTwitterConfig(code), true, CollectionStatus.RUNNING.toString(), 
 					CollectionStatus.RUNNING.toString());
@@ -180,6 +197,10 @@ public class TwitterCollectionController extends BaseCollectionController {
 			if(collection.getTwitterStatus() != twitterTask.getTwitterStatus()){
 				collectionService.updateTwitterStatusById(id, twitterTask.getTwitterStatus());
 			}
+			if(twitterTask.getTwitterLastExecutionTime() != null && (collection.getTwitterLastExecutionTime() == null || collection.getTwitterLastExecutionTime().before(twitterTask.getTwitterLastExecutionTime()))){
+				collectionService.updateTwitterLastExecutionTimeById(id, twitterTask.getTwitterLastExecutionTime());
+			}
+			
 			return new ResponseWrapper(twitterTask, true, ResponseCode.SUCCESS.toString(), null);
 		}else if(collection.getTwitterStatus() != CollectionStatus.NOT_RUNNING){
 			collection.setTwitterStatus(CollectionStatus.NOT_RUNNING);
@@ -203,5 +224,15 @@ public class TwitterCollectionController extends BaseCollectionController {
 		logger.info("Getting the twitter collection count for collectionId: "+id);
 		Long collectionCount = collectionLogService.getCountByCollectionIdAndProvider(id, CollectionType.TWITTER);
 		return new ResponseWrapper(collectionCount, true, ResponseCode.SUCCESS.toString(), null);
+	}
+	
+	
+	@RequestMapping(value = "/searchProfiles", method={RequestMethod.GET})
+	@ResponseBody
+	public Object searchProfiles(@RequestParam String keyword,
+			@RequestParam(value = "limit", required = false, defaultValue = "20") Integer limit) {
+			
+		List<TwitterProfile> searchedUsersList = twitterCollectionService.searchUsers(keyword, limit);
+		return searchedUsersList;
 	}
 }

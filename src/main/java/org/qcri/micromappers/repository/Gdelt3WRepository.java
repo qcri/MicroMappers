@@ -24,5 +24,7 @@ public abstract interface Gdelt3WRepository extends PagingAndSortingRepository<G
 
     public Gdelt3W findById(Long id);
 
+    public List<Gdelt3W> findByImgURL(String imgURL);
+
     public List<Gdelt3W> findByComputerVisionEnabled(boolean computerVisionEnabled);
 }

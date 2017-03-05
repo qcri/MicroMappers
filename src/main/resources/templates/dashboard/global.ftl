@@ -17,7 +17,7 @@
                                 <tr>
                                     <td style="width: 50%">
                                         <form id="filterWords" action="${rc.getContextPath()}/dashboard/global?page=${index}" class="form-main">
-                                            <div class="col-md-10 col-sm-10 col-xs-12">
+                                            <div class="col-md-8 col-sm-8 col-xs-12">
                                                 <label class="sr-only" for="search">Search</label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control input-search" name="q" id="q" placeholder="Search">
@@ -27,6 +27,11 @@
                                             <div class="col-md-2 col-sm-2 col-xs-12">
                                                 <button type="submit" class="btn btn-primary" onclick="searchBy()">
                                                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span><span class="hidden-sm hidden-xs"> Search </span>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                                <button type="submit" class="btn btn-primary" onclick="searchBy()">
+                                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span><span class="hidden-sm hidden-xs"> Refresh </span>
                                                 </button>
                                             </div>
                                     </td>
@@ -73,9 +78,9 @@
 						<tr>
 							<td>
 								<#if info.glideMaster?? >
-                                    <a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" target="_blank">${info.glideMaster.glideCode}</a>
+                                    <a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" class="hoverMe" target="_blank">${info.glideMaster.glideCode}</a>
 								<#else>
-                                    <a href="${info.globalEventDefinition.eventUrl}" target="_blank">${info.globalEventDefinition.title}</a>
+                                    <a href="${info.globalEventDefinition.eventUrl}" class="hoverMe" target="_blank">${info.globalEventDefinition.title}</a>
 								</#if>
 							</td>
                             <td>
@@ -92,6 +97,10 @@
 								${info.source}
                             </td>
 						</#list>
+						<div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;    padding: 0px;">
+						    <iframe id="urlModalIFrame"  scrolling="no1" style="width:100%;height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						    </iframe>
+						</div>
 					</tbody>
 				</table>
 			</div>
@@ -100,6 +109,7 @@
 		<#include "_footer.html">
 		<script>
 			<#include  "cookies.js">
+			<#include "urlpopup.js">
 		</script>
 	</body>
     <script>

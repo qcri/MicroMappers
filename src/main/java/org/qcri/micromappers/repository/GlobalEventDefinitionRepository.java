@@ -15,6 +15,7 @@ import java.util.List;
  */
 public abstract interface GlobalEventDefinitionRepository extends PagingAndSortingRepository<GlobalEventDefinition, Long> {
     GlobalEventDefinition findByEventUrl(String eventUrl);
+    GlobalEventDefinition findByTitle(String title);
     Page<GlobalEventDefinition> findAll(Pageable pageable);
 	GlobalEventDefinition findById(Long id);
 
@@ -23,6 +24,12 @@ public abstract interface GlobalEventDefinitionRepository extends PagingAndSorti
 
     @Query("SELECT d FROM GlobalEventDefinition d WHERE d.state=:state and d.articleTag like CONCAT('%',:words,'%') or d.searchKeyword like CONCAT('%',:words,'%')")
     List<GlobalEventDefinition> findByStateAndTag(@Param("state")String state, @Param("words")String words);
+
+    @Query("SELECT d FROM GlobalEventDefinition d WHERE d.articleTag like CONCAT('%',:words,'%') or d.searchKeyword like CONCAT('%',:words,'%') or d.title like CONCAT('%',:words,'%')")
+    List<GlobalEventDefinition> findAllBySearchKeyWord(@Param("words")String words);
+
+    @Query("SELECT d FROM GlobalEventDefinition d WHERE d.author=:author and d.eventUrl like CONCAT('%',:eventUrl,'%') or d.title like CONCAT('%',:title,'%')")
+    GlobalEventDefinition findByEventURLAndTitleAndAuthor(@Param("eventUrl")String eventUrl, @Param("title")String title, @Param("author")String author);
 }
 
 

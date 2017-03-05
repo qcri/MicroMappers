@@ -18,12 +18,12 @@
 					<#if eventType?? && eventType='snopes'>
                         <a class="btn" href="${rc.getContextPath()}/global/events/snopes"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Snopes Global Events</a>
 					<#else>
-                        <a class="btn" href="${rc.getContextPath()}/global/events/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
+                        <a class="btn" href="${rc.getContextPath()}/global/events/gdelt/glides"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Global Disaster Events</a>
 					</#if>
                 </div>
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#general">General</a></li>
-<!-- 					<li><a data-toggle="tab" href="#advanced">Advanced</a></li> -->
+					<li><a data-toggle="tab" href="#textDisambiguityConfig" id="textDisambiguityConfigTab">Text Disambiguity Config</a></li>
 				</ul>
 				<div class="tab-content" style="margin-top:15px">
 				
@@ -33,7 +33,7 @@
 							<label class="control-label col-sm-3" for="eventTitle">Event :</label>
 							<div class="col-sm-6">
 								<#if eventInfo.title??>
-									<label class="form-control-static" style="font-weight: normal;" title="Snopes: ${eventInfo.title}"><a href="${eventInfo.eventUrl}" target="_blank">Snopes: ${eventInfo.title}</a></label>
+									<label class="form-control-static" style="font-weight: normal;" title="Snopes: ${eventInfo.title}"><a href="${eventInfo.eventUrl}" target="_blank">News: ${eventInfo.title}</a></label>
 								<#elseif eventInfo.glideCode??>
 									<label class="form-control-static" style="font-weight: normal;" title="Gdelt: ${eventInfo.glideCode}"><a href="http://reliefweb.int/disaster/${eventInfo.glideCode}" target="_blank">Gdelt: ${eventInfo.glideCode}</a></label>
 								</#if>
@@ -66,16 +66,31 @@
 								</select>
 							</div>
 						</div>
-						<div class="form-group" id="keywordsDiv">
-							<label class="control-label col-sm-3" for="track">Keywords :</label>
-							<div class="col-sm-6"> 
-								<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
+						<div id="twitterConfigDiv">
+							<div class="form-group" id="keywordsDiv">
+								<label class="control-label col-sm-3" for="track">Keywords :</label>
+								<div class="col-sm-6"> 
+									<textarea class="form-control" rows="6" name="track" placeholder="Enter comma seperated keywords">${keywords}</textarea>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="control-label col-sm-3" for="twitterDatePicker" title="Enter to collect Twitter historical data">Twitter From Date :</label>
+								<div class="row">
+									<div class="col-sm-6" style="padding-right: 30px;">
+										<div class="input-daterange input-group" id="twitterDatePicker">
+										    <input type="text" class="input-sm form-control" name="start" id="twitterStartDate"/>
+										    <span class="input-group-addon">to</span>
+										    <input type="text" class="input-sm form-control" name="end" id="twitterEndDate"/>
+										</div>
+                                        <div class="breadcrumb">Enter dates if you want to collect historical data also, otherwise leave empty & collect only Realtime data.</div>
+									</div>
+								</div>
 							</div>
 						</div>
 						
+						
 						<div id="facebookConfigDiv" hidden=true>
-						
-						
 							<div class="form-group">
 								<label class="control-label col-sm-3" for="subscribedProfiles">Subscribed Profiles :</label>
 								<div class="col-sm-6"> 
@@ -88,7 +103,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchInterval">Fetch Interval :</label>
+								<label class="control-label col-sm-3" for="fetchInterval">Facebook Fetch Interval :</label>
 								<div class="col-sm-6">
 									<select class="form-control" name="fetchInterval">
 										<option value="2" selected>2 hours</option>
@@ -102,7 +117,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="control-label col-sm-3" for="fetchFrom">Fetch From Last :</label>
+								<label class="control-label col-sm-3" for="fetchFrom">Facebook Fetch From Last :</label>
 								<div class="col-sm-6">
 									<select class="form-control" name="fetchFrom">
 										<option value="168" selected>7 days</option>
@@ -121,6 +136,40 @@
 							</label>
 						</div>
 						
+					</div>
+					
+<!-- 					Text Disambiguity tab -->
+					<div id="textDisambiguityConfig" class="tab-pane fade">
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="textDisambiguityTopic">Text Disambiguity Topic :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="textDisambiguityTopic" placeholder="Please add topic word. e.g. Jordan" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabel">First Category :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabel" placeholder="please name first category" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabel">Second Cateogry :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabel" placeholder="please name Second category" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="firstLabelTags">First Category Labels :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="firstLabelTags" placeholder="Comma Seperated related lables for first category" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3" for="secondLabelTags">Second Category Labels :</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="secondLabelTags" placeholder="Comma Seperated related lables for second category" required>
+							</div>
+						</div>
 					</div>
 				</div>
 				

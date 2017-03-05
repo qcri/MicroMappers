@@ -24,6 +24,10 @@ public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
             return null;
         }
         else {
+            if(!this.validateGlideCode(fieldSet.readRawString(7))){
+                return null;
+            }
+
             gdeltMaster.setLanguageCode(fieldSet.readRawString(0));
             gdeltMaster.setArticleURL(fieldSet.readRawString(1));
             gdeltMaster.setTimestamp(fieldSet.readRawString(2));
@@ -51,6 +55,20 @@ public class GdeltMMICFieldSetMapper implements FieldSetMapper<GdeltMMIC> {
             gdeltMaster.setGlideCode(fieldSet.readRawString(7));
         }
         return gdeltMaster;
+    }
+
+    private boolean validateGlideCode(String glideCode){
+
+        if(glideCode.length() < 18 || glideCode.length() > 18){
+            return false;
+        }
+
+        if(glideCode.split("-").length < 2){
+            return false;
+        }
+
+        return true;
+
     }
 
 }

@@ -33,6 +33,10 @@ public class ImageAnalysisFetch implements Tasklet {
         */
        List<ImageAnalyserTask> taskList = imageAnalyserTaskService.findByState(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_ONGOING.getStatus());
 
+       if(taskList.isEmpty()){
+           return RepeatStatus.FINISHED;
+       }
+
        taskList.forEach(item -> {
            boolean processed = false;
            if(item.getGdelt3W() != null && !processed){

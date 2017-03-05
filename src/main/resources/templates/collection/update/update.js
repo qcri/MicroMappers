@@ -16,12 +16,15 @@ $('#provider').change(function() {
     if(document.getElementsByName('provider')[0].value == 'TWITTER'){
         $('#facebookConfigDiv').hide();
         $('#keywordsDiv').show();
+        $('#textDisambiguityConfigTab').show();
     }else if(document.getElementsByName('provider')[0].value == 'FACEBOOK'){
         $('#facebookConfigDiv').show();
         $('#keywordsDiv').hide();
+        $('#textDisambiguityConfigTab').hide();
     }else{
         $('#facebookConfigDiv').show();
         $('#keywordsDiv').show();
+        $('#textDisambiguityConfigTab').show();
     }
 });
 
@@ -154,6 +157,15 @@ function updateCollection() {
             langFilters: langFilters.join(","),
             provider: document.getElementsByName('provider')[0].value,
     };
+    
+    if(document.getElementsByName('provider')[0].value == "TWITTER" || document.getElementsByName('provider')[0].value == "ALL"){
+        data.collectionLabel = {};
+        data.collectionLabel.topic = document.getElementsByName('textDisambiguityTopic')[0].value.toLowerCase().trim();
+        data.collectionLabel.firstLabel = document.getElementsByName('firstLabel')[0].value.toLowerCase().trim();
+        data.collectionLabel.secondLabel = document.getElementsByName('secondLabel')[0].value.toLowerCase().trim();
+        data.collectionLabel.firstLabelTags = document.getElementsByName('firstLabelTags')[0].value.toLowerCase().trim();
+        data.collectionLabel.secondLabelTags = document.getElementsByName('secondLabelTags')[0].value.toLowerCase().trim();
+    }
     
     var url = "${rc.getContextPath()}/collection/update?id="+collectionId;
     

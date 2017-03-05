@@ -93,7 +93,7 @@
 							<tr>
 								<td class="col-md-2">Event:</td>
 								<#if collectionInfo.globalEventDefinition??>
-									<td class="text-right col-md-10" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Snopes: ${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">Snopes: ${collectionInfo.globalEventDefinition.title}</a></td>
+									<td class="text-right col-md-10" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="News: ${collectionInfo.globalEventDefinition.title}"><a href="${collectionInfo.globalEventDefinition.eventUrl}" target="_blank">News: ${collectionInfo.globalEventDefinition.title}</a></td>
 								<#elseif collectionInfo.glideMaster??>
 									<td class="text-right col-md-10" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="Gdelt: ${collectionInfo.glideMaster.glideCode}"><a href="http://reliefweb.int/disaster/${collectionInfo.glideMaster.glideCode}" target="_blank">Gdelt: ${collectionInfo.glideMaster.glideCode}</a></td>
 								</#if>
@@ -140,6 +140,7 @@
 									<td>Subscribed Profiles:</td>
 									<td>
 										<div class="row">
+										<#if collectionInfo.subscribedProfiles??>
 											<#list collectionInfo.subscribedProfiles?eval as profile>
 												<div class="profile-div" title="${profile.name}">
 													<div style="float: left">
@@ -156,12 +157,13 @@
 	    											<div style="float: right;padding: -5px;margin: -5px;color: #3c7ac6"><a href=${profile.link} target="_blank" title="${profile.link}"><i class="fa fa-external-link link"></i></a></div>
 												</div>
 											</#list>
+										</#if>
 										</div>
 									</td>
 								</tr>
 								<tr>
-									<td>Fetch Interval:</td>
-									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.fetchInterval}">${collectionInfo.fetchInterval}</td>
+									<td>Facebook Fetch Interval:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.fetchInterval}">${collectionInfo.fetchInterval} hours</td>
 								</tr>
 							</#if>
 							<tr>
@@ -172,6 +174,28 @@
 								<td>Collaborators:</td>
 								<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionCollaborators}">${collectionCollaborators}</td>
 							</tr>
+							<#if collectionInfo.collectionLabel?? && (collectionInfo.provider == "ALL" || collectionInfo.provider == "TWITTER")>
+								<tr>
+									<td>Text Disambiguity Topic:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.topic}">${collectionInfo.collectionLabel.topic}</td>
+								</tr>
+								<tr>
+									<td>First Label:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.firstLabel}">${collectionInfo.collectionLabel.firstLabel}</td>
+								</tr>
+								<tr>
+									<td>Second Label:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.secondLabel}">${collectionInfo.collectionLabel.secondLabel}</td>
+								</tr>
+								<tr>
+									<td>First Label Tags:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.firstLabelTags}">${collectionInfo.collectionLabel.firstLabelTags}</td>
+								</tr>
+								<tr>
+									<td>Second Label Tags:</td>
+									<td class="text-right" style="word-wrap: break-word;max-width: 160px;white-space:normal;" title="${collectionInfo.collectionLabel.secondLabelTags}">${collectionInfo.collectionLabel.secondLabelTags}</td>
+								</tr>
+							</#if>
 						</tbody>
 					</table>
 				</div>

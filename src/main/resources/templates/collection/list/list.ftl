@@ -8,19 +8,19 @@
                 <div class="btn-group">
                     <a class="btn" href="${rc.getContextPath()}/home"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Home</a>
                 </div>
-				<table class="table table-striped table-bordered">
+				<table id="collectionGrid" class="table table-striped table-bordered">
 					<thead>
 						<tr>
 							<th>Name</th>
 							<th>Status</th>
-							<th>Event</th>
+							<!--<th>Event</th>-->
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
-						<#list page.list as info>
+						<#list page as info>
 						<tr>
-							<td>
+							<td width="30%">
 								<#if info.globalEventDefinition?? >
 									<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.globalEventDefinition.title}">
 								<#elseif info.glideMaster?? >
@@ -31,7 +31,7 @@
 									by ${info.owner}
 								</#if>
 							</td>
-							<td class="col-md-2">
+							<td class="col-md-2" width="20%">
 								<div>
 									<#if info.provider == "ALL" || info.provider == "TWITTER">
 										<i class="fa fa-twitter twitter-color"></i>&nbsp;${info.twitterStatus}
@@ -46,17 +46,17 @@
 									</#if>
 								</div>
 							</td>
-							<td>
+							<!--<td width="20%">
 								<#if info.globalEventDefinition?? >
-									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}">
+									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}" class="hoverMe">
 										${info.globalEventDefinition.title}
 									</a>
 								<#elseif info.glideMaster?? >
-									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" target="_blank" >${info.glideMaster.glideCode}</a>
+									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" class="hoverMe" target="_blank" >${info.glideMaster.glideCode}</a>
 								</#if>
 								
-							</td>
-							<td class="col-md-1">
+							</td>-->
+							<td class="col-md-1" width="50%">
 								<#if info.isTrashed()>
 									<span data-placement="top" data-toggle="tooltip" title="Restore">
 										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
@@ -78,45 +78,23 @@
 									</i>
 								</span>
 								<span data-placement="top" data-toggle="tooltip" title="Download">
-									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}" data-page="${page.pageNumber}">
+									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
                                         <span class="glyphicon glyphicon-download"></span>
                                     </i>
+								</span>
+                                <span data-placement="top" data-toggle="tooltip" title="Text Analystics">
+									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-tasks"></span>
+                                    </i></a>
 								</span>
 							</td>
 						</tr>
 						</#list>
+						<!--<div  id="urlModalDiv" style="display: none;overflow:hidden;width:auto;padding:0px;">
+						    <iframe id="urlModalIFrame"  scrolling="no1" style="width:100%;height: 100%; border: 0px none; margin-bottom: 0px; margin-left: 0px;">
+						    </iframe>
+						</div>-->
 					</tbody>
-					<tfoot>
-						<tr>
-							<td colspan="4" class="text-center">
-								<div style="margin:0px;">
-									<ul class="pagination pull-right">
-										<!-- First Page -->
-										<#if page.isFirstPage()>
-										<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-left" ></span></li>
-										<#else>
-										<li><a href="${rc.getContextPath()}/collection/view/list?page=${page.pageNumber-1}"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-										</#if>
-										<#list page.navigatePageNumbers as index>
-										<#if page.getPageNumber() == index>
-										<li class="active">
-											<#else>
-										<li>
-											</#if>
-											<a href="${rc.getContextPath()}/collection/view/list?page=${index}">${index}</a>
-										</li>
-										</#list>
-										<!-- Last Page -->
-										<#if page.isLastPage()>
-										<li class="disabled"><span style="margin-top:-1px;" class="glyphicon glyphicon-chevron-right" ></span></li>
-										<#else>
-										<li ><a href="${rc.getContextPath()}/collection/view/list?page=${page.pageNumber+1}"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-										</#if>
-									</ul>
-								</div>
-							</td>
-						</tr>
-					</tfoot>
 				</table>
 			</div>
 			<!-- <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
@@ -141,9 +119,9 @@
 							<button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
 						</div>
 					</div>
-					/.modal-content 
+					/.modal-content
 				</div>
-				/.modal-dialog 
+				/.modal-dialog
 				</div> -->
 			<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
 				<div class="modal-dialog">
@@ -189,6 +167,7 @@
 		<script>
 			<#include "cookies.js">
 			<#include "collection/list/list.js">
+			<#include "urlpopup.js">
 		</script>
 	</body>
 </html>

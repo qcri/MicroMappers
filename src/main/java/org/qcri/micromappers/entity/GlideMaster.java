@@ -4,11 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +37,12 @@ public class GlideMaster extends ExtendedBaseEntity {
     @OneToMany
     @JoinColumn(name = "glide_code", referencedColumnName = "glide_code")
     private List<GdeltMMIC> GdeltMMICList;
+
+    @Transient
+    private String computerVisionRequestState;
+
+    @Transient
+    private int totalDataNumber;
 
     public GlideMaster() {
     }
@@ -83,6 +85,14 @@ public class GlideMaster extends ExtendedBaseEntity {
 
     public void setGdeltMMICList(List<GdeltMMIC> gdeltMMICList) {
         GdeltMMICList = gdeltMMICList;
+    }
+
+    public int getTotalDataNumber() {
+        return totalDataNumber;
+    }
+
+    public void setTotalDataNumber() {
+        this.totalDataNumber = this.Gdelt3WList.size() + this.GdeltMMICList.size() + this.collection.size();
     }
 
     @JsonIgnore
@@ -137,5 +147,14 @@ public class GlideMaster extends ExtendedBaseEntity {
 
     public void setComputerVisionEnabled(Boolean computerVisionEnabled) {
         this.computerVisionEnabled = computerVisionEnabled;
+    }
+
+
+    public String getComputerVisionRequestState() {
+        return computerVisionRequestState;
+    }
+
+    public void setComputerVisionRequestState(String computerVisionRequestState) {
+        this.computerVisionRequestState = computerVisionRequestState;
     }
 }

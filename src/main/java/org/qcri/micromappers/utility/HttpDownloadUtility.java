@@ -174,4 +174,19 @@ public class HttpDownloadUtility {
 
         return fileName;
     }
+
+    public static boolean isExist(String URLName){
+        try {
+            HttpURLConnection.setFollowRedirects(false);
+
+            HttpURLConnection con =
+                    (HttpURLConnection) new URL(URLName).openConnection();
+            con.setRequestMethod("HEAD");
+            return (con.getResponseCode() == HttpURLConnection.HTTP_OK);
+        }
+        catch (Exception e) {
+            logger.error("isExist : " + e);
+            return false;
+        }
+    }
 }

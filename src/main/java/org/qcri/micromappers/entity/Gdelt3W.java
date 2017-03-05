@@ -22,7 +22,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
     @Column(name = "img_url", length = 1000)
     private String imgURL;
 
-    @Column(name = "glide_code", nullable = false, length = 100)
+    @Column(name = "glide_code", nullable = false, length = 500)
     private String glideCode;
 
     @Column(name = "local_img_url", length = 1000)
@@ -154,6 +154,7 @@ public class Gdelt3W  extends ExtendedBaseEntity {
     public void setState(String state) {
         this.state = state;
     }
+
 
     public JSONArray getJsWheres() {
         return jsWheres;

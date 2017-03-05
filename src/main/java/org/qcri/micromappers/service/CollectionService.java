@@ -3,6 +3,7 @@ package org.qcri.micromappers.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -117,6 +118,20 @@ public class CollectionService
 			return Boolean.FALSE;
 		}
 	}
+	
+	public Boolean updateTwitterLastExecutionTimeById(Long id, Date lastExecutiontime){
+		try{
+			int updateStatus = collectionRepository.updateTwitterLastExecutionTimeById(id, lastExecutiontime);
+			if(updateStatus == 1){
+				return Boolean.TRUE; 
+			}else{
+				return Boolean.FALSE;
+			}
+		}catch (Exception e) {
+			logger.error("Error while updating twitter last execution time by id", e);
+			return Boolean.FALSE;
+		}
+	}
 
 	public List<Collection> getAllRunningCollections(){
 		try{
@@ -158,11 +173,22 @@ public class CollectionService
 		PageRequest request =
 				new PageRequest(pageNumber - 1, pageSize, sortDirection, sortColumn);
 		Page<Collaborator> pagedCollaborators = collaboratorService.getAllByPageAndAccount(account, request);
-
 		Page<Collection> pagedCollections = pagedCollaborators.map(pc -> pc.getCollection());
+
+
+
 		return pagedCollections;
 	}
 
+	public List<Collection> getAllByAccount(Account account) {
+
+		List<Collaborator> pagedCollaborators = collaboratorService.getAllByAccount(account);
+	//	List<Collection> pagedCollections = pagedCollaborators.stream().collect(Collectors.ge)
+		List<Collection> pagedCollections = new ArrayList<Collection>();
+		pagedCollaborators.forEach(item->pagedCollections.add(item.getCollection()));
+
+		return pagedCollections;
+	}
 	public Boolean trashCollectionById(Long id) {
 		try{
 			int updateStatus = collectionRepository.updatingTwitterStatusAndFacebookStatusAndTrashStatusById(id, CollectionStatus.TRASHED, CollectionStatus.TRASHED, Boolean.TRUE);

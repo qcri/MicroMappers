@@ -9,13 +9,15 @@ import org.qcri.micromappers.entity.GdeltMMIC;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.models.GdeltMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
+import org.qcri.micromappers.models.GlobalDataSources;
 import org.qcri.micromappers.models.PageInfo;
-import org.qcri.micromappers.service.Gdelt3WService;
-import org.qcri.micromappers.service.GdeltMMICService;
-import org.qcri.micromappers.service.GlideMasterService;
-import org.qcri.micromappers.service.GlobalEventDefinitionService;
+import org.qcri.micromappers.service.*;
+import org.qcri.micromappers.utility.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,10 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jlucas on 12/21/16.
@@ -49,39 +48,33 @@ public class GlobalEventController {
     @Autowired
     GdeltMMICService gdeltMMICService;
 
+
     @RequestMapping(value={"","/","snopes"})
-    public String index(Model model, HttpServletRequest request,
-    		@RequestParam(value = "page", defaultValue = "1") String page) {
-    	
-        int pageNumber = Integer.valueOf(page);
-        Page<GlobalEventDefinition> pages =  globalEventDefinitionService.listAllByPage(pageNumber);
+    public String index(Model model, HttpServletRequest request) {
 
-        PageInfo<GlobalEventDefinition> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
+        List<GlobalEventDefinition> globalEventDefinitionList = globalEventDefinitionService.findAllByState(Constants.SNOPES_STATE_ACTIVE);
 
+        Comparator<GlobalEventDefinition> globalEventComparator = (o1, o2)->o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        globalEventDefinitionList.sort(globalEventComparator.reversed());
 
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", globalEventDefinitionList);
         return "snopes";
     }
 
-    @RequestMapping(value={"/glides"})
-    public String glides(Model model, HttpServletRequest request,
-                        @RequestParam(value = "page", defaultValue = "1") String page) {
+    @RequestMapping(value={"/gdelt/glides"})
+    public String glides(Model model, HttpServletRequest request) {
 
-        int pageNumber = Integer.valueOf(page);
-        Page<GlideMaster> pages =  glideMasterService.listAllByPage(pageNumber);
+      //  PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
+      //  pageInfo.setList(glideMasterService.findAll());
 
-        PageInfo<GlideMaster> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
+        model.addAttribute("page", glideMasterService.findAll());
 
-
-        model.addAttribute("page", pageInfo);
-        return "glides";
+        return "/gdelt/glides";
     }
+
 
     @RequestMapping(value={"/gdelt/data3w"})
     public String get3WData(Model model, HttpServletRequest request,HttpServletResponse response,
-                         @RequestParam(value = "page", defaultValue = "1") String page,
                             @RequestParam(value = "glideCode") String glideCode,
                             @RequestParam(value = "dw", defaultValue = "") String dw) {
 
@@ -92,11 +85,7 @@ public class GlobalEventController {
             }
         }
 
-        int pageNumber = Integer.valueOf(page);
-        Page<Gdelt3W> pages =  gdelt3WService.findbyGlideCode(pageNumber, glideCode);
-
-        PageInfo<Gdelt3W> pageInfo = new PageInfo<>(pages);
-        List<Gdelt3W> gdelt3Ws = pages.getContent();
+        List<Gdelt3W> gdelt3Ws = gdelt3WService.findAllByGlideCode(glideCode);
         JSONParser parser = new JSONParser();
         gdelt3Ws.forEach((temp) -> {
             try {
@@ -109,10 +98,7 @@ public class GlobalEventController {
             }
         });
 
-        pageInfo.setList(gdelt3Ws);
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", gdelt3Ws);
         model.addAttribute("glideCode",glideCode);
 
         return "/gdelt/data3w";
@@ -153,14 +139,7 @@ public class GlobalEventController {
             }
         }
 
-        int pageNumber = Integer.valueOf(page);
-        Page<GdeltMMIC> pages =  gdeltMMICService.findbyGlideCode(pageNumber, glideCode);
-
-        PageInfo<GdeltMMIC> pageInfo = new PageInfo<>(pages);
-        pageInfo.setList(pages.getContent());
-
-
-        model.addAttribute("page", pageInfo);
+        model.addAttribute("page", gdeltMMICService.findAllByGlideCode(glideCode));
         model.addAttribute("glideCode",glideCode);
 
         return "/gdelt/datammic";

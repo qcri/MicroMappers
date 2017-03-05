@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.qcri.micromappers.entity.Account;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.UserConnection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.models.CollectionDetailsInfo;
@@ -30,6 +31,9 @@ public class BaseCollectionService{
 
 	@Autowired
 	private UserConnectionService userConnectionService;
+
+	@Autowired
+	private CollectionLabelService collectionLabelService;
 
 	@Autowired 
 	private Util util;
@@ -68,11 +72,22 @@ public class BaseCollectionService{
 		collection.setTwitterStatus(CollectionStatus.NOT_RUNNING);
 		collection.setFacebookStatus(CollectionStatus.NOT_RUNNING);
 		try {
+			if(StringUtils.isBlank(collection.getName()) || StringUtils.isBlank(collection.getCode())){
+				return null;
+			}
 			collectionService.saveOrUpdate(collection);
 			collaboratorService.addCollaborator(collection, user);
 		} catch (MicromappersServiceException e) {
 			logger.error(e.getMessage());
 			throw new MicromappersServiceException(e.getMessage(), e);
+		}
+
+		try{
+			CollectionLabel collectionLabel = collectionDetailsInfo.getCollectionLabel();
+			collectionLabel.setCollection(collection);
+			collectionLabelService.create(collectionLabel);
+		}catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return collection;
 	}
@@ -123,6 +138,30 @@ public class BaseCollectionService{
 
 			try {
 				Collection updatedCollection = collectionService.saveOrUpdate(collection);
+
+				try{
+					CollectionLabel oldCollectionLabel = collectionLabelService.getByCollectionId(collectionInfo.getId());
+					if(oldCollectionLabel != null){
+						if(collectionInfo.getCollectionLabel() != null){
+							oldCollectionLabel.setTopic(collectionInfo.getCollectionLabel().getTopic());
+							oldCollectionLabel.setFirstLabel(collectionInfo.getCollectionLabel().getFirstLabel());
+							oldCollectionLabel.setSecondLabel(collectionInfo.getCollectionLabel().getSecondLabel());
+							oldCollectionLabel.setFirstLabelTags(collectionInfo.getCollectionLabel().getFirstLabelTags());
+							oldCollectionLabel.setSecondLabelTags(collectionInfo.getCollectionLabel().getSecondLabelTags());
+							collectionLabelService.create(oldCollectionLabel);
+						}else{
+							collectionLabelService.delete(oldCollectionLabel);
+						}
+					}else{
+						if(collectionInfo.getCollectionLabel() != null){
+							collectionInfo.getCollectionLabel().setCollection(updatedCollection);
+							collectionLabelService.create(collectionInfo.getCollectionLabel());
+						}
+					}
+				}catch (Exception e) {
+					logger.error("Exception while updating collection label", e);
+				}
+
 				return new ResponseWrapper(updatedCollection.toCollectionDetailsInfo(), Boolean.TRUE, ResponseCode.SUCCESS.toString(), null);
 			} catch (MicromappersServiceException e) {
 				logger.error("Error while updating collection", e);

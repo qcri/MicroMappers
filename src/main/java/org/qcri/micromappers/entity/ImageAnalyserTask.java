@@ -13,8 +13,11 @@ public class ImageAnalyserTask extends ExtendedBaseEntity {
     @Column(name="state")
     String state;
 
-    @ManyToOne
-    @JoinColumn(name = "collection_id", nullable=false)
+    @Column(name="img_url", nullable=true)
+    String imageURL;
+
+    @OneToOne
+    @JoinColumn(name = "collection_id", nullable=true)
     Collection collection;
 
     @OneToOne
@@ -47,11 +50,21 @@ public class ImageAnalyserTask extends ExtendedBaseEntity {
     public ImageAnalyserTask(String state, Gdelt3W gdelt3W) {
         this.state = state;
         this.gdelt3W = gdelt3W;
+        this.imageURL = gdelt3W.getImgURL();
     }
 
     public ImageAnalyserTask(String state, GdeltMMIC gdeltMMIC) {
         this.state = state;
         this.gdeltMMIC = gdeltMMIC;
+        this.imageURL = gdeltMMIC.getImgURL();
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getState() {

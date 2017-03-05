@@ -8,6 +8,7 @@ import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.ImageAnalyserTaskRepository;
 import org.qcri.micromappers.utility.CollectionType;
 import org.qcri.micromappers.utility.ComputerVisionStatus;
+import org.qcri.micromappers.utility.HttpDownloadUtility;
 import org.qcri.micromappers.utility.Util;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurationProperty;
 import org.qcri.micromappers.utility.configurator.MicromappersConfigurator;
@@ -34,6 +35,9 @@ public class ImageAnalyserTaskService {
     @Inject
     private ImageAnalysisService imageAnalysisService;
 
+    @Inject
+    private Util util;
+
     public List<ImageAnalyserTask> findByState(String state){
         List<ImageAnalyserTask> tasks = null;
         if(state.equalsIgnoreCase(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_ONGOING.getStatus())){
@@ -44,7 +48,15 @@ public class ImageAnalyserTaskService {
 
     public ImageAnalyserTask saveOrUpdate(ImageAnalyserTask imageAnalyserTask){
         try{
-            return imageAnalyserTaskRepository.save(imageAnalyserTask);
+            if(!this.isRecordExist(imageAnalyserTask)){
+                return imageAnalyserTaskRepository.save(imageAnalyserTask);
+            }
+            else{
+                //throw new MicromappersServiceException("Exception while create or update a ImageAnalyserTask : duplicate found");
+                logger.warn("Exception while create or update a ImageAnalyserTask : duplicate found" );
+                return null;
+            }
+
         }catch (Exception e) {
             logger.error("Error while create or update ImageAnalyserTask", e);
             throw new MicromappersServiceException("Exception while create or update a ImageAnalyserTask", e);
@@ -56,13 +68,16 @@ public class ImageAnalyserTaskService {
         String imageURL = this.getImageURL(taskRecord);
 
         if(imageURL != null){
-            String response = MSCognitiveClassifier.analyzeImage(imageURL);
-            //String response = MSCognitiveProcessor.getTempJson();
-            ImageAnalysis analysis = MSCognitiveProcessor.processClassifiedInfo(response, taskRecord, imageURL);
-            if(analysis!=null){
-                imageAnalysisService.createImageAnalysis(analysis);
-                imageAnalyserTask.setState(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus());
-                saveOrUpdate(imageAnalyserTask);
+            if(HttpDownloadUtility.isExist(imageURL) && !this.isProcessed(imageURL)){
+                String response = MSCognitiveClassifier.analyzeImage(imageURL);
+                //String response = MSCognitiveProcessor.getTempJson();
+                this.persistToFile(imageAnalyserTask.getId().toString(), response);
+                ImageAnalysis analysis = MSCognitiveProcessor.processClassifiedInfo(response, taskRecord, imageURL);
+                if(analysis!=null){
+                    imageAnalysisService.createImageAnalysis(analysis);
+                    imageAnalyserTask.setState(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_COMPLETED.getStatus());
+                    saveOrUpdate(imageAnalyserTask);
+                }
             }
         }
         else{
@@ -121,5 +136,53 @@ public class ImageAnalyserTaskService {
         }
 
         return imageUrl;
+    }
+
+    private boolean isProcessed(String imgURL){
+        ImageAnalysis imageAnalysis = imageAnalysisService.findByImgURL(imgURL);
+        if(imageAnalysis != null){
+            return true;
+        }
+        return false;
+    }
+
+    private void persistToFile(String fileName, String feed ){
+        Path parentPath = Paths.get(configProperties.getProperty(MicromappersConfigurationProperty.IMAGE_CLASSIFIER_PATH));
+
+        if(util.createDirectories(parentPath)){
+            Path filePath = Paths.get(parentPath.toString(), fileName);
+            util.writeToFile(filePath, feed);
+        }
+    }
+
+    private boolean isRecordExist(ImageAnalyserTask imageAnalyserTask){
+        if(imageAnalyserTask.getGdelt3W() != null){
+            List<ImageAnalyserTask> task1 = imageAnalyserTaskRepository.findByGdelt3W(imageAnalyserTask.getGdelt3W());
+            List<ImageAnalyserTask> img1 = imageAnalyserTaskRepository.findByImageURL(imageAnalyserTask.getGdelt3W().getImgURL());
+            if(task1 != null && !task1.isEmpty() && !img1.isEmpty()){
+                logger.warn("Gdelt3W duplicate found : " + imageAnalyserTask.getGdelt3W().getId());
+                return true;
+            }
+        }
+
+        if(imageAnalyserTask.getGdeltMMIC() != null){
+            List<ImageAnalyserTask> task2 = imageAnalyserTaskRepository.findByGdeltMMIC(imageAnalyserTask.getGdeltMMIC());
+            List<ImageAnalyserTask> img2 = imageAnalyserTaskRepository.findByImageURL(imageAnalyserTask.getGdeltMMIC().getImgURL());
+            if(task2 != null && !task2.isEmpty()  && !img2.isEmpty()){
+                logger.warn("Gdeltmmic duplicate found : " + imageAnalyserTask.getGdeltMMIC().getId());
+                return true;
+            }
+        }
+
+        if(imageAnalyserTask.getDataFeed() != null){
+            List<ImageAnalyserTask> task3 = imageAnalyserTaskRepository.findByDataFeed(imageAnalyserTask.getDataFeed());
+            if(task3 != null && !task3.isEmpty()){
+                logger.warn("datafeed duplicate found : " + imageAnalyserTask.getDataFeed().getId());
+                return true;
+            }
+        }
+
+        return false;
+
     }
 }

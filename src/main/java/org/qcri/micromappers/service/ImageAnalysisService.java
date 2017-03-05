@@ -30,4 +30,9 @@ public class ImageAnalysisService {
 
     }
 
+    public ImageAnalysis findByImgURL(String imgURL){
+        return imageAnalysisRepository.findByImageURL(imgURL);
+    }
+
+
 }

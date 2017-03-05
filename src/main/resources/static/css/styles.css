@@ -59,3 +59,5 @@ color: #1da1f2;
 .select2-result-repository__meta { margin-left: 70px; }
 .select2-result-repository__title { color: black; font-weight: bold; word-wrap: break-word; line-height: 1.1;  }
 .select2-result-repository__likes { color: #555; font-weight: normal; word-wrap: break-word; line-height: 1.1; margin-bottom: 4px; }
+
+.liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }

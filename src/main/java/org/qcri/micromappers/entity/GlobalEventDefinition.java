@@ -21,19 +21,19 @@ public class GlobalEventDefinition extends ExtendedBaseEntity {
     @Column(name="title", length = 500)
     private String title;
 
-    @Column(name="description", length = 2000)
+    @Column(name="description", length = 2000, nullable=true)
     private String description;
 
-    @Column(name="claim_reviewed", length = 1000)
+    @Column(name="claim_reviewed", length = 1000, nullable=true)
     private String claimReviewed;
 
-    @Column(name="clain_review_rating", length = 50)
+    @Column(name="clain_review_rating", length = 50, nullable=true)
     private String clainReviewRating;
 
-    @Column(name="article_tag", length = 1000)
+    @Column(name="article_tag", length = 1000, nullable=true)
     private String articleTag;
 
-    @Column(name="search_keyword", length = 2000)
+    @Column(name="search_keyword", length = 2000, nullable=true)
     private String searchKeyword;
 
     @Column(name="event_url", length = 1000)
@@ -53,6 +53,20 @@ public class GlobalEventDefinition extends ExtendedBaseEntity {
     @JoinColumn(name = "global_event_definition_id")
     private List<Collection> collection;
 
+    public GlobalEventDefinition(String title, String datePublished, String eventUrl, String author){
+        this.title = title;
+        this.datePublished = datePublished;
+        this.eventUrl = eventUrl;
+        this.author = author;
+    }
+
+    public GlobalEventDefinition(String title, String datePublished, String eventUrl, String author, String searchKeyword){
+        this.title = title;
+        this.datePublished = datePublished;
+        this.eventUrl = eventUrl;
+        this.author = author;
+        this.searchKeyword = searchKeyword;
+    }
 
     public GlobalEventDefinition(String title, String description, String claimReviewed, String clainReviewRating, String articleTag, String searchKeyword, String eventUrl, String author, String datePublished) {
         this.title = title;

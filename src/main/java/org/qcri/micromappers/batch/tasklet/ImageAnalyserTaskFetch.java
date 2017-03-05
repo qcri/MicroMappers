@@ -55,7 +55,7 @@ public class ImageAnalyserTaskFetch implements Tasklet {
         List<GdeltMMIC> gdeltMMICList = gdeltMMICService.findByComputerVisionEnabled(true);
 
         gdeltMMICList.forEach(item -> {
-            if(item.getImageAnalyserTask() == null){
+            if(item.getImageAnalyserTask() == null && item.getImgURL() !=null){
                 ImageAnalyserTask analyserTask = new ImageAnalyserTask(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_ONGOING.getStatus(),
                         item);
 
@@ -67,7 +67,7 @@ public class ImageAnalyserTaskFetch implements Tasklet {
         List<Gdelt3W> gdelt3WList = gdelt3WService.findByComputerVisionEnabled(true);
 
         gdelt3WList.forEach(item -> {
-            if(item.getImageAnalyserTask() == null){
+            if(item.getImageAnalyserTask() == null && item.getImgURL() !=null){
                 ImageAnalyserTask analyserTask = new ImageAnalyserTask(ComputerVisionStatus.COMPUTER_VISION_ANALYSER_TASK_ONGOING.getStatus(),
                         item);
 

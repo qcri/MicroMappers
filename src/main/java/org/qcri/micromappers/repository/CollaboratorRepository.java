@@ -22,4 +22,6 @@ public abstract interface CollaboratorRepository extends CrudRepository<Collabor
 	public Long deleteByCollectionIdAndAccountId(Long collectionId, Long accountId);
 
 	public Page<Collaborator> findByAccount(Account account, Pageable pageable);
+
+	public List<Collaborator> findByAccount(Account account);
 }

@@ -32,10 +32,13 @@ import org.springframework.stereotype.Component;
 public class Util
 {
 	private static Logger logger = Logger.getLogger(Util.class);
-	final private static long MAX_CHECK_TIME_MILLIS = 300000; // 5min for local.
-	//final private static long MAX_CHECK_TIME_MILLIS = 10800000;  // 3 hours for production
-	//final private static long MAX_CHECK_TIME_MILLIS = 3600000; // 1hr for testing
-	private static long timeOfLastTranslationProcessingMillis = System.currentTimeMillis(); //initialize at startup
+	final private static long MAX_CHECK_SNOPES_TIME_MILLIS = 7200000; // 2hours.
+	final private static long MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS = 9000000; //2.5hours
+	final private static long MAX_CHECK_FACT_CHECK_TIME_MILLIS = 12600000; //3.5hr
+
+	public static long timeOfLastSnopesProcessingMillis = System.currentTimeMillis(); //initialize at startup
+	public static long timeOfLastGoogleNewsProcessingMillis = System.currentTimeMillis(); //initialize at startup
+	public static long timeOfLastFactCheckProcessingMillis = System.currentTimeMillis();
 	private static UrlValidator urlValidator = new UrlValidator();
 
 	@Inject
@@ -52,15 +55,46 @@ public class Util
 
 		long currentTimeMillis = System.currentTimeMillis();
 		logger.info("currentTimeMillis : " + currentTimeMillis);
-		long diff = currentTimeMillis - timeOfLastTranslationProcessingMillis;
+		long diff = currentTimeMillis - timeOfLastSnopesProcessingMillis;
 		logger.info("currentTimeMillis differ : " + diff);
-		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_TIME_MILLIS);
-		// every 3hours
-		if ((currentTimeMillis - timeOfLastTranslationProcessingMillis) >= MAX_CHECK_TIME_MILLIS) {
+		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_SNOPES_TIME_MILLIS);
+		// every 6hours
+		if ((currentTimeMillis - timeOfLastSnopesProcessingMillis) >= MAX_CHECK_SNOPES_TIME_MILLIS) {
 			return true;
 		}
 		return false;
 	}
+
+	public static boolean isTimeToGoogleNewsFetchRun(){
+
+		long currentTimeMillis = System.currentTimeMillis();
+		logger.info("currentTimeMillis : " + currentTimeMillis);
+		long diff = currentTimeMillis - timeOfLastGoogleNewsProcessingMillis;
+		logger.info("currentTimeMillis differ : " + diff);
+		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS);
+		// every 6hours
+		if ((currentTimeMillis - timeOfLastGoogleNewsProcessingMillis) >= MAX_CHECK_GOOGLE_NEWS_TIME_MILLIS) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isTimeToFactCheckFetchRun(){
+
+		long currentTimeMillis = System.currentTimeMillis();
+		logger.info("currentTimeMillis : " + currentTimeMillis);
+		long diff = currentTimeMillis - MAX_CHECK_FACT_CHECK_TIME_MILLIS;
+		logger.info("currentTimeMillis differ : " + diff);
+		logger.info("MAX_CHECK_TIME_MILLIS : " + MAX_CHECK_FACT_CHECK_TIME_MILLIS);
+		// every 6hours
+		if ((currentTimeMillis - timeOfLastFactCheckProcessingMillis) >= MAX_CHECK_FACT_CHECK_TIME_MILLIS) {
+			return true;
+		}
+		return false;
+	}
+
+
+
 
 	public Account getAuthenticatedUser() throws MicromappersException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

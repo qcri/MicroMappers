@@ -29,6 +29,9 @@ public class CollectionTask {
 	protected String languageFilter;
 	protected CollectionType provider;
 	protected Date lastExecutionTime;
+	private Date twitterLastExecutionTime;
+	private Date twitterSinceDate;
+	private Date twitterUntilDate;
 	protected Integer fetchInterval;
 	protected Integer fetchFrom;
 
@@ -222,6 +225,9 @@ public class CollectionTask {
 		newTask.setFetchInterval(fetchInterval);
 		newTask.setFetchFrom(fetchFrom);
 		newTask.setProvider(provider);
+		newTask.setTwitterLastExecutionTime(twitterLastExecutionTime);
+		newTask.setTwitterSinceDate(twitterSinceDate);
+		newTask.setTwitterUntilDate(twitterUntilDate);
 		return newTask;
 	}
 
@@ -363,5 +369,47 @@ public class CollectionTask {
 	 */
 	public void setFbPostCount(Long fbPostCount) {
 		this.fbPostCount = fbPostCount;
+	}
+
+	/**
+	 * @return the twitterSinceDate
+	 */
+	public Date getTwitterSinceDate() {
+		return twitterSinceDate;
+	}
+
+	/**
+	 * @param twitterSinceDate the twitterSinceDate to set
+	 */
+	public void setTwitterSinceDate(Date twitterSinceDate) {
+		this.twitterSinceDate = twitterSinceDate;
+	}
+
+	/**
+	 * @return the twitterUntilDate
+	 */
+	public Date getTwitterUntilDate() {
+		return twitterUntilDate;
+	}
+
+	/**
+	 * @param twitterUntilDate the twitterUntilDate to set
+	 */
+	public void setTwitterUntilDate(Date twitterUntilDate) {
+		this.twitterUntilDate = twitterUntilDate;
+	}
+
+	/**
+	 * @return the twitterLastExecutionTime
+	 */
+	public Date getTwitterLastExecutionTime() {
+		return twitterLastExecutionTime;
+	}
+
+	/**
+	 * @param twitterLastExecutionTime the twitterLastExecutionTime to set
+	 */
+	public void setTwitterLastExecutionTime(Date twitterLastExecutionTime) {
+		this.twitterLastExecutionTime = twitterLastExecutionTime;
 	}
 }

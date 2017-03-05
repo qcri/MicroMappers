@@ -4,10 +4,12 @@
 package org.qcri.micromappers.models;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.qcri.micromappers.entity.Collection;
+import org.qcri.micromappers.entity.CollectionLabel;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.GlobalEventDefinition;
 import org.qcri.micromappers.utility.CollectionStatus;
@@ -44,7 +46,10 @@ public class CollectionDetailsInfo implements Serializable{
     private Integer durationHours;
     private int fetchInterval;
     private int fetchFrom;
+    private Long twitterSinceDate;
+    private Long twitterUntilDate;
     private boolean isComputerVisionEnabled;
+    private CollectionLabel collectionLabel;
     
 	public String getTrack() {
 		return track;
@@ -152,6 +157,17 @@ public class CollectionDetailsInfo implements Serializable{
 		collection.setFetchInterval(this.getFetchInterval());
 		collection.setFetchFrom(this.getFetchFrom());
 		collection.setComputerVisionEnabled(this.isComputerVisionEnabled());
+
+		if(this.getTwitterSinceDate() != null) {
+			collection.setTwitterSinceDate(new Date(this.getTwitterSinceDate()));
+		}
+		if(this.getTwitterUntilDate() != null){
+			collection.setTwitterUntilDate(new Date(this.getTwitterUntilDate()));
+		}
+
+		if(this.getTwitterUntilDate() == null && this.getTwitterSinceDate() != null){
+			collection.setTwitterUntilDate(new Date());
+		}
 		
 		if(StringUtils.isNotBlank(this.getTrack())) {
 			collection.setTrack(this.getTrack().toLowerCase().trim());
@@ -233,5 +249,40 @@ public class CollectionDetailsInfo implements Serializable{
 	public void setComputerVisionEnabled(boolean isComputerVisionEnabled) {
 		this.isComputerVisionEnabled = isComputerVisionEnabled;
 	}
-	
+	/**
+	 * @return the twitterSinceDate
+	 */
+	public Long getTwitterSinceDate() {
+		return twitterSinceDate;
+	}
+	/**
+	 * @param twitterSinceDate the twitterSinceDate to set
+	 */
+	public void setTwitterSinceDate(Long twitterSinceDate) {
+		this.twitterSinceDate = twitterSinceDate;
+	}
+	/**
+	 * @return the twitterUntilDate
+	 */
+	public Long getTwitterUntilDate() {
+		return twitterUntilDate;
+	}
+	/**
+	 * @param twitterUntilDate the twitterUntilDate to set
+	 */
+	public void setTwitterUntilDate(Long twitterUntilDate) {
+		this.twitterUntilDate = twitterUntilDate;
+	}
+	/**
+	 * @return the collectionLabel
+	 */
+	public CollectionLabel getCollectionLabel() {
+		return collectionLabel;
+	}
+	/**
+	 * @param collectionLabel the collectionLabel to set
+	 */
+	public void setCollectionLabel(CollectionLabel collectionLabel) {
+		this.collectionLabel = collectionLabel;
+	}
 }

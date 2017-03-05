@@ -16,6 +16,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -33,99 +34,127 @@ public class SnopesNewsFetch implements Tasklet {
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
 
         if(!Util.isTimeToSnopesFetchRun()){
-            logger.info("need to wait more");
+            logger.info("need to wait more for Snopes");
             return RepeatStatus.FINISHED;
+        }
+        else{
+            Util.timeOfLastSnopesProcessingMillis = System.currentTimeMillis();
         }
 
         WebClient client = new WebClient();
         client.getOptions().setCssEnabled(false);
         client.getOptions().setJavaScriptEnabled(false);
+        client.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        client.getOptions().setThrowExceptionOnScriptError(false);
 
         try {
             String baseUrl = configProperties.getProperty(MicromappersConfigurationProperty.SNOPES_COM_BASE_URL);
             String searchUrl = configProperties.getProperty(MicromappersConfigurationProperty.SNOPES_COM_NEWS_URL);
             HtmlPage page = client.getPage(searchUrl);
 
-            List<HtmlElement> items = (List<HtmlElement>) page.getByXPath(".//ul[@class='post-list']/li") ;
+            List<HtmlElement> items = (List<HtmlElement>) page.getByXPath(".//div[@id='main-list']/article") ;
             if(items.isEmpty()){
                 logger.info("No items found !");
             }else{
-                int index = 0;
                 for(HtmlElement item : items){
                     GlobalEventDefinition globalEventDefinition = new GlobalEventDefinition();
 
-                    HtmlAnchor itemAnchor1 = ((HtmlAnchor)item.getByXPath("//div[@class='right-side']/h4[@class='title']/a").get(index));
+                    HtmlMeta meta = ((HtmlMeta)item.getFirstByXPath("meta[@itemprop='mainEntityOfPage']"));
 
-                    String itemUrl = itemAnchor1.getHrefAttribute() ;
+                    if(meta == null){
+                        meta = ((HtmlMeta)item.getFirstByXPath("meta[@itemprop='url']"));
+                    }
 
-                    if(globalEventDefinitionService.findByEventUrl(baseUrl+itemUrl) == null){
-                        String title = itemAnchor1.asText();
+                    String itemUrl = meta.getContentAttribute() ;
 
-                        globalEventDefinition.setSearchKeyword(itemUrl.replaceAll("/", "").replaceAll("-", ","));
+
+                    HtmlElement itemTtitle = (HtmlElement)item.getFirstByXPath("a/h2[@class='article-link-title']");
+                    String title = itemTtitle.asText();
+
+                    if(globalEventDefinitionService.findByEventUrl(itemUrl) == null){
+
+                        String tempKeywords = itemUrl;
+                        if(tempKeywords.endsWith("/")){
+                            tempKeywords = tempKeywords.substring(0,tempKeywords.length() - 1);
+                            int lastStart = tempKeywords.lastIndexOf("/");
+                            tempKeywords = tempKeywords.substring(lastStart + 1, tempKeywords.length());
+                        }
+                        globalEventDefinition.setSearchKeyword(tempKeywords.replaceAll("/", "").replaceAll("-", ","));
                         globalEventDefinition.setTitle(title);
-                        globalEventDefinition.setEventUrl(baseUrl+itemUrl);
+                        globalEventDefinition.setEventUrl(itemUrl);
 
-                        HtmlElement itemAnchor2 = ((HtmlElement)item.getByXPath("//div[@class='right-side']/p[@class='body']/span[@class='label']").get(index));
-                        String description = itemAnchor2.asText();
-                        globalEventDefinition.setDescription(description);
+                        HtmlMeta metaDatePublished = ((HtmlMeta)item.getFirstByXPath("meta[@itemprop='datePublished']"));
+                        if(metaDatePublished.getContentAttribute() != null){
+                            if(metaDatePublished.getContentAttribute().contains("2017")){
+                                globalEventDefinition.setDatePublished(metaDatePublished.getContentAttribute());
+                            }
+                            else{
+                                globalEventDefinition.setDatePublished(new Timestamp(System.currentTimeMillis()).toString());
+                            }
+                        }
 
-
-                        HtmlElement itemAnchor3 = ((HtmlElement) item.getByXPath("//div[@class='right-side']/div[@class='meta']/a[@class='author']/span[@itemprop='author']").get(index));
-                        String author = itemAnchor3.asText();
-                        globalEventDefinition.setAuthor(author);
+                        globalEventDefinition.setAuthor("snopes");
 
                         globalEventDefinition = this.getEachFact(client, globalEventDefinition);
+                        if(globalEventDefinition.getArticleTag() == null || globalEventDefinition.getArticleTag().isEmpty() ){
+                            globalEventDefinition.setArticleTag(globalEventDefinition.getSearchKeyword());
+                        }
                         globalEventDefinition.setState(Constants.SNOPES_STATE_ACTIVE);
                         globalEventDefinitionService.create(globalEventDefinition);
                     }
-
-                    index++;
                 }
             }
         }catch(Exception e){
             logger.error("RepeatStatus: " + e);
         }
+
         return RepeatStatus.FINISHED;
     }
 
     public GlobalEventDefinition getEachFact(WebClient client, GlobalEventDefinition globalEventDefinition){
         try{
             HtmlPage page = client.getPage(globalEventDefinition.getEventUrl());
-            List<HtmlElement> items = (List<HtmlElement>) page.getByXPath(".//div[@class='wordpress']/div[@class='content-wrapper']/article") ;
+            List<HtmlElement> items = (List<HtmlElement>) page.getByXPath(".//div[@class='body-content']/article") ;
             if(items.isEmpty()) {
                 logger.info("No items found !");
             }else{
                 for(HtmlElement item : items){
-                    HtmlMeta meta = ((HtmlMeta)item.getFirstByXPath(".//meta[@itemprop='datePublished']"));
-                    String datePublished = meta.getContentAttribute();
-                    globalEventDefinition.setDatePublished(datePublished);
 
-                    HtmlSpan span1 = item.getFirstByXPath(".//span[@itemprop='claimReviewed']");
+                    HtmlElement itemDescription = ((HtmlElement)item.getFirstByXPath(".//header/h2[@itemprop='description']"));
+
+                    String description = itemDescription.asText();
+                    globalEventDefinition.setDescription(description);
+
+
+                    HtmlElement span1 = ((HtmlElement)item.getFirstByXPath(".//p[@itemprop='claimReviewed']"));
                     if(span1!=null){
                         String clainReviewed = span1.asText();
                         globalEventDefinition.setClaimReviewed(clainReviewed);
                     }
 
 
-                    HtmlSpan span2 = item.getFirstByXPath(".//span[@itemprop='reviewRating']/span[@itemprop='alternateName']");
+                    HtmlSpan span2 = ((HtmlSpan)item.getFirstByXPath(".//span[@itemprop='reviewRating']/span[@itemprop='alternateName']"));
 
                     if(span2 != null){
                         String reviewRating = span2.asText();
                         globalEventDefinition.setClainReviewRating(reviewRating);
 
                     }
+                    //item.getByXPath(".//div[@class='entry-content article-text legacy']/footer[@class='article-footer']/div[@class='article-info-box']/p[@class='tag-box']/a")
+                    List<HtmlAnchor> tags = (List<HtmlAnchor>)item.getByXPath(".//.//div[@class='entry-content article-text legacy']/footer[@class='article-footer']/div[@class='article-info-box']/p[@class='tag-box']/a");
+                   // List<HtmlAnchor> tags =  (List<HtmlAnchor>)item.getByXPath(".//div[@class='article-tags clearfix']/ul/li/a");
+                    if(tags != null){
+                        StringBuilder tagInfo = new StringBuilder();
+                        for(HtmlAnchor tag : tags){
+                            if(tagInfo.length() > 0){
+                                tagInfo.append(",");
+                            }
+                            tagInfo.append(tag.asText());
 
-                    List<HtmlAnchor> tags =  (List<HtmlAnchor>)item.getByXPath(".//div[@class='article-tags clearfix']/ul/li/a");
-
-                    StringBuilder tagInfo = new StringBuilder();
-                    for(HtmlAnchor tag : tags){
-                        if(tagInfo.length() > 0){
-                            tagInfo.append(",");
                         }
-                        tagInfo.append(tag.asText());
-
+                        globalEventDefinition.setArticleTag(tagInfo.toString());
                     }
-                    globalEventDefinition.setArticleTag(tagInfo.toString());
+
                 }
             }
         }

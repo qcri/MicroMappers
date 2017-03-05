@@ -72,6 +72,12 @@ public class Collection extends ExtendedBaseEntity {
 	@Column(name="fetch_interval", columnDefinition="int default 2")
 	private Integer fetchInterval;
 
+	@Column(name="twitter_since_date")
+	private Date twitterSinceDate;
+	
+	@Column(name="twitter_until_date")
+	private Date twitterUntilDate;
+	
 	//default value 7 days = 24 * 7 hours
 	@Column(name="fetch_from", columnDefinition="int default 168")
 	private Integer fetchFrom;
@@ -79,6 +85,9 @@ public class Collection extends ExtendedBaseEntity {
 	@Column(name="last_execution_time")
 	private Date lastExecutionTime;
 
+	@Column(name="twitter_last_execution_time")
+	private Date twitterLastExecutionTime;
+	
 	@Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
 	private Boolean computerVisionEnabled;
 	
@@ -300,11 +309,14 @@ public class Collection extends ExtendedBaseEntity {
 		task.setSubscribedProfiles(this.getSubscribedProfiles());
 		task.setToTrack(this.getTrack());
 		task.setLanguageFilter(this.getLangFilters());
+		task.setTwitterSinceDate(this.getTwitterSinceDate());
+		task.setTwitterUntilDate(this.getTwitterUntilDate());
 		task.setFetchInterval(this.getFetchInterval());
 		task.setProvider(this.getProvider());
 		task.setFetchInterval(this.getFetchInterval());
 		task.setFetchFrom(this.getFetchFrom());
 		task.setLastExecutionTime(this.getLastExecutionTime());
+		task.setTwitterLastExecutionTime(this.getTwitterLastExecutionTime());
 		task.setTwitterStatus(this.twitterStatus);
 		task.setFacebookStatus(this.facebookStatus);
 		return task;
@@ -318,6 +330,8 @@ public class Collection extends ExtendedBaseEntity {
 		collectionDetailsInfo.setDurationHours(this.getDurationHours());
 		collectionDetailsInfo.setFetchFrom(this.getFetchFrom());
 		collectionDetailsInfo.setFetchInterval(this.fetchInterval);
+		collectionDetailsInfo.setTwitterSinceDate(this.getTwitterSinceDate() != null ? this.getTwitterSinceDate().getTime() : null);
+		collectionDetailsInfo.setTwitterUntilDate(this.getTwitterUntilDate() != null ? this.getTwitterUntilDate().getTime() : null);
 		collectionDetailsInfo.setSubscribedProfiles(this.subscribedProfiles);
 		collectionDetailsInfo.setLangFilters(this.getLangFilters());
 		collectionDetailsInfo.setName(this.getName());
@@ -365,6 +379,48 @@ public class Collection extends ExtendedBaseEntity {
 	 */
 	public void setFacebookStatus(CollectionStatus facebookStatus) {
 		this.facebookStatus = facebookStatus;
+	}
+
+	/**
+	 * @return the twitterSinceDate
+	 */
+	public Date getTwitterSinceDate() {
+		return twitterSinceDate;
+	}
+
+	/**
+	 * @param twitterSinceDate the twitterSinceDate to set
+	 */
+	public void setTwitterSinceDate(Date twitterSinceDate) {
+		this.twitterSinceDate = twitterSinceDate;
+	}
+
+	/**
+	 * @return the twitterUntilDate
+	 */
+	public Date getTwitterUntilDate() {
+		return twitterUntilDate;
+	}
+
+	/**
+	 * @param twitterUntilDate the twitterUntilDate to set
+	 */
+	public void setTwitterUntilDate(Date twitterUntilDate) {
+		this.twitterUntilDate = twitterUntilDate;
+	}
+
+	/**
+	 * @return the twitterLastExecutionTime
+	 */
+	public Date getTwitterLastExecutionTime() {
+		return twitterLastExecutionTime;
+	}
+
+	/**
+	 * @param twitterLastExecutionTime the twitterLastExecutionTime to set
+	 */
+	public void setTwitterLastExecutionTime(Date twitterLastExecutionTime) {
+		this.twitterLastExecutionTime = twitterLastExecutionTime;
 	}
 
 }
