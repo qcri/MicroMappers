@@ -14,6 +14,7 @@
 							<th WIDTH="35%">Title</th>
 							<th WIDTH="35%">Summary</th>
 							<th WIDTH="15%">Source</th>
+							<th>Collected</th>
 							<th WIDTH="15%">Action</th>
 						</tr>
 					</thead>
@@ -33,6 +34,7 @@
 								${info.description}
 							</td>
 							<td>${info.author}</td>
+							<td>${info.createdAt}</td>
 							<td>
 								<span class="btn btn-primary btn-xs" title="View details">
 									<a href="${info.eventUrl}" target="_blank" style="color:white;">
@@ -60,7 +62,8 @@
 			<#include "cookies.js">
 			<#include "urlpopup.js">
             $('#newsData').dataTable( {
-			    columnDefs: [ { "orderable": false, "targets": 3 } ]
+			    columnDefs: [ { "orderable": true, "targets": 3, "visible": false } ],
+                "order": [[ 3, "desc" ]]
 			} );
 		</script>
 	</body>
