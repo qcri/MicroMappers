@@ -12,8 +12,10 @@
 					<thead>
 						<tr>
 							<th>Name</th>
+
 							<th>Status</th>
 							<!--<th>Event</th>-->
+                            <th>Count</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -28,9 +30,10 @@
 								</#if>
 								${info.name}</a>
 								<#if current_user != info.owner>
-									by ${info.owner}
+									- ${info.owner}
 								</#if>
 							</td>
+
 							<td class="col-md-2" width="20%">
 								<div>
 									<#if info.provider == "ALL" || info.provider == "TWITTER">
@@ -46,6 +49,7 @@
 									</#if>
 								</div>
 							</td>
+                            <td width="10%">${info.count}</td>
 							<!--<td width="20%">
 								<#if info.globalEventDefinition?? >
 									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}" class="hoverMe">
@@ -56,7 +60,7 @@
 								</#if>
 								
 							</td>-->
-							<td class="col-md-1" width="50%">
+							<td class="col-md-1" width="40%">
 								<#if info.isTrashed()>
 									<span data-placement="top" data-toggle="tooltip" title="Restore">
 										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">

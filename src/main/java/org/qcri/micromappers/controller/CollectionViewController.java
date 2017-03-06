@@ -82,6 +82,7 @@ public class CollectionViewController {
 
 		List<CollectionDetailsInfo> pagedCollectionDetailsInfo = new ArrayList<CollectionDetailsInfo>();
 		pagedCollection.forEach(item->pagedCollectionDetailsInfo.add(item.toCollectionDetailsInfo()));
+		pagedCollectionDetailsInfo.forEach(item -> item.setCount(collectionLogService.getCountByCollectionId(item.getId())));
 
         model.addAttribute("page", pagedCollectionDetailsInfo);
         return "collection/list/list";
