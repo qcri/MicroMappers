@@ -24,4 +24,6 @@ public abstract interface CollaboratorRepository extends CrudRepository<Collabor
 	public Page<Collaborator> findByAccount(Account account, Pageable pageable);
 
 	public List<Collaborator> findByAccount(Account account);
+
+	public List<Collaborator> findAll();
 }

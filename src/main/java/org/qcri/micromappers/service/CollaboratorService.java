@@ -11,6 +11,7 @@ import org.qcri.micromappers.entity.Collaborator;
 import org.qcri.micromappers.entity.Collection;
 import org.qcri.micromappers.exception.MicromappersServiceException;
 import org.qcri.micromappers.repository.CollaboratorRepository;
+import org.qcri.micromappers.utility.RoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -145,6 +146,9 @@ public class CollaboratorService
 	}
 
 	public List<Collaborator> getAllByAccount(Account account) {
+		if(account.getRole().equals(RoleType.ADMIN)){
+			return collaboratorRepository.findAll();
+		}
 		return collaboratorRepository.findByAccount(account);
 	}
 	
