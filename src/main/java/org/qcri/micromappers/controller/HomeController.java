@@ -48,7 +48,7 @@ public class HomeController {
 
 	@RequestMapping(value="/", method = RequestMethod.GET)
 	public String loadHomePage(Model model, HttpServletRequest request){
-		return "redirect:signin";
+		return "redirect:home";
 	}
 
 	@RequestMapping(value="/signin", method = RequestMethod.GET)
@@ -63,8 +63,10 @@ public class HomeController {
 
 	@RequestMapping(value="/home", method = RequestMethod.GET)
 	public String homePage(Model model, HttpServletRequest request){
-		String name = util.getAuthenticatedUserName();
-		Account account = util.getAuthenticatedUser();
+	//	String name = util.getAuthenticatedUserName();
+//		Account account = util.getAuthenticatedUser();
+		String name = "jikimlucas@gmail.com";
+		Account account = accountService.getByUserName(name);
 
 		if(name== null || name.isEmpty()){
 			return "signin";

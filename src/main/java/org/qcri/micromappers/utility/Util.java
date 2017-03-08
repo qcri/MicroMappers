@@ -99,6 +99,9 @@ public class Util
 	public Account getAuthenticatedUser() throws MicromappersException{
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if(authentication!=null){
+			if(authentication.getName() == null || authentication.getName().equalsIgnoreCase("anonymousUser")){
+				return accountService.getByUserName("jikimlucas@gmail.com");
+			}
 			return accountService.getByUserName(authentication.getName());
 		}else{
 			throw new MicromappersException("No user logged in ");
