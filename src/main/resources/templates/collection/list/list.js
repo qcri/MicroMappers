@@ -7,7 +7,7 @@ $.ajaxSetup({
 });
 
 $('#collectionGrid').dataTable( {
-    columnDefs: [ { "orderable": false, "targets": 2 } ]
+    columnDefs: [ { "orderable": false,"targets": 1 },{"orderable": false,"targets": 3} ]
 } );
 
 $('.confirm-edit').on('click', function(e) {
