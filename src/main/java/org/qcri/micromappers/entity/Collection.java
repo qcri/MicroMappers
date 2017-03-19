@@ -90,7 +90,18 @@ public class Collection extends ExtendedBaseEntity {
 	
 	@Column(name="computer_vision_enabled", columnDefinition = "boolean default false", nullable = false)
 	private Boolean computerVisionEnabled;
-	
+
+	@Column(name="state", nullable = true)
+	private String state;
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	/**
 	 * @return the code
 	 */

@@ -11,18 +11,16 @@
 				<table id="collectionGrid" class="table table-striped table-bordered">
 					<thead>
 						<tr>
-							<th>Name</th>
-
-							<th>Status</th>
-							<!--<th>Event</th>-->
-                            <th>Count</th>
-							<th>Action</th>
+							<th style="width: 50%;">Name</th>
+							<th style="width: 20%;">Status</th>
+                            <th style="width: 10%;">Count</th>
+							<th style="width: 20%;">Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<#list page as info>
 						<tr>
-							<td width="30%">
+							<td style="width: 50%;">
 								<#if info.globalEventDefinition?? >
 									<a href="${rc.getContextPath()}/collection/view/details?id=${info.id}" title="${info.globalEventDefinition.title}">
 								<#elseif info.glideMaster?? >
@@ -34,7 +32,7 @@
 								</#if>
 							</td>
 
-							<td class="col-md-2" width="20%">
+							<td class="col-md-2" style="width: 20%;">
 								<div>
 									<#if info.provider == "ALL" || info.provider == "TWITTER">
 										<i class="fa fa-twitter twitter-color"></i>&nbsp;${info.twitterStatus}
@@ -49,7 +47,7 @@
 									</#if>
 								</div>
 							</td>
-                            <td width="10%">${info.count}</td>
+                            <td style="width: 10%;">${info.count}</td>
 							<!--<td width="20%">
 								<#if info.globalEventDefinition?? >
 									<a href="${info.globalEventDefinition.eventUrl}" target="_blank" title="${info.globalEventDefinition.title}" class="hoverMe">
@@ -58,39 +56,48 @@
 								<#elseif info.glideMaster?? >
 									<a href="http://reliefweb.int/disaster/${info.glideMaster.glideCode}" title="${info.glideMaster.glideCode}" class="hoverMe" target="_blank" >${info.glideMaster.glideCode}</a>
 								</#if>
-								
+
 							</td>-->
-							<td class="col-md-1" width="40%">
-								<#if info.isTrashed()>
-									<span data-placement="top" data-toggle="tooltip" title="Restore">
-										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-										<span class="glyphicon glyphicon-repeat"></span>
-										</button>
-									</span>
-								<#else>
-									<span data-placement="top" data-toggle="tooltip" title="Delete">
-										<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
-										<span class="glyphicon glyphicon-trash"></span>
-										</button>
-									</span>
-								
-								</#if>
-								
-								<span data-placement="top" data-toggle="tooltip" title="Edit">
-									<i class="confirm-edit btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
-										<span class="glyphicon glyphicon-edit"></span>
-									</i>
+							<td class="col-md-1" style="width: 20%;">
+                                <span data-placement="top" data-toggle="tooltip" title="Sentiment">
+									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-heart"></span>
+                                    </i></a>
+								</span>
+								<span data-placement="top" data-toggle="tooltip" title="Purifier">
+									<a href="https://public.tableau.com/profile/maupetit#!/vizhome/DEMO_V2/Dashboard2" target="_blank"><i class="btn btn-primary btn-xs" data-title="Rumour" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-stats"></span>
+                                    </i></a>
+								</span>
+								<span data-placement="top" data-toggle="tooltip" title="Crowdsourcing">
+									<a href="http://clickers.micromappers.org/project/${info.code}/newtask" target="_blank"><i class="btn btn-primary btn-xs" data-title="Crowdsourcing" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-user"></span>
+                                    </i></a>
 								</span>
 								<span data-placement="top" data-toggle="tooltip" title="Download">
 									<i class="confirm-download btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
                                         <span class="glyphicon glyphicon-download"></span>
                                     </i>
 								</span>
-                                <span data-placement="top" data-toggle="tooltip" title="Text Analystics">
-									<a href="${rc.getContextPath()}/dashboard/keywordSentiment?cid=${info.id}"><i class="btn btn-primary btn-xs" data-title="ton" data-id="${info.id}">
-                                        <span class="glyphicon glyphicon-tasks"></span>
-                                    </i></a>
+								<span data-placement="top" data-toggle="tooltip" title="Edit">
+									<i class="confirm-edit btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </i>
 								</span>
+								<#if info.isTrashed()>
+                                    <span data-placement="top" data-toggle="tooltip" title="Restore">
+										<button class="confirm-restore btn btn-primary btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+                                            <span class="glyphicon glyphicon-repeat"></span>
+                                        </button>
+									</span>
+								<#else>
+                                    <span data-placement="top" data-toggle="tooltip" title="Delete">
+										<button class="confirm-delete btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"  role="button" data-id="${info.id}">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+									</span>
+
+								</#if>
 							</td>
 						</tr>
 						</#list>

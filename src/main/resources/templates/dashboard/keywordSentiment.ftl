@@ -16,7 +16,7 @@
 				<table id="sentimentDataGrid" class="table table-striped table-bordered">
                     <thead>
                     <tr>
-                        <td colspan="4" class="text-center">
+                        <td colspan="5" class="text-center">
                             <table width="100%">
                                 <tr>
                                     <td style="width: 50%">
@@ -37,15 +37,16 @@
                         <th>Positive</th>
                         <th>Negative</th>
                         <th>Created At</th>
+                        <th>Action</th>
                     </tr>
 					</thead>
 					<tbody>
 						<#list page as info>
                             <tr>
-                                <td title="${info.feedText}" width="60%">
+                                <td title="${info.feedText}" width="50%" id="feedText">
                                     ${info.feedText}
                                 </td>
-                                <td width="10%" title="${info.positive}">
+                                <td width="10%" title="${info.positive}" id="positive">
                                     <#if info.positive gt 0.5>
                                         <i class="glyphicon glyphicon-ok"></i>
                                     <#elseif info.positive == 0.5>
@@ -54,7 +55,7 @@
                                          <i class="glyphicon glyphicon-remove"></i>
                                     </#if>
                                 </td>
-                                <td width="10%" title="${info.negative}">
+                                <td width="10%" title="${info.negative}" id="negative">
                                     <#if info.negative gt 0.5>
                                         <i class="glyphicon glyphicon-ok"></i>
                                     <#elseif info.negative == 0.5>
@@ -63,8 +64,16 @@
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </#if>
                                 </td>
-                                <td title="${info.createdAt}" width="20%">
+                                <td title="${info.createdAt}" width="20%" id="createdAt">
                                     ${info.createdAt}
+                                </td>
+                                <td title="retrain data" width="10%" id="retraining">
+                                    <span class="btn btn-primary btn-xs" title="retraining">
+									<i class="confirm-retraining btn btn-primary btn-xs" data-title="Edit" data-id="${info.id}">
+                                        <span class="glyphicon glyphicon-equalizer"></span>&nbsp;Retraining
+                                    </i>
+								    </span>
+
                                 </td>
                             </tr>
 						</#list>
@@ -79,8 +88,6 @@
 			<#include "urlpopup.js">
 		</script>
         <script language="JavaScript">
-            $('#sentimentDataGrid').DataTable();
-
             var config0 = liquidFillGaugeDefaultSettings();
             config0.circleThickness = 0.2;
             config0.textVertPosition = 0.2;
@@ -96,6 +103,15 @@
             config1.textVertPosition = 0.2;
             config1.waveAnimateTime = 1000;
             var gauge2= loadLiquidFillGauge("fillgauge2", ${neg_percent}, config1);
+
+            $('#sentimentDataGrid').dataTable( {
+                columnDefs: [ { "orderable": false,"targets": 4 }]
+            } );
+
+            $('.confirm-retraining').on('click', function(e) {
+                e.preventDefault();
+                var id = $(this).data('id');
+            });
 
 
         </script>

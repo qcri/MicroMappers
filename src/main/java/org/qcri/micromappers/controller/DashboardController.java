@@ -6,11 +6,13 @@ import org.json.simple.JSONArray;
 import org.qcri.micromappers.entity.Gdelt3W;
 import org.qcri.micromappers.entity.GlideMaster;
 import org.qcri.micromappers.entity.SentimentAnalysis;
+import org.qcri.micromappers.entity.TextDisambiguityAnalysis;
 import org.qcri.micromappers.models.GlobalDataSources;
 import org.qcri.micromappers.models.PageInfo;
 import org.qcri.micromappers.models.WordCloud;
 import org.qcri.micromappers.service.GlobalDataSourcesService;
 import org.qcri.micromappers.service.SentimentAnalysisService;
+import org.qcri.micromappers.service.TextDisambiguityService;
 import org.qcri.micromappers.utility.ComputerVisionStatus;
 import org.qcri.micromappers.utility.Constants;
 import org.qcri.micromappers.utility.TextAnalyticsStatus;
@@ -44,6 +46,9 @@ public class DashboardController {
 
     @Autowired
     SentimentAnalysisService sentimentAnalysisService;
+
+    @Autowired
+    TextDisambiguityService textDisambiguityService;
 
     @RequestMapping(value={"/global"})
     public String globalOverview(Model model, HttpServletRequest request,
@@ -105,9 +110,11 @@ public class DashboardController {
         }
 
         model = this.sentimentBubbleScore(collection_Id, model);
+       // List<TextDisambiguityAnalysis> textDisambiguityAnalysises = textDisambiguityService.getAllTextDisambiguityAnalysis(collection_Id);
 
         model.addAttribute("page", sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id));
         model.addAttribute("cid",collection_Id);
+       // model.addAttribute("disambiguity", textDisambiguityAnalysises);
 
         return "/dashboard/keywordSentiment";
     }

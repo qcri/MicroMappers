@@ -185,7 +185,16 @@ public class CollectionService
 		List<Collaborator> pagedCollaborators = collaboratorService.getAllByAccount(account);
 	//	List<Collection> pagedCollections = pagedCollaborators.stream().collect(Collectors.ge)
 		List<Collection> pagedCollections = new ArrayList<Collection>();
-		pagedCollaborators.forEach(item->pagedCollections.add(item.getCollection()));
+		/**
+		pagedCollaborators.forEach(
+				item->pagedCollections.add(item.getCollection())
+		);
+**/
+		pagedCollaborators.forEach(item->{
+			if(item.getCollection().getState() == null){
+				pagedCollections.add(item.getCollection());
+			}
+		});
 
 		return pagedCollections;
 	}

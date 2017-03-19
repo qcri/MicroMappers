@@ -9,6 +9,8 @@ import org.qcri.micromappers.repository.TextDisambiguityRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Kushal
  *
@@ -32,5 +34,9 @@ public class TextDisambiguityService {
 			logger.error("Error while persisting to textDisambiguityAnalysis", e);
 			throw new MicromappersServiceException("Exception while persisting to textDisambiguityAnalysis", e);
 		}
+	}
+
+	public List<TextDisambiguityAnalysis> getAllTextDisambiguityAnalysis(long collectionId){
+		return textDisambiguityRepository.findByCollectionId(collectionId);
 	}
 }

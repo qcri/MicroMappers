@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*
+/**
 		http
 			.formLogin()
 				.loginPage("/signin")
@@ -72,7 +72,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.antMatchers("/admin/**", "/img/**", "/resources/**", "/auth/**", "/signin/**", "/signup/**", "/disconnect/facebook", "/vendor/**", "/css/**").permitAll()
 					.antMatchers("/**").authenticated()
 			.and()
-			.apply(getSpringSocialConfigurer()); */
+			.apply(getSpringSocialConfigurer());
+ **/
 	}
 
 	private SpringSocialConfigurer getSpringSocialConfigurer() {
