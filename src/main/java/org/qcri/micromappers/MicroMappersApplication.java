@@ -23,6 +23,7 @@ public class MicroMappersApplication {
         //ApplicationContext context = new ClassPathXmlApplicationContext(str);
 
     	context = SpringApplication.run(MicroMappersApplication.class, args);
+
     }
     
     public static ConfigurableApplicationContext getApplicationContext(){
