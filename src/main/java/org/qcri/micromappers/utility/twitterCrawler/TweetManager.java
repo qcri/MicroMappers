@@ -218,6 +218,7 @@ public class TweetManager {
 		}
 
 		String url = String.format("https://twitter.com/i/search/timeline?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
+		//String url = String.format("https://twitter.com/search?f=realtime&q=%s&src=typd&max_position=%s", URLEncoder.encode(appendQuery, "UTF-8"), scrollCursor);
 
 		return getPageResponse(url);
 	}
@@ -229,7 +230,13 @@ public class TweetManager {
 
 		int i= 0;
 		for(i= 0; i< split.length-1; i++){
-			stringBuilder.append(split[i].trim() + " OR ");
+			if(split[i].trim().contains(" ")){
+				String aWord = "\""+ split[i].trim() + "\"";
+				stringBuilder.append(aWord + " OR ");
+			}
+			else{
+				stringBuilder.append(split[i].trim() + " OR ");
+			}
 		}
 		if(split.length > 0){
 			stringBuilder.append(split[i].trim());
