@@ -104,9 +104,17 @@ public class DashboardController {
             }
         }
 
-        model = this.sentimentBubbleScore(collection_Id, model);
+        List<SentimentAnalysis> pages = sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id);
 
-        model.addAttribute("page", sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id));
+        model = this.sentimentBubbleScore(pages, model);
+
+        pages.sort((f1, f2) -> Long.compare(f2.getCreatedAt().getTime(), f1.getCreatedAt().getTime()));
+
+        int maxLen = 3000;
+        if(pages.size() < maxLen){
+            maxLen = pages.size();
+        }
+        model.addAttribute("page", new ArrayList(pages.subList(0, maxLen)));
         model.addAttribute("cid",collection_Id);
 
         return "/dashboard/keywordSentiment";
@@ -122,10 +130,10 @@ public class DashboardController {
         return jsonArray.toJSONString();
     }
 
-    private Model sentimentBubbleScore(long collection_Id, Model model){
+    private Model sentimentBubbleScore(List<SentimentAnalysis> sentimentAnalysisList, Model model){
 
-        List<SentimentAnalysis> sentimentAnalysisList =
-                sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id);
+       // List<SentimentAnalysis> sentimentAnalysisList =
+        //        sentimentAnalysisService.findByStateAndCollectionId(TextAnalyticsStatus.COMPLETED, collection_Id);
 
         try{
 
