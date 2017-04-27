@@ -32,7 +32,7 @@
 									<span class="glyphicon glyphicon-info-sign"></span>&nbsp;Info
 									</a>
 								</span>
-								<#if info.computerVisionRequestState??>
+								<!--<#if info.computerVisionRequestState??>
 									<#if info.computerVisionRequestState == "approved">
                                     	<span class="image-classifier btn btn-primary btn-xs disabled" data-placement="top" data-toggle="tooltip" title="Image Classifier is running" data-title="cv" data-id="${info.id}">
                                         <span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier Running
@@ -46,7 +46,7 @@
                                     <span class="image-classifier btn btn-primary btn-xs" data-placement="top" data-toggle="tooltip" title="Add Image Classifer" data-title="cv" data-id="${info.id}">
 									<span class="glyphicon glyphicon-plus-sign" style="color:white;"></span>&nbsp;Image Classifier Request
 									</span>
-								</#if>
+								</#if>-->
 
 								<span class="btn btn-primary btn-xs">
 									<a href="${rc.getContextPath()}/global/events/gdelt/data3w?glideCode=${info.glideCode}" style="color:white;">
