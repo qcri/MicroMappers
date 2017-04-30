@@ -13,4 +13,5 @@ import java.util.List;
 public abstract interface GdeltImageClassifierRepository extends CrudRepository<GdeltImageClassifier, Long> {
 
     public List<GdeltImageClassifier> findByAccount(Account account);
+    public List<GdeltImageClassifier> findByState(String state);
 }

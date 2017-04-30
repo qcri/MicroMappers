@@ -11,6 +11,9 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
 
     private static final long serialVersionUID = 1705153546973813717L;
 
+    @Column(name="name")
+    private String name;
+
     @Column(name="theme")
     private String theme;
 
@@ -32,6 +35,9 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
     @Column(name="imageTag")
     private String imageTag;
 
+    @Column(name = "state", nullable = false, length = 50)
+    private String state;
+
     @OneToOne
     @JoinColumn(name = "account_id", nullable=false)
     private Account account;
@@ -39,15 +45,23 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
     public GdeltImageClassifier() {
     }
 
-    public GdeltImageClassifier(String theme, int tone, int timeSpan, String location, String locationCC, String imageWebTag, String imageTag, Account account) {
+    public GdeltImageClassifier(String name, String theme, String location, String locationCC, String imageWebTag, String imageTag, Account account, String state) {
+        this.name = name;
         this.theme = theme;
-        this.tone = tone;
-        this.timeSpan = timeSpan;
         this.location = location;
         this.locationCC = locationCC;
         this.imageWebTag = imageWebTag;
         this.imageTag = imageTag;
         this.account = account;
+        this.state = state;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTheme() {
@@ -112,5 +126,13 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

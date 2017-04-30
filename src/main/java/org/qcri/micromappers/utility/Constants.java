@@ -38,6 +38,7 @@ public class Constants
   public static final String COMPUTER_VISION_REJECTED = "rejected";
   public static final String COMPUTER_VISION_COMPLETED = "COMPLETED";
 
+  public static final String GENERAL_ACTIVE = "active";
 
   public static List<String> STOP_WORDS;
 
