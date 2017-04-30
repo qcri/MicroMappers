@@ -1,0 +1,116 @@
+package org.qcri.micromappers.entity;
+
+import javax.persistence.*;
+
+/**
+ * Created by jlucas on 4/30/17.
+ */
+@Entity
+@Table(name = "gdeltImageClassifier")
+public class GdeltImageClassifier extends ExtendedBaseEntity  {
+
+    private static final long serialVersionUID = 1705153546973813717L;
+
+    @Column(name="theme")
+    private String theme;
+
+    @Column(name="tone")
+    private int tone;
+
+    @Column(name="timeSpan")
+    private int timeSpan;
+
+    @Column(name="location")
+    private String location;
+
+    @Column(name="locationCC")
+    private String locationCC;
+
+    @Column(name="imageWebTag")
+    private String imageWebTag;
+
+    @Column(name="imageTag")
+    private String imageTag;
+
+    @OneToOne
+    @JoinColumn(name = "account_id", nullable=false)
+    private Account account;
+
+    public GdeltImageClassifier() {
+    }
+
+    public GdeltImageClassifier(String theme, int tone, int timeSpan, String location, String locationCC, String imageWebTag, String imageTag, Account account) {
+        this.theme = theme;
+        this.tone = tone;
+        this.timeSpan = timeSpan;
+        this.location = location;
+        this.locationCC = locationCC;
+        this.imageWebTag = imageWebTag;
+        this.imageTag = imageTag;
+        this.account = account;
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
+    public int getTone() {
+        return tone;
+    }
+
+    public void setTone(int tone) {
+        this.tone = tone;
+    }
+
+    public int getTimeSpan() {
+        return timeSpan;
+    }
+
+    public void setTimeSpan(int timeSpan) {
+        this.timeSpan = timeSpan;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocationCC() {
+        return locationCC;
+    }
+
+    public void setLocationCC(String locationCC) {
+        this.locationCC = locationCC;
+    }
+
+    public String getImageWebTag() {
+        return imageWebTag;
+    }
+
+    public void setImageWebTag(String imageWebTag) {
+        this.imageWebTag = imageWebTag;
+    }
+
+    public String getImageTag() {
+        return imageTag;
+    }
+
+    public void setImageTag(String imageTag) {
+        this.imageTag = imageTag;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+}
