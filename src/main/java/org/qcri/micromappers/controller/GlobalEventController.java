@@ -80,8 +80,13 @@ public class GlobalEventController {
 
     @RequestMapping(value={"/gdelt/classifiers"})
     public String getclassifiers(Model model, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(gdeltImageClassifierService.getAll());
-        model.addAttribute("page", gdeltImageClassifierService.getAll());
+        List<GdeltImageClassifier> gdeltImageClassifiers = gdeltImageClassifierService.getAll();
+
+        gdeltImageClassifiers.forEach(item->{
+            item.setGdeltImageClassifierProfile();
+        });
+
+        model.addAttribute("page", gdeltImageClassifiers);
 
         return "/gdelt/classifiers";
     }

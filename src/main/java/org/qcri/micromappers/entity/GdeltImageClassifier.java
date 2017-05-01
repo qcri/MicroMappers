@@ -1,5 +1,8 @@
 package org.qcri.micromappers.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.qcri.micromappers.models.GdeltImageClassifierProfile;
+
 import javax.persistence.*;
 
 /**
@@ -41,6 +44,9 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
     @OneToOne
     @JoinColumn(name = "account_id", nullable=false)
     private Account account;
+
+    @Transient
+    private GdeltImageClassifierProfile gdeltImageClassifierProfile;
 
     public GdeltImageClassifier() {
     }
@@ -134,5 +140,17 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public void setGdeltImageClassifierProfile(){
+        GdeltImageClassifierProfile gdeltImageClassifierProfile =
+                new GdeltImageClassifierProfile(this.theme, this.location, this.locationCC,this.imageWebTag,this.imageTag);
+
+        gdeltImageClassifierProfile.setGeoJsonQuery();
+        gdeltImageClassifierProfile.setHtmlQuery();
+        gdeltImageClassifierProfile.setImageGeoJsonQuery();
+        gdeltImageClassifierProfile.setImageHtmlQuery();
+
+        this.gdeltImageClassifierProfile = gdeltImageClassifierProfile;
     }
 }
