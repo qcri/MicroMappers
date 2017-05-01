@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Created by jlucas on 4/30/17.
  */
 @Entity
-@Table(name = "gdeltImageClassifier")
+@Table(name = "gdelt_image_classifier")
 public class GdeltImageClassifier extends ExtendedBaseEntity  {
 
     private static final long serialVersionUID = 1705153546973813717L;

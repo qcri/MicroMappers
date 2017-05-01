@@ -34,23 +34,21 @@ $('#glideData').dataTable( {
 $('#createClassifierRequest').on('click', function(e) {
 	e.preventDefault();
 
-	var data = {
-		name: document.getElementsByName('textName')[0].value.toLowerCase().trim(),
-		loc: document.getElementsByName('textLocation')[0].value.toLowerCase().trim(),
-		webtag: document.getElementsByName('textImageWebTag')[0].value,
-		tag: document.getElementsByName('textImageTag')[0].value
-	};
+	var n1 = document.getElementsByName('textName')[0].value.toLowerCase().trim();
+	var n2 = document.getElementsByName('textImageWebTag')[0].value;
+	var n3 = document.getElementsByName('textImageTag')[0].value;
+	if(n1.length > 0 && ( n2.length > 0 || n3.length > 0)){
+		var data = {
+			name: document.getElementsByName('textName')[0].value.toLowerCase().trim(),
+			loc: document.getElementsByName('textLocation')[0].value.toLowerCase().trim(),
+			webtag: document.getElementsByName('textImageWebTag')[0].value,
+			tag: document.getElementsByName('textImageTag')[0].value
+		};
 
-	location.href= "${rc.getContextPath()}/global/events/gdelt/request?data="+JSON.stringify(data);
-	/**
-	$.ajax({
-		type: "POST",
-		url: url,
-		dataType:"json",
-		completed: function(data){
-			location.href = "${rc.getContextPath()}/global/events/gdelt/classifiers";
-		}
-	});
-	 **/
+		location.href= "${rc.getContextPath()}/global/events/gdelt/request?data="+JSON.stringify(data);
+	}
+	else{
+		showErrorAlert("Please fill out the form");
+	}
 
 });
