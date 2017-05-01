@@ -53,13 +53,11 @@ public class GdeltImageClassifierService {
             JSONParser parser = new JSONParser();
             JSONObject jsonObject = (JSONObject)parser.parse(data);
             String name = jsonObject.get("name").toString();
-            String theme= jsonObject.get("theme").toString();
             String location= jsonObject.get("loc").toString();
-            String locationCC= jsonObject.get("cc").toString();
             String imageWebTag= jsonObject.get("webtag").toString();
             String imageTag= jsonObject.get("tag").toString();
 
-            return new GdeltImageClassifier(name, theme, location, locationCC, imageWebTag, imageTag, account, Constants.GENERAL_ACTIVE);
+            return new GdeltImageClassifier(name, location, imageWebTag, imageTag, account, Constants.GENERAL_ACTIVE);
         }
         catch(Exception e){
             logger.error(e);

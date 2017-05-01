@@ -48,14 +48,18 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
     @Transient
     private GdeltImageClassifierProfile gdeltImageClassifierProfile;
 
+    @Transient
+    private String mapURL;
+
+    @Transient
+    private String geoJsonURL;
+
     public GdeltImageClassifier() {
     }
 
-    public GdeltImageClassifier(String name, String theme, String location, String locationCC, String imageWebTag, String imageTag, Account account, String state) {
+    public GdeltImageClassifier(String name, String location,String imageWebTag, String imageTag, Account account, String state) {
         this.name = name;
-        this.theme = theme;
         this.location = location;
-        this.locationCC = locationCC;
         this.imageWebTag = imageWebTag;
         this.imageTag = imageTag;
         this.account = account;
@@ -142,6 +146,30 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
         this.state = state;
     }
 
+    public String getMapURL() {
+        return mapURL;
+    }
+
+    public void setMapURL(String mapURL) {
+        this.mapURL = mapURL;
+    }
+
+    public String getGeoJsonURL() {
+        return geoJsonURL;
+    }
+
+    public void setGeoJsonURL(String geoJsonURL) {
+        this.geoJsonURL = geoJsonURL;
+    }
+
+    public GdeltImageClassifierProfile getGdeltImageClassifierProfile() {
+        return gdeltImageClassifierProfile;
+    }
+
+    public void setGdeltImageClassifierProfile(GdeltImageClassifierProfile gdeltImageClassifierProfile) {
+        this.gdeltImageClassifierProfile = gdeltImageClassifierProfile;
+    }
+
     public void setGdeltImageClassifierProfile(){
         GdeltImageClassifierProfile gdeltImageClassifierProfile =
                 new GdeltImageClassifierProfile(this.theme, this.location, this.locationCC,this.imageWebTag,this.imageTag);
@@ -151,6 +179,8 @@ public class GdeltImageClassifier extends ExtendedBaseEntity  {
         gdeltImageClassifierProfile.setImageGeoJsonQuery();
         gdeltImageClassifierProfile.setImageHtmlQuery();
 
-        this.gdeltImageClassifierProfile = gdeltImageClassifierProfile;
+        this.setGdeltImageClassifierProfile(gdeltImageClassifierProfile);
+        this.setMapURL(gdeltImageClassifierProfile.getImageHtmlQuery());
+        this.setGeoJsonURL(gdeltImageClassifierProfile.getImageGeoJsonQuery());
     }
 }

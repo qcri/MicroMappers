@@ -84,6 +84,7 @@ public class GlobalEventController {
 
         gdeltImageClassifiers.forEach(item->{
             item.setGdeltImageClassifierProfile();
+
         });
 
         model.addAttribute("page", gdeltImageClassifiers);

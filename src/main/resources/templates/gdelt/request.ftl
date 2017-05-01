@@ -23,36 +23,37 @@
                                 <input type="text" class="form-control" name="textName" placeholder="Please title the classifier" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                       <!-- <div class="form-group">
                             <label class="control-label col-sm-3" for="textTheme">Image Theme :</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" name="textTheme" placeholder="Please add topic word. e.g. flood" required>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="textLocation">Location :</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" name="textLocation" placeholder="please location e.g. montreal" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="textCountry">Country :</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" name="textCountry" placeholder="please country e.g canada" required>
-                            </div>
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="textImageWebTag">Image Web Tag :</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" name="textImageWebTag" placeholder="Comma Seperated related tags" required>
+                                <input type="text" class="form-control" name="textImageWebTag" placeholder="Comma Seperated related tags e.g. flood, fire" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="control-label col-sm-3" for="textImageTag">Image Tag :</label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" name="textImageTag" placeholder="Comma Seperated related tags" required>
+                                <input type="text" class="form-control" name="textImageTag" placeholder="Comma Seperated related tags e.g. flood, fire" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="textLocation">Location :</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="textLocation" placeholder="please location e.g. new york" required>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="control-label col-sm-3" for="textCountry">Country :</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="textCountry" placeholder="please country e.g canada" required>
+                            </div>
+                        </div>-->
+
                     </div>
                 </div>
 

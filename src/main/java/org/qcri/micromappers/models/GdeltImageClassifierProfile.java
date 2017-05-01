@@ -6,6 +6,8 @@ import org.qcri.micromappers.entity.GdeltImageClassifier;
 import org.qcri.micromappers.utility.GdeltGeoApiParameter;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by jlucas on 5/1/17.
@@ -107,11 +109,11 @@ public class GdeltImageClassifierProfile implements Serializable {
         this.imageHtmlQuery = this.assembleQuery() + GdeltGeoApiParameter.DISPLAY_FORMAT + GdeltGeoApiParameter.FORMAT_IMAGE_HTML;
     }
 
-    private String assembleQuery(){
+    private String assembleQuery() {
             //theme,  location,  locationCC,  imageWebTag,  imageTag
         boolean addOR = false;
         StringBuffer sb = new StringBuffer();
-        sb.append(GdeltGeoApiParameter.GDELT_GEO_API_URL);
+
         sb.append("(");
     /**
         if(this.theme!= null && !this.theme.isEmpty()){
@@ -160,9 +162,19 @@ public class GdeltImageClassifierProfile implements Serializable {
             sb.append(this.reformatQuery(GdeltGeoApiParameter.QUERY_LOCATION, this.location));
 
         }
-        sb.append(")&mode=ImagePointData&");
+        sb.append(")");
+        String query = "";
+        try {
+            query = URLEncoder.encode(sb.toString(), "UTF-8");
+        }
+        catch (Exception e){
 
-        return sb.toString();
+        }
+
+        //sb.append(GdeltGeoApiParameter.GDELT_GEO_API_URL);
+       // sb.append("&mode=ImagePointData&");
+
+        return GdeltGeoApiParameter.GDELT_GEO_API_URL + query + "&mode=ImagePointData&";
     }
 
     private String reformatQuery(String requestParameterTopic, String requestString){

@@ -36,14 +36,13 @@ $('#createClassifierRequest').on('click', function(e) {
 
 	var data = {
 		name: document.getElementsByName('textName')[0].value.toLowerCase().trim(),
-		theme: document.getElementsByName('textTheme')[0].value.toLowerCase().trim(),
 		loc: document.getElementsByName('textLocation')[0].value.toLowerCase().trim(),
-		cc: document.getElementsByName('textCountry')[0].value,
 		webtag: document.getElementsByName('textImageWebTag')[0].value,
 		tag: document.getElementsByName('textImageTag')[0].value
 	};
 
-	var url = "${rc.getContextPath()}/global/events/gdelt/request?data="+JSON.stringify(data);
+	location.href= "${rc.getContextPath()}/global/events/gdelt/request?data="+JSON.stringify(data);
+	/**
 	$.ajax({
 		type: "POST",
 		url: url,
@@ -52,5 +51,6 @@ $('#createClassifierRequest').on('click', function(e) {
 			location.href = "${rc.getContextPath()}/global/events/gdelt/classifiers";
 		}
 	});
+	 **/
 
 });
