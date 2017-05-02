@@ -30,3 +30,25 @@ $('.image-classifier').on('click', function(e) {
 $('#glideData').dataTable( {
     columnDefs: [ { "orderable": false, "targets": 2 } ]
 } );
+
+$('#createClassifierRequest').on('click', function(e) {
+	e.preventDefault();
+
+	var n1 = document.getElementsByName('textName')[0].value.toLowerCase().trim();
+	var n2 = document.getElementsByName('textImageWebTag')[0].value;
+	var n3 = document.getElementsByName('textImageTag')[0].value;
+	if(n1.length > 0 && ( n2.length > 0 || n3.length > 0)){
+		var data = {
+			name: document.getElementsByName('textName')[0].value.toLowerCase().trim(),
+			loc: document.getElementsByName('textLocation')[0].value.toLowerCase().trim(),
+			webtag: document.getElementsByName('textImageWebTag')[0].value,
+			tag: document.getElementsByName('textImageTag')[0].value
+		};
+
+		location.href= "${rc.getContextPath()}/global/events/gdelt/request?data="+JSON.stringify(data);
+	}
+	else{
+		showErrorAlert("Please fill out the form");
+	}
+
+});

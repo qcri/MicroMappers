@@ -39,8 +39,11 @@
 						<h4><i class="icon-check"></i> Disaster Global Events</h4>
 						<p>Monitor World Diaster Information. GDELT Data Repo</p>
 						<a href="${rc.getContextPath()}/global/events/gdelt/glides" class="btn btn-primary">
-                            Manage <i class="icon-chevron-right"></i>
+                            News Dataset<i class="icon-chevron-right"></i>
 						</a>
+                        <a href="${rc.getContextPath()}/global/events/gdelt/classifiers" class="btn btn-primary">
+                            Image Classifiers <i class="icon-chevron-right"></i>
+                        </a>
 					</div>
 				</div>
 			</div>
